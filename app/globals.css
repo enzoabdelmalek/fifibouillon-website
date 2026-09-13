@@ -1,26 +1,202 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------
+   Design tokens — palette Bouillon FiFi
+   Lemon Chiffon #FFF8CA · Rosewood #6B0B0C
+   Coffee Bean  #2D120D · Botticelli #CDE3E8
+   Or du logo   #C8920E
+   --------------------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+
+  --paper: #fffbea;
+  --paper-alt: #fff8ca;
+  --surface: #fffef7;
+
+  --ink: #2d120d;
+  --muted: #7a544a;
+
+  --primary: #6b0b0c;
+  --primary-hover: #520809;
+  --on-primary: #fff8ca;
+
+  --gold: #8a6209; /* or lisible sur fond clair */
+  --accent: #c8920e; /* or décoratif : filets, ornements */
+  --cool: #cde3e8;
+  --cool-ink: #2d120d;
+
+  --line: rgb(45 18 13 / 0.14);
+  --line-strong: rgb(45 18 13 / 0.28);
+
+  --grain-opacity: 0.035;
+  --shadow-card: 0 1px 2px rgb(45 18 13 / 0.04), 0 12px 32px -12px rgb(45 18 13 / 0.14);
+}
+
+.dark {
+  color-scheme: dark;
+
+  /* Fonds : anthracite chaud, presque neutre.
+     Le Coffee Bean n'est PAS utilisé comme fond de page ici — c'est un brun
+     rouge trop proche du Rosewood des bandeaux : côte à côte, les deux teintes
+     se brouillent. En laissant le fond désaturé, le bordeaux redevient la
+     seule couleur saturée de la page et se détache franchement. */
+  --paper: #17120f;
+  --paper-alt: #201a17;
+  --surface: #261f1b;
+
+  --ink: #fff8ca;
+  --muted: #bcab97;
+
+  --primary: #8f1416;
+  --primary-hover: #a8191b;
+  --on-primary: #fff8ca;
+
+  --gold: #dfaa36;
+  --accent: #c8920e;
+  --cool: #cde3e8;
+  --cool-ink: #2d120d;
+
+  --line: rgb(255 248 202 / 0.14);
+  --line-strong: rgb(255 248 202 / 0.3);
+
+  --grain-opacity: 0.05;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 14px 36px -14px rgb(0 0 0 / 0.6);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-playfair), ui-serif, Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-jost), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --color-paper: var(--paper);
+  --color-paper-alt: var(--paper-alt);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-on-primary: var(--on-primary);
+  --color-gold: var(--gold);
+  --color-accent: var(--accent);
+  --color-cool: var(--cool);
+  --color-cool-ink: var(--cool-ink);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  --shadow-card: var(--shadow-card);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* --------------------------------------------------------------- */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--primary);
+    color: var(--on-primary);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Grain papier — posé en overlay sur les grands aplats */
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: var(--grain-opacity);
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Titre de rubrique : petites capitales très espacées */
+  .eyebrow {
+    font-size: 0.6875rem;
+    line-height: 1;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* Filet orné : ligne — losange — ligne */
+  .rule-ornament {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--accent);
+  }
+  .rule-ornament::before,
+  .rule-ornament::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.45;
+  }
+
+  /* Ligne de carte : intitulé … prix */
+  .leader {
+    flex: 1;
+    align-self: end;
+    margin-bottom: 0.35em;
+    border-bottom: 1px dotted var(--line-strong);
+    min-width: 1.5rem;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Apparition au scroll (piloté par components/reveal.tsx).
+     Le masquage initial est réservé aux navigateurs où JS tourne : sans lui,
+     le contenu resterait invisible pour toujours. */
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .js .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .js .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
 }
