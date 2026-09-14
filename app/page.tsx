@@ -22,20 +22,20 @@ export default function Home() {
 
 function Hero() {
   return (
-    <section className="grain relative flex min-h-[100svh] flex-col overflow-hidden bg-[#6b0b0c] text-[#fff8ca]">
+    <section className="grain relative flex min-h-[100svh] flex-col overflow-hidden bg-paper-alt text-ink">
       <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col items-center justify-center px-5 py-24 text-center sm:px-8">
         <Reveal>
-          <Logo variant="onDark" className="h-40 sm:h-48 lg:h-56" priority />
+          <Logo className="h-40 sm:h-48 lg:h-56" priority />
         </Reveal>
 
         <Reveal delay={140}>
-          <p className="eyebrow mt-8 text-[#c8920e]">
+          <p className="eyebrow mt-8 text-brand-accent">
             {site.district} · {site.city}
           </p>
           <h1 className="mt-5 max-w-3xl font-display text-4xl/[1.08] tracking-tight text-balance sm:text-5xl/[1.06] lg:text-[3.6rem]/[1.05]">
             La cuisine française de toujours, généreuse et à prix juste.
           </h1>
-          <p className="mx-auto mt-6 max-w-lg text-base/relaxed text-pretty text-[#fff8ca]/70">
+          <p className="mx-auto mt-6 max-w-lg text-base/relaxed text-pretty text-muted">
             Un bouillon comme on les aime : des classiques mijotés, une salle
             chaleureuse et le service continu, du déjeuner au dernier verre.
           </p>
@@ -44,13 +44,13 @@ function Hero() {
         <Reveal delay={260} className="mt-9 flex flex-wrap items-center justify-center gap-3">
           <Link
             href="/la-carte"
-            className="rounded-full bg-[#fff8ca] px-7 py-3.5 text-[0.8rem] tracking-[0.16em] text-[#2d120d] uppercase transition-transform duration-200 hover:-translate-y-0.5"
+            className="rounded-full bg-primary px-7 py-3.5 text-[0.8rem] tracking-[0.16em] text-on-primary uppercase transition-transform duration-200 hover:-translate-y-0.5"
           >
             Découvrir la carte
           </Link>
           <Link
             href="/nous-trouver"
-            className="rounded-full border border-[#fff8ca]/35 px-7 py-3.5 text-[0.8rem] tracking-[0.16em] uppercase transition-colors duration-200 hover:bg-[#fff8ca]/10"
+            className="rounded-full border border-line-strong px-7 py-3.5 text-[0.8rem] tracking-[0.16em] uppercase transition-colors duration-200 hover:bg-surface"
           >
             Nous trouver
           </Link>
@@ -58,14 +58,14 @@ function Hero() {
       </div>
 
       {/* Bandeau d'arguments, ancré en bas du hero */}
-      <div className="relative border-t border-[#fff8ca]/15">
-        <ul className="mx-auto flex max-w-6xl flex-col divide-y divide-[#fff8ca]/15 px-5 sm:flex-row sm:divide-x sm:divide-y-0 sm:px-8">
+      <div className="relative border-t border-line">
+        <ul className="mx-auto flex max-w-6xl flex-col divide-y divide-line px-5 sm:flex-row sm:divide-x sm:divide-y-0 sm:px-8">
           {site.highlights.map((item) => (
             <li
               key={item}
-              className="eyebrow flex flex-1 items-center justify-center gap-3 py-4 text-[#fff8ca]/75"
+              className="eyebrow flex flex-1 items-center justify-center gap-3 py-4 text-muted"
             >
-              <Diamond className="size-1.5 text-[#c8920e]" />
+              <Diamond className="size-1.5 text-brand-accent" />
               {item}
             </li>
           ))}
@@ -163,7 +163,7 @@ function Maison() {
 
 function Signatures() {
   return (
-    <section className="border-y border-line bg-paper-alt">
+    <section className="border-y border-line bg-surface">
       <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8 lg:py-32">
         <Reveal className="text-center">
           <p className="eyebrow text-gold">À la carte</p>
@@ -177,7 +177,7 @@ function Signatures() {
 
         <ul className="mt-14 grid gap-px overflow-hidden rounded-sm border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
           {signatures.map((dish, index) => (
-            <li key={dish.name} className="bg-paper">
+            <li key={dish.name} className="bg-surface">
               <Reveal delay={index * 70} className="flex h-full flex-col p-7 sm:p-9">
                 <span aria-hidden className="eyebrow text-accent/70">
                   {String(index + 1).padStart(2, "0")}
@@ -191,7 +191,7 @@ function Signatures() {
             </li>
           ))}
 
-          <li className="bg-paper">
+          <li className="bg-surface">
             <Reveal delay={signatures.length * 70} className="h-full">
               <Link
                 href="/la-carte"
@@ -273,7 +273,7 @@ function Cartes() {
                   href={card.pdf}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="relative z-10 text-[0.8rem] tracking-[0.12em] text-muted uppercase transition-colors hover:text-ink"
+                  className="relative z-10 -my-2 py-2 text-[0.8rem] tracking-[0.12em] text-muted uppercase transition-colors hover:text-ink"
                 >
                   PDF
                 </a>
@@ -290,17 +290,17 @@ function Cartes() {
 
 function HappyHour() {
   return (
-    <section className="grain relative overflow-hidden bg-[#6b0b0c] text-[#fff8ca]">
-      <div className="relative mx-auto max-w-6xl px-5 py-24 sm:px-8 lg:py-32">
+    <section className="border-y border-line bg-paper-alt">
+      <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8 lg:py-32">
         <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
           <Reveal>
-            <p className="eyebrow text-[#c8920e]">{site.happyHour.label}</p>
-            <p className="mt-6 font-display text-6xl/[0.95] tracking-tight sm:text-7xl/[0.95] lg:text-[5.5rem]/[0.92]">
+            <p className="eyebrow text-brand-accent">{site.happyHour.label}</p>
+            <p className="mt-6 font-display text-6xl/[0.95] tracking-tight text-brand-accent sm:text-7xl/[0.95] lg:text-[5.5rem]/[0.92]">
               16h
-              <span className="mx-3 text-[#c8920e]">—</span>
+              <span className="mx-3 text-gold">—</span>
               22h
             </p>
-            <p className="mt-6 max-w-sm text-base/relaxed text-[#fff8ca]/70">
+            <p className="mt-6 max-w-sm text-base/relaxed text-muted">
               Tous les jours, les pintes et les cocktails signature passent au
               tarif comptoir.
             </p>
@@ -315,10 +315,8 @@ function HappyHour() {
               },
             ].map((group) => (
               <div key={group.label}>
-                <h3 className="eyebrow border-b border-[#fff8ca]/20 pb-3 text-[#fff8ca]">
-                  {group.label}
-                </h3>
-                <ul className="mt-4 space-y-2.5 text-base text-[#fff8ca]/75">
+                <h3 className="eyebrow border-b border-line-strong pb-3 text-ink">{group.label}</h3>
+                <ul className="mt-4 space-y-2.5 text-base text-muted">
                   {group.items.map((item) => (
                     <li key={item}>{item}</li>
                   ))}

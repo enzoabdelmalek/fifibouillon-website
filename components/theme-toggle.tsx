@@ -5,17 +5,29 @@ import { cn } from "@/lib/utils";
 
 export const THEME_STORAGE_KEY = "fifi-theme";
 
+/** Couleurs de l'interface du navigateur (barre d'adresse mobile) par thème. */
+const THEME_COLOR = { light: "#fffdf6", dark: "#17120f" } as const;
+
 /**
  * Script injecté dans le <head> pour appliquer le thème avant le premier
- * rendu — sans lui, un flash de thème clair apparaît au chargement.
+ * rendu — sans lui, un flash apparaît au chargement.
  *
- * Il pose aussi la classe `js` sur <html> : les animations d'apparition
- * ne masquent leur contenu que si JavaScript est actif (sans JS, tout
- * reste visible).
+ * Le site démarre TOUJOURS en clair : la préférence système n'est pas suivie.
+ * Le mode sombre ne s'applique que si le visiteur l'a explicitement choisi.
+ *
+ * Le script pose aussi la classe `js` sur <html> : les animations d'apparition
+ * et les onglets de carte ne masquent leur contenu que si JavaScript est
+ * actif (sans JS, tout reste visible).
  */
-export const themeInitScript = `(function(){var r=document.documentElement;r.classList.add("js");try{var s=localStorage.getItem(${JSON.stringify(
-  THEME_STORAGE_KEY,
-)});var d=s?s==="dark":window.matchMedia("(prefers-color-scheme: dark)").matches;r.classList.toggle("dark",d);}catch(e){}})();`;
+export const themeInitScript = `(function(){
+var r=document.documentElement;r.classList.add("js");
+var d=false;try{d=localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)})==="dark";}catch(e){}
+r.classList.toggle("dark",d);
+var set=function(){var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",d?${JSON.stringify(
+  THEME_COLOR.dark,
+)}:${JSON.stringify(THEME_COLOR.light)});};
+set();document.addEventListener("DOMContentLoaded",set);
+})();`.replace(/\n/g, "");
 
 /**
  * Le thème vit dans la classe `dark` de <html> — une source de vérité
@@ -23,36 +35,19 @@ export const themeInitScript = `(function(){var r=document.documentElement;r.cla
  * pas d'effet, pas de rendu en double, et le rendu serveur reste stable.
  */
 function subscribeToTheme(onChange: () => void) {
-  const media = window.matchMedia("(prefers-color-scheme: dark)");
-
   // La classe peut changer depuis ce bouton comme depuis un autre onglet.
   const observer = new MutationObserver(onChange);
   observer.observe(document.documentElement, {
     attributes: true,
     attributeFilter: ["class"],
   });
-
-  // Tant que le visiteur n'a pas choisi, on suit les préférences système.
-  const onMediaChange = () => {
-    try {
-      if (localStorage.getItem(THEME_STORAGE_KEY)) return;
-    } catch {
-      /* mode privé : on suit le système */
-    }
-    document.documentElement.classList.toggle("dark", media.matches);
-  };
-  media.addEventListener("change", onMediaChange);
-
-  return () => {
-    observer.disconnect();
-    media.removeEventListener("change", onMediaChange);
-  };
+  return () => observer.disconnect();
 }
 
 const getTheme = () =>
   document.documentElement.classList.contains("dark") ? "dark" : "light";
 
-/** Au rendu serveur, le thème n'est pas encore connu : on part du clair. */
+/** Le clair est le thème par défaut, côté serveur comme au premier rendu. */
 const getServerTheme = () => "light" as const;
 
 export function ThemeToggle({ className }: { className?: string }) {
@@ -61,6 +56,12 @@ export function ThemeToggle({ className }: { className?: string }) {
   const toggle = useCallback(() => {
     const next = document.documentElement.classList.contains("dark") ? "light" : "dark";
     document.documentElement.classList.toggle("dark", next === "dark");
+
+    // Garde la barre d'adresse mobile en accord avec la page.
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", THEME_COLOR[next]);
+
     try {
       localStorage.setItem(THEME_STORAGE_KEY, next);
     } catch {

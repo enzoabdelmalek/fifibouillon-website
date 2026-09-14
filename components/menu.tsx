@@ -28,18 +28,31 @@ export function MenuRow({
   );
 }
 
-/** Un bloc de carte complet : titre orné, lignes, mention de bas de section. */
+/**
+ * Un bloc de carte complet : titre orné, lignes, mention de bas de section.
+ *
+ * `animate={false}` à l'intérieur d'un onglet : l'apparition au scroll repose
+ * sur IntersectionObserver, qui ne se déclenche jamais pour un panneau masqué —
+ * le contenu resterait invisible au changement d'onglet.
+ */
 export function MenuSectionBlock({
   section,
   delay = 0,
   className,
+  animate = true,
 }: {
   section: MenuSection;
   delay?: number;
   className?: string;
+  animate?: boolean;
 }) {
+  const Wrapper = animate ? Reveal : "section";
+  const wrapperProps = animate
+    ? ({ as: "section", delay } as const)
+    : ({} as Record<string, never>);
+
   return (
-    <Reveal as="section" delay={delay} className={cn("break-inside-avoid", className)}>
+    <Wrapper {...wrapperProps} className={cn("break-inside-avoid", className)}>
       <header className="text-center">
         <h2 className="font-display text-2xl tracking-wide text-ink sm:text-3xl">
           {section.title}
@@ -61,7 +74,7 @@ export function MenuSectionBlock({
       {section.note ? (
         <p className="mt-4 text-center text-xs/relaxed text-muted italic">{section.note}</p>
       ) : null}
-    </Reveal>
+    </Wrapper>
   );
 }
 

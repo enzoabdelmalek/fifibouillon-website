@@ -46,17 +46,18 @@ export function SiteHeader() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  /* En haut de page, l'en-tête flotte sur le bandeau bordeaux : texte crème,
-     fond transparent. Dès qu'on défile, il se pose sur du papier. */
+  /* Les pages ouvrent sur un bandeau jaune beurre : l'en-tête y flotte sans
+     fond. Au défilement, il se pose sur du blanc. Le texte reste marron dans
+     les deux cas — plus de bascule de couleur à gérer. */
   const solid = scrolled || open;
 
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,box-shadow] duration-300",
+        "fixed inset-x-0 top-0 z-50 text-ink transition-[background-color,border-color,box-shadow] duration-300",
         solid
-          ? "border-b border-line bg-paper/92 text-ink shadow-[0_1px_24px_-12px_rgb(45_18_13/0.4)] backdrop-blur-md"
-          : "border-b border-transparent bg-transparent text-[#fff8ca]",
+          ? "border-b border-line bg-paper/92 shadow-[0_1px_24px_-12px_rgb(45_18_13/0.4)] backdrop-blur-md"
+          : "border-b border-transparent bg-transparent",
       )}
     >
       <div className="mx-auto flex h-[72px] max-w-7xl items-center gap-6 px-5 sm:px-8 lg:h-20">
@@ -65,15 +66,11 @@ export function SiteHeader() {
           aria-label="FiFi — retour à l'accueil"
           className="flex shrink-0 items-center gap-3.5 transition-opacity hover:opacity-80"
         >
-          {solid ? (
-            <Wordmark className="h-7 sm:h-8" priority />
-          ) : (
-            <Wordmark variant="onDark" className="h-7 sm:h-8" priority />
-          )}
+          <Wordmark className="h-7 sm:h-8" priority />
           <span aria-hidden className="hidden h-8 w-px bg-current/25 sm:block" />
           <span aria-hidden className="hidden leading-[1.5] sm:block">
             <span className="eyebrow block text-[0.6rem] opacity-80">Bouillon &amp; Brasserie</span>
-            <span className="eyebrow block text-[0.6rem] text-accent">9ᵉ arr.</span>
+            <span className="eyebrow block text-[0.6rem] text-brand-accent">9ᵉ arr.</span>
           </span>
         </Link>
 
@@ -96,7 +93,7 @@ export function SiteHeader() {
                     <span
                       aria-hidden
                       className={cn(
-                        "absolute inset-x-3.5 -bottom-0.5 h-px origin-left bg-accent transition-transform duration-300",
+                        "absolute inset-x-3.5 -bottom-0.5 h-px origin-left bg-primary transition-transform duration-300",
                         active ? "scale-x-100" : "scale-x-0",
                       )}
                     />
@@ -151,10 +148,10 @@ export function SiteHeader() {
                     href={item.href}
                     className="flex items-baseline gap-4 py-4 font-display text-3xl"
                   >
-                    <span className="eyebrow w-6 shrink-0 text-accent">
+                    <span className="eyebrow w-6 shrink-0 text-brand-accent">
                       {String(index + 1).padStart(2, "0")}
                     </span>
-                    <span className={cn(active && "text-primary dark:text-gold")}>
+                    <span className={cn(active && "text-brand-accent")}>
                       {item.label}
                     </span>
                   </Link>
@@ -168,11 +165,11 @@ export function SiteHeader() {
               href={`tel:${site.contact.phone.replace(/\s/g, "")}`}
               className="flex items-center gap-3 text-ink"
             >
-              <PhoneIcon className="size-4 text-accent" />
+              <PhoneIcon className="size-4 text-brand-accent" />
               {site.contact.phoneDisplay}
             </a>
             <p className="flex items-start gap-3">
-              <ClockIcon className="mt-0.5 size-4 shrink-0 text-accent" />
+              <ClockIcon className="mt-0.5 size-4 shrink-0 text-brand-accent" />
               <span>
                 {site.happyHour.label} — {site.happyHour.value}
               </span>

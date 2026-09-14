@@ -11,12 +11,25 @@
 :root {
   color-scheme: light;
 
-  --paper: #fffbea;
-  --paper-alt: #fff8ca;
-  --surface: #fffef7;
+  /* PRIMAIRES : blanc + jaune beurre. Ce sont eux qui portent la page.
+     SECONDAIRES : marron (texte) et rouge (boutons, accents, ornements) —
+     employés par touches, jamais en grands aplats. */
+  --paper: #fffdf6; /* blanc chaud — surface dominante */
+  --paper-alt: #fff8ca; /* jaune beurre — bandeaux et bandes alternées */
+  --surface: #ffffff; /* blanc pur — cartes posées sur le beurre */
 
   --ink: #2d120d;
   --muted: #7a544a;
+
+  /* Pied de page : seul aplat sombre du site, il ancre le bas de page. */
+  --footer-bg: #2d120d;
+  --footer-ink: #fff8ca;
+
+  /* Accent de marque employé EN TEXTE (surtitres, chiffres, ornements).
+     Distinct de --primary, qui ne sert que de FOND de bouton : un rouge assez
+     sombre pour porter du texte crème est trop sombre pour être lu en texte
+     sur fond sombre. Voir la contrepartie dans .dark. */
+  --brand-accent: #6b0b0c;
 
   --primary: #6b0b0c;
   --primary-hover: #520809;
@@ -48,6 +61,13 @@
 
   --ink: #fff8ca;
   --muted: #bcab97;
+
+  --footer-bg: #100c0a;
+  --footer-ink: #fff8ca;
+
+  /* Sur fond sombre, le rouge de marque tombe à 1,87:1 — illisible.
+     L'or du logo prend le relais : même rôle d'accent, ~8:1. */
+  --brand-accent: #dfaa36;
 
   --primary: #8f1416;
   --primary-hover: #a8191b;
@@ -83,6 +103,9 @@
   --color-cool-ink: var(--cool-ink);
   --color-line: var(--line);
   --color-line-strong: var(--line-strong);
+  --color-footer-bg: var(--footer-bg);
+  --color-footer-ink: var(--footer-ink);
+  --color-brand-accent: var(--brand-accent);
 
   --shadow-card: var(--shadow-card);
 }
@@ -169,6 +192,31 @@
 }
 
 @layer utilities {
+  /* Onglets de carte : le panneau inactif n'est masqué que si JS tourne.
+     Sans JavaScript, les panneaux restent tous affichés — la carte est alors
+     longue, mais complète et lisible. Le script du <head> pose `js` avant le
+     premier rendu, donc aucun clignotement. */
+  .js [data-menu-panel="false"] {
+    display: none;
+  }
+
+  .js [data-menu-panel="true"] {
+    animation: panel-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .js [data-menu-panel="true"] {
+      animation: none;
+    }
+  }
+
   .text-balance {
     text-wrap: balance;
   }

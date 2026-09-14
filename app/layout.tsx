@@ -52,10 +52,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fffbea" },
-    { media: "(prefers-color-scheme: dark)", color: "#1c0a06" },
-  ],
+  /* Valeur unique et non conditionnée aux préférences système : le site
+     démarre toujours en clair. Le script de thème réécrit cette balise quand
+     le visiteur bascule en sombre (cf. components/theme-toggle.tsx). */
+  themeColor: "#fffdf6",
 };
 
 /** Données structurées — aide Google à afficher horaires, adresse et carte. */
@@ -77,6 +77,13 @@ const restaurantJsonLd = {
     addressCountry: site.address.country,
   },
   hasMenu: [`${site.url}/la-carte`, `${site.url}/les-boissons`],
+  openingHoursSpecification: site.hours.map((slot) => ({
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: slot.schema.days,
+    opens: slot.schema.opens,
+    closes: slot.schema.closes,
+  })),
+  image: `${site.url}/opengraph-image.png`,
   sameAs: [site.social.instagram, site.social.facebook].filter(Boolean),
 };
 

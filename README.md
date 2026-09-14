@@ -68,6 +68,26 @@ PDF fournis par le client. Les PDF restent téléchargeables depuis le site
 (`public/Menu food.pdf`, `public/Menu boisson.pdf`) : **lors d'un changement de
 carte, mettre à jour les deux** — les données ET les PDF.
 
+### Affichage par onglets
+
+Les deux pages de carte utilisent [`components/menu-tabs.tsx`](components/menu-tabs.tsx) :
+une famille affichée à la fois, barre d'onglets collante sous l'en-tête. Sans ça, la
+page boissons faisait 10 500 px de haut pour une centaine de références — on s'y perdait.
+
+Le regroupement en onglets se déclare dans chaque page (`const groups`), ce qui permet
+de réunir plusieurs sections sous un même onglet (« Bières » couvre pression, bouteilles,
+apéritifs et whiskies).
+
+Trois points à garder en tête si tu y touches :
+
+- **Tous les panneaux sont rendus dans le HTML**, seul l'affichage bascule. Google indexe
+  donc la carte entière — vérifiable avec `curl` sur la page.
+- **Le masquage est conditionné à la classe `js`** (cf. `globals.css`). Sans JavaScript,
+  tous les panneaux restent affichés : la page est longue mais complète.
+- **`MenuSectionBlock` reçoit `animate={false}` dans les onglets.** L'apparition au scroll
+  repose sur IntersectionObserver, qui ne se déclenche jamais pour un panneau masqué : le
+  contenu resterait invisible au changement d'onglet. Les panneaux ont leur propre fondu CSS.
+
 ## Thème clair / sombre
 
 Piloté par la classe `dark` sur `<html>`.
@@ -96,14 +116,38 @@ variables : `bg-paper`, `text-ink`, `text-gold`, `border-line`, etc. suivent.
 | Botticelli | `#CDE3E8` | accent froid, en réserve |
 | Or du logo | `#C8920E` | filets, ornements, numérotation |
 
-Le bordeaux des grands bandeaux (hero, bandeaux de titre, happy hour, pied de
-page) est **identique dans les deux thèmes** : c'est la constante de la marque.
+### Hiérarchie
 
-En mode sombre, les fonds de page sont un anthracite chaud **désaturé**
+**Primaires : blanc et jaune beurre.** Ce sont eux qui portent la page — fonds,
+bandeaux d'ouverture, cartes. **Secondaires : marron et rouge**, employés par
+touches et jamais en grands aplats : le marron porte le texte, le rouge les
+boutons, surtitres, ornements et l'onglet actif.
+
+Le seul aplat sombre du site est le **pied de page** (`--footer-bg`), qui ancre
+le bas de page.
+
+⚠️ **`--primary` et `--brand-accent` ne sont pas interchangeables.**
+`--primary` ne sert que de **fond** de bouton (texte crème dessus). `--brand-accent`
+sert au **texte** accentué : surtitres, chiffres, ornements, onglet actif du menu
+mobile. Un rouge assez sombre pour porter du texte crème est trop sombre pour être
+lu *en texte* sur fond sombre — en mode sombre, `--brand-accent` bascule donc sur
+l'or du logo (1,87:1 → 8:1). Utiliser `text-primary` pour du texte rouvre le bug.
+
+En mode sombre, les fonds sont un anthracite chaud **désaturé**
 (`#17120F` / `#201A17` / `#261F1B`) et non le Coffee Bean. Les deux teintes sont
-des bruns rouges de valeurs voisines : côte à côte, le Rosewood des bandeaux et
-un fond Coffee Bean se brouillent. Fond désaturé, le bordeaux redevient la seule
-couleur saturée de la page et se détache franchement.
+des bruns rouges de valeurs voisines : côte à côte, le rouge de marque et un fond
+Coffee Bean se brouillent. Fond désaturé, le rouge reste la seule couleur saturée
+de la page et se détache franchement.
+
+## Partage et SEO
+
+- `app/opengraph-image.png` / `app/twitter-image.png` (1200 × 630) : aperçu affiché
+  quand un lien du site est partagé (WhatsApp, Facebook, Instagram, iMessage).
+  Régénérés à la main depuis le logo — à refaire si le logo change.
+- Données structurées `Restaurant` dans `app/layout.tsx` : nom, adresse, téléphone,
+  horaires, carte, image, fourchette de prix. Alimentées par `lib/site.ts`.
+  Les horaires `schema` doivent rester cohérents avec les horaires affichés.
+- `sitemap.xml` et `robots.txt` générés depuis `nav` et `site.url`.
 
 ## Assets
 

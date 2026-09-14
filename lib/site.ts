@@ -53,13 +53,29 @@ export const site = {
   },
 
   /**
-   * Horaires de service. `hours` est affiché tel quel ;
-   * `schema` suit le format OpeningHoursSpecification de Schema.org.
+   * Horaires de service. ⚠️ À COMPLÉTER — ce sont des valeurs d'exemple.
+   *
+   * `days` / `value` sont affichés tels quels sur le site ; `schema` alimente
+   * le OpeningHoursSpecification de Schema.org, que Google utilise pour
+   * afficher « Ouvert » / « Fermé » dans les résultats de recherche.
+   * Les deux doivent rester cohérents.
    */
   hours: [
-    { days: "Lundi – Jeudi", value: "12h00 – 23h00" }, // À COMPLÉTER
-    { days: "Vendredi – Samedi", value: "12h00 – 00h00" }, // À COMPLÉTER
-    { days: "Dimanche", value: "12h00 – 22h30" }, // À COMPLÉTER
+    {
+      days: "Lundi – Jeudi",
+      value: "12h00 – 23h00",
+      schema: { days: ["Monday", "Tuesday", "Wednesday", "Thursday"], opens: "12:00", closes: "23:00" },
+    },
+    {
+      days: "Vendredi – Samedi",
+      value: "12h00 – 00h00",
+      schema: { days: ["Friday", "Saturday"], opens: "12:00", closes: "00:00" },
+    },
+    {
+      days: "Dimanche",
+      value: "12h00 – 22h30",
+      schema: { days: ["Sunday"], opens: "12:00", closes: "22:30" },
+    },
   ],
 
   happyHour: {

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Diamond, MenuSectionBlock } from "@/components/menu";
+import { Diamond } from "@/components/menu";
+import { MenuTabs, type MenuGroup } from "@/components/menu-tabs";
 import { PageHeader } from "@/components/page-header";
 import { Reveal } from "@/components/reveal";
 import { beersAndSpirits, cocktails, happyHour, snacks, softDrinks, wines } from "@/lib/menu";
@@ -12,6 +13,19 @@ export const metadata: Metadata = {
   alternates: { canonical: "/les-boissons" },
 };
 
+/**
+ * La carte des boissons compte une centaine de références : regroupées en six
+ * familles, chacune tient sur un écran ou deux.
+ */
+const groups: MenuGroup[] = [
+  { id: "cocktails", label: "Cocktails", sections: [cocktails[0]] },
+  { id: "sans-alcool", label: "Sans alcool", sections: [cocktails[1]] },
+  { id: "vins", label: "Vins", sections: wines },
+  { id: "bieres", label: "Bières", sections: beersAndSpirits },
+  { id: "softs", label: "Softs", sections: softDrinks },
+  { id: "pouce", label: "Sur le pouce", sections: [snacks] },
+];
+
 export default function LesBoissonsPage() {
   return (
     <>
@@ -23,23 +37,9 @@ export default function LesBoissonsPage() {
 
       <HappyHourBanner />
 
-      <div className="mx-auto max-w-3xl px-5 py-20 sm:px-8 lg:py-28">
-        <div className="space-y-20 lg:space-y-24">
-          {cocktails.map((section, index) => (
-            <MenuSectionBlock key={section.title} section={section} delay={index * 60} />
-          ))}
-          {wines.map((section) => (
-            <MenuSectionBlock key={section.title} section={section} />
-          ))}
-          {beersAndSpirits.map((section) => (
-            <MenuSectionBlock key={section.title} section={section} />
-          ))}
-          <MenuSectionBlock section={snacks} />
-          {softDrinks.map((section) => (
-            <MenuSectionBlock key={section.title} section={section} />
-          ))}
-        </div>
+      <MenuTabs groups={groups} />
 
+      <div className="mx-auto max-w-3xl px-5 pb-20 sm:px-8 lg:pb-28">
         <Reveal className="mt-20 border-t border-line pt-10 text-center">
           <p className="text-sm/relaxed text-muted">
             Prix en euros, taxes et service compris. L’abus d’alcool est dangereux
@@ -69,11 +69,11 @@ export default function LesBoissonsPage() {
 
 function HappyHourBanner() {
   return (
-    <section className="border-b border-line bg-paper-alt">
+    <section className="border-b border-line bg-surface">
       <div className="mx-auto max-w-3xl px-5 py-14 sm:px-8">
-        <Reveal className="relative overflow-hidden rounded-sm border border-accent/40 bg-paper p-8 shadow-card sm:p-10">
+        <Reveal className="relative overflow-hidden rounded-sm border border-primary/30 bg-paper-alt p-8 sm:p-10">
           <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
-            <h2 className="font-display text-2xl text-ink sm:text-3xl">{happyHour.title}</h2>
+            <h2 className="font-display text-2xl text-brand-accent sm:text-3xl">{happyHour.title}</h2>
             <p className="eyebrow text-gold">{happyHour.schedule}</p>
           </div>
 

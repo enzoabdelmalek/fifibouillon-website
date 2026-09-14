@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { MenuSectionBlock } from "@/components/menu";
+import { MenuTabs, type MenuGroup } from "@/components/menu-tabs";
 import { PageHeader } from "@/components/page-header";
 import { Reveal } from "@/components/reveal";
 import { foodMenu } from "@/lib/menu";
@@ -12,6 +12,17 @@ export const metadata: Metadata = {
   alternates: { canonical: "/la-carte" },
 };
 
+/**
+ * Une famille par onglet. Les libellés sont raccourcis (« Entrées » plutôt que
+ * « Les entrées ») pour tenir sur une seule ligne de la barre, même sur mobile.
+ */
+const groups: MenuGroup[] = [
+  { id: "entrees", label: "Entrées", sections: [foodMenu[0]] },
+  { id: "salades", label: "Salades", sections: [foodMenu[1]] },
+  { id: "plats", label: "Plats", sections: [foodMenu[2]] },
+  { id: "desserts", label: "Desserts", sections: [foodMenu[3]] },
+];
+
 export default function LaCartePage() {
   return (
     <>
@@ -21,13 +32,9 @@ export default function LaCartePage() {
         intro="Les classiques du bouillon, mijotés chaque jour sur place. Servis sans interruption, du déjeuner au dîner."
       />
 
-      <div className="mx-auto max-w-3xl px-5 py-20 sm:px-8 lg:py-28">
-        <div className="space-y-20 lg:space-y-24">
-          {foodMenu.map((section, index) => (
-            <MenuSectionBlock key={section.title} section={section} delay={index * 60} />
-          ))}
-        </div>
+      <MenuTabs groups={groups} />
 
+      <div className="mx-auto max-w-3xl px-5 pb-20 sm:px-8 lg:pb-28">
         <Reveal className="mt-20 border-t border-line pt-10 text-center">
           <p className="text-sm/relaxed text-muted">
             Prix en euros, taxes et service compris. La carte évolue au fil des
