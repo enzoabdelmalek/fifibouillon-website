@@ -192,6 +192,34 @@
 }
 
 @layer utilities {
+  /* Fondu au changement de thème.
+     La transition n'est PAS permanente : elle est posée sur <html> le temps de
+     la bascule, puis retirée (cf. components/theme-toggle.tsx). Laissée en
+     place, elle ferait traîner chaque survol de lien ou de bouton du site. */
+  .theme-transition,
+  .theme-transition *,
+  .theme-transition *::before,
+  .theme-transition *::after {
+    transition:
+      background-color 260ms ease,
+      border-color 260ms ease,
+      color 260ms ease,
+      fill 260ms ease,
+      box-shadow 260ms ease,
+      opacity 260ms ease,
+      rotate 260ms ease !important;
+    transition-delay: 0ms !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .theme-transition,
+    .theme-transition *,
+    .theme-transition *::before,
+    .theme-transition *::after {
+      transition: none !important;
+    }
+  }
+
   /* Onglets de carte : le panneau inactif n'est masqué que si JS tourne.
      Sans JavaScript, les panneaux restent tous affichés — la carte est alors
      longue, mais complète et lisible. Le script du <head> pose `js` avant le

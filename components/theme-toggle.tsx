@@ -1,12 +1,15 @@
 "use client";
 
-import { useCallback, useSyncExternalStore } from "react";
+import { useCallback, useRef, useSyncExternalStore } from "react";
 import { cn } from "@/lib/utils";
 
 export const THEME_STORAGE_KEY = "fifi-theme";
 
 /** Couleurs de l'interface du navigateur (barre d'adresse mobile) par thème. */
 const THEME_COLOR = { light: "#fffdf6", dark: "#17120f" } as const;
+
+/** Doit rester aligné sur la durée de `.theme-transition` dans globals.css. */
+const TRANSITION_MS = 260;
 
 /**
  * Script injecté dans le <head> pour appliquer le thème avant le premier
@@ -52,10 +55,22 @@ const getServerTheme = () => "light" as const;
 
 export function ThemeToggle({ className }: { className?: string }) {
   const theme = useSyncExternalStore(subscribeToTheme, getTheme, getServerTheme);
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const toggle = useCallback(() => {
-    const next = document.documentElement.classList.contains("dark") ? "light" : "dark";
-    document.documentElement.classList.toggle("dark", next === "dark");
+    const root = document.documentElement;
+    const next = root.classList.contains("dark") ? "light" : "dark";
+
+    // Fondu armé juste pour la bascule, puis retiré : une transition laissée
+    // en place ferait traîner tous les survols du site.
+    root.classList.add("theme-transition");
+    clearTimeout(timer.current);
+    timer.current = setTimeout(
+      () => root.classList.remove("theme-transition"),
+      TRANSITION_MS,
+    );
+
+    root.classList.toggle("dark", next === "dark");
 
     // Garde la barre d'adresse mobile en accord avec la page.
     document
@@ -83,11 +98,13 @@ export function ThemeToggle({ className }: { className?: string }) {
         className,
       )}
     >
-      {/* Les deux icônes sont montées et permutées en CSS : rendu serveur stable. */}
+      {/* Les deux icônes sont empilées dans la même cellule de grille et
+          permutées en CSS : rendu serveur stable, et un fondu croisé possible
+          — `display` ne s'anime pas. */}
       <svg
         viewBox="0 0 24 24"
         aria-hidden
-        className="size-[18px] dark:hidden"
+        className="col-start-1 row-start-1 size-[18px] rotate-0 opacity-100 transition-[opacity,rotate] duration-300 ease-out motion-reduce:transition-none dark:rotate-90 dark:opacity-0"
         fill="none"
         stroke="currentColor"
         strokeWidth="1.5"
@@ -99,7 +116,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       <svg
         viewBox="0 0 24 24"
         aria-hidden
-        className="hidden size-[18px] dark:block"
+        className="col-start-1 row-start-1 size-[18px] -rotate-90 opacity-0 transition-[opacity,rotate] duration-300 ease-out motion-reduce:transition-none dark:rotate-0 dark:opacity-100"
         fill="none"
         stroke="currentColor"
         strokeWidth="1.5"

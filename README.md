@@ -92,14 +92,35 @@ Trois points à garder en tête si tu y touches :
 
 Piloté par la classe `dark` sur `<html>`.
 
-- Par défaut, le site suit les préférences système du visiteur.
-- La bascule de l'en-tête enregistre un choix explicite dans `localStorage`
-  (clé `fifi-theme`), qui prend alors le pas sur le système.
+- **Le site démarre toujours en clair.** La préférence système n'est
+  volontairement pas suivie : un visiteur dont le téléphone est en mode sombre
+  voit quand même le site en clair à sa première visite.
+- La bascule de l'en-tête enregistre le choix dans `localStorage`
+  (clé `fifi-theme`). Le mode sombre ne s'applique que si le visiteur l'a
+  demandé, et son choix est conservé d'une page à l'autre.
 - Un script inline dans `<head>` (`themeInitScript`) applique le thème **avant
-  le premier rendu** : pas de flash de thème clair au chargement.
+  le premier rendu** : pas de flash au chargement.
 - Ce même script pose la classe `js` sur `<html>`. Les animations d'apparition
-  ne masquent leur contenu que sous `.js` — sans JavaScript, la page reste
-  entièrement lisible.
+  et les onglets de carte ne masquent leur contenu que sous `.js` — sans
+  JavaScript, la page reste entièrement lisible.
+- La balise `<meta name="theme-color">` (couleur de la barre d'adresse mobile)
+  est réécrite à chaque bascule pour rester en accord avec la page.
+
+### Animation de bascule
+
+Fondu de 260 ms sur les couleurs, plus un fondu croisé rotatif des icônes
+soleil / lune. La classe `.theme-transition` est posée sur `<html>` **le temps
+de la bascule seulement**, puis retirée : laissée en place, sa règle
+`transition … !important` sur `*` ferait traîner chaque survol du site.
+Deux points à respecter si tu y touches :
+
+- `TRANSITION_MS` (theme-toggle.tsx) doit rester aligné sur la durée déclarée
+  dans `.theme-transition` (globals.css).
+- La règle `!important` couvre `opacity` et `rotate` : sans ça, elle écraserait
+  le fondu croisé des icônes pendant la bascule. Et Tailwind v4 génère la
+  propriété autonome `rotate`, pas `transform` — une transition sur `transform`
+  n'animerait rien.
+- L'ensemble est désactivé sous `prefers-reduced-motion`.
 
 Les couleurs sont des variables CSS définies dans `app/globals.css`
 (`:root` pour le clair, `.dark` pour le sombre) puis exposées à Tailwind via
