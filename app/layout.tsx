@@ -99,6 +99,13 @@ const restaurantJsonLd = {
     opens: slot.schema.opens,
     closes: slot.schema.closes,
   })),
+  // Google s'en sert pour le positionnement local : sans coordonnées, il
+  // géocode l'adresse lui-même, et « 56B » n'est pas toujours bien résolu.
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: site.address.latitude,
+    longitude: site.address.longitude,
+  },
   image: `${site.url}/opengraph-image.png`,
   sameAs: [site.social.instagram, site.social.tiktok, site.social.facebook].filter(Boolean),
 };

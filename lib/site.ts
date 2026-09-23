@@ -41,6 +41,9 @@ export const site = {
     postalCode: "75009",
     city: "Paris",
     country: "FR",
+    /** Coordonnées du siège déclaré en base Sirene, au mètre près. */
+    latitude: 48.880853,
+    longitude: 2.328765,
   },
 
   /**
@@ -100,13 +103,20 @@ export const site = {
    * c'est le client qui est responsable, pas nous.
    */
   legal: {
-    companyName: "À COMPLÉTER — raison sociale exacte (Kbis)",
-    legalForm: "À COMPLÉTER — SAS, SARL…",
-    capital: "À COMPLÉTER — capital social",
-    siren: "À COMPLÉTER — 9 chiffres",
-    rcs: "À COMPLÉTER — ville d'immatriculation",
-    vatNumber: "À COMPLÉTER — n° TVA intracommunautaire",
-    publicationDirector: "À COMPLÉTER — nom du gérant",
+    /**
+     * L'enseigne est « FiFi », la société est « RESTO B 56 » : ce sont les
+     * informations de la SOCIÉTÉ qui doivent figurer ici, pas celles de
+     * l'enseigne. Source : SIREN 502155716, base Sirene / RNE, siège déclaré
+     * au 56 B rue de Clichy — c'est bien le même établissement.
+     */
+    companyName: "RESTO B 56",
+    legalForm: "SARL (société à responsabilité limitée)",
+    capital: "À COMPLÉTER — capital social, sur les statuts ou le Kbis",
+    siren: "502 155 716",
+    rcs: "Paris",
+    /** Calculé : clé = (12 + 3 × (SIREN mod 97)) mod 97 = 27. */
+    vatNumber: "FR27502155716",
+    publicationDirector: "Rachid Benneouala, gérant",
     host: {
       name: "Vercel Inc.",
       address: "440 N Barranca Ave #4133, Covina, CA 91723, États-Unis",
