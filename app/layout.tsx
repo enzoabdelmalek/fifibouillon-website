@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Jost, Playfair_Display } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { themeInitScript } from "@/components/theme-toggle";
+import { env } from "@/lib/env";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -77,6 +79,20 @@ const restaurantJsonLd = {
     addressCountry: site.address.country,
   },
   hasMenu: [`${site.url}/la-carte`, `${site.url}/les-boissons`],
+  acceptsReservations: `${site.url}/reserver`,
+  potentialAction: {
+    "@type": "ReserveAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `${site.url}/reserver`,
+      inLanguage: "fr-FR",
+      actionPlatform: [
+        "https://schema.org/DesktopWebPlatform",
+        "https://schema.org/MobileWebPlatform",
+      ],
+    },
+    result: { "@type": "FoodEstablishmentReservation", name: "Réserver une table" },
+  },
   openingHoursSpecification: site.hours.map((slot) => ({
     "@type": "OpeningHoursSpecification",
     dayOfWeek: slot.schema.days,
@@ -84,7 +100,7 @@ const restaurantJsonLd = {
     closes: slot.schema.closes,
   })),
   image: `${site.url}/opengraph-image.png`,
-  sameAs: [site.social.instagram, site.social.facebook].filter(Boolean),
+  sameAs: [site.social.instagram, site.social.tiktok, site.social.facebook].filter(Boolean),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -109,6 +125,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(restaurantJsonLd) }}
         />
+
+        {/* Tracker de visites VWA → table `sessions`, lue par le dashboard.
+            L'identifiant n'est pas un secret (il est visible dans l'URL du
+            script) : le layout étant un composant serveur, on lit la même
+            variable BUSINESS_ID que les réservations, sans NEXT_PUBLIC_. */}
+        {env.businessId() ? (
+          <Script
+            src={`https://tracker-production-9a75.up.railway.app/track.js?id=${env.businessId()}`}
+            strategy="afterInteractive"
+          />
+        ) : null}
       </body>
     </html>
   );

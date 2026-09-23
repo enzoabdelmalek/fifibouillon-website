@@ -184,12 +184,58 @@ recadrés ; les fichiers dérivés sont dans `public/assets/` :
 
 Les originaux (`LogoNoir.jpeg`, `LogoBlanc.jpeg`, `Couleurs.jpeg`) sont conservés.
 
-## Pas de réservation
+## Réservation
 
-Le site est volontairement une vitrine : les appels à l'action pointent vers le
-téléphone et l'itinéraire. Pour ajouter un module de réservation plus tard, les
-boutons concernés sont dans `app/page.tsx` (hero et section « Nous trouver »),
-`components/site-header.tsx` et `app/nous-trouver/page.tsx`.
+Reprend l'architecture du site **La Toscana** : même projet Supabase, même table
+`reservations`, mêmes colonnes (`business_id`, `customer_name`, `customer_phone`,
+`customer_mail`, `date`, `guests`, `message`, `status`, `attended`). Le dashboard
+existant fonctionne donc sans modification — les deux restaurants sont
+distingués par `business_id`.
+
+| Fichier | Rôle |
+| --- | --- |
+| `lib/reservation.ts` | créneaux, fuseau horaire, validation (partagée client/serveur) |
+| `lib/supabase.ts` | client **serveur uniquement** + schéma de la table |
+| `lib/email.ts` | gabarits d'e-mails aux couleurs FiFi + envoi Resend |
+| `app/api/reservations/route.ts` | POST : valide, vérifie la capacité, enregistre, notifie |
+| `app/api/reservations/availability/route.ts` | GET : compteurs de couverts par créneau |
+| `components/reservation-form.tsx` | formulaire |
+| `app/reserver/page.tsx` | page |
+
+Variables d'environnement : voir `.env.example`. Sans elles, le site se
+construit et s'affiche normalement — c'est l'envoi du formulaire qui renvoie un
+message invitant à téléphoner.
+
+```bash
+npm run test:reservation   # fuseau horaire, créneaux, validation (24 assertions)
+```
+
+### Trois écarts volontaires avec Toscana
+
+**1. Aucune clé Supabase dans le navigateur.** Toscana expose
+`NEXT_PUBLIC_SUPABASE_ANON_KEY` et lit la table `reservations` depuis le client.
+Cette table contient des noms, téléphones et e-mails : tout ce que les
+politiques RLS autorisent l'anon à lire, n'importe quel visiteur peut le lire
+aussi. Ici les clés restent serveur, et l'API ne renvoie jamais que des
+compteurs de places — jamais le contenu des réservations.
+
+**2. Contrôle de capacité côté serveur.** Sur Toscana il est fait dans le
+navigateur : deux visiteurs peuvent réserver la dernière table simultanément, et
+un formulaire modifié passe outre. Ici la vérification est refaite avant
+l'insertion, et un créneau qui vient de se remplir renvoie un 409.
+
+**3. Créneaux dérivés des horaires.** Ils sont calculés depuis `site.hours`
+plutôt que codés en dur : corriger les horaires corrige les créneaux. Le dernier
+service est fixé à `LAST_SEATING_BEFORE_CLOSE_MINUTES` avant la fermeture, et le
+regroupement Déjeuner / Après-midi / Dîner n'est qu'un confort de lecture — FiFi
+sert en continu, il ne doit jamais créer de trou.
+
+### Fuseau horaire
+
+`parisDateTimeToUtc()` convertit l'heure locale parisienne en instant UTC avant
+enregistrement, en deux passes pour absorber les bascules heure d'été / hiver.
+Sans ça, un serveur en UTC enregistrerait une table de 20h à 18h ou 22h selon la
+saison. Couvert par les tests.
 
 ## Accessibilité
 

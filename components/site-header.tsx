@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Wordmark } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { nav, site } from "@/lib/site";
+import { desktopNav, nav, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
@@ -76,7 +76,7 @@ export function SiteHeader() {
 
         <nav aria-label="Navigation principale" className="hidden flex-1 lg:block">
           <ul className="flex items-center justify-center gap-2 xl:gap-5">
-            {nav.map((item) => {
+            {desktopNav.map((item) => {
               const active =
                 item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
               return (
@@ -107,14 +107,22 @@ export function SiteHeader() {
         <div className="ml-auto flex shrink-0 items-center gap-2 lg:ml-0">
           <a
             href={`tel:${site.contact.phone.replace(/\s/g, "")}`}
+            aria-label={`Appeler le ${site.contact.phoneDisplay}`}
             className={cn(
-              "hidden items-center gap-2 rounded-full px-4 py-2.5 text-[0.8rem] tracking-[0.12em] uppercase sm:inline-flex",
-              "border border-current/30 transition-colors hover:bg-current/10",
+              "hidden items-center gap-2 rounded-full border border-current/30 px-4 py-2.5",
+              "text-[0.8rem] tracking-[0.12em] uppercase transition-colors hover:bg-current/10 sm:inline-flex",
             )}
           >
             <PhoneIcon className="size-3.5" />
-            {site.contact.phoneDisplay}
+            <span className="hidden xl:inline">{site.contact.phoneDisplay}</span>
           </a>
+
+          <Link
+            href="/reserver"
+            className="rounded-full bg-primary px-5 py-2.5 text-[0.8rem] tracking-[0.12em] whitespace-nowrap text-on-primary uppercase transition-colors hover:bg-primary-hover sm:px-6"
+          >
+            Réserver
+          </Link>
 
           <ThemeToggle />
 

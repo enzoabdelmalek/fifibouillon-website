@@ -31,6 +31,19 @@ export function SiteFooter() {
                   </svg>
                 </a>
               ) : null}
+              {site.social.tiktok ? (
+                <a
+                  href={site.social.tiktok}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  aria-label="TikTok"
+                  className="grid size-10 place-items-center rounded-full border border-footer-ink/25 transition-colors hover:bg-footer-ink/10"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden className="size-4" fill="currentColor">
+                    <path d="M16.6 2h-2.9v13.1a2.6 2.6 0 1 1-2.2-2.6v-3a5.6 5.6 0 1 0 5.1 5.6V8.9a6.8 6.8 0 0 0 4 1.3V7.3a4 4 0 0 1-4-4Z" />
+                  </svg>
+                </a>
+              ) : null}
               {site.social.facebook ? (
                 <a
                   href={site.social.facebook}

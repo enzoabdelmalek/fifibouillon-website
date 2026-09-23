@@ -43,16 +43,16 @@ function Hero() {
 
         <Reveal delay={260} className="mt-9 flex flex-wrap items-center justify-center gap-3">
           <Link
-            href="/la-carte"
+            href="/reserver"
             className="rounded-full bg-primary px-7 py-3.5 text-[0.8rem] tracking-[0.16em] text-on-primary uppercase transition-transform duration-200 hover:-translate-y-0.5"
           >
-            Découvrir la carte
+            Réserver une table
           </Link>
           <Link
-            href="/nous-trouver"
+            href="/la-carte"
             className="rounded-full border border-line-strong px-7 py-3.5 text-[0.8rem] tracking-[0.16em] uppercase transition-colors duration-200 hover:bg-surface"
           >
-            Nous trouver
+            Découvrir la carte
           </Link>
         </Reveal>
       </div>
@@ -348,11 +348,17 @@ function Trouver() {
           </address>
 
           <div className="mt-9 flex flex-wrap gap-3">
+            <Link
+              href="/reserver"
+              className="rounded-full bg-primary px-7 py-3.5 text-[0.8rem] tracking-[0.16em] text-on-primary uppercase transition-colors hover:bg-primary-hover"
+            >
+              Réserver une table
+            </Link>
             <a
               href={site.mapsUrl}
               target="_blank"
               rel="noreferrer noopener"
-              className="rounded-full bg-primary px-7 py-3.5 text-[0.8rem] tracking-[0.16em] text-on-primary uppercase transition-colors hover:bg-primary-hover"
+              className="rounded-full border border-line-strong px-7 py-3.5 text-[0.8rem] tracking-[0.16em] text-ink uppercase transition-colors hover:bg-paper-alt"
             >
               Itinéraire
             </a>
