@@ -92,6 +92,47 @@ export const site = {
     },
   ],
 
+  /**
+   * Identité légale de l'éditeur — mentions légales (LCEN art. 6 III).
+   *
+   * ⚠️ À COMPLÉTER avec l'extrait Kbis du restaurant. Obligatoire : un site
+   * professionnel sans mentions légales expose son éditeur à une sanction, et
+   * c'est le client qui est responsable, pas nous.
+   */
+  legal: {
+    companyName: "À COMPLÉTER — raison sociale exacte (Kbis)",
+    legalForm: "À COMPLÉTER — SAS, SARL…",
+    capital: "À COMPLÉTER — capital social",
+    siren: "À COMPLÉTER — 9 chiffres",
+    rcs: "À COMPLÉTER — ville d'immatriculation",
+    vatNumber: "À COMPLÉTER — n° TVA intracommunautaire",
+    publicationDirector: "À COMPLÉTER — nom du gérant",
+    host: {
+      name: "Vercel Inc.",
+      address: "440 N Barranca Ave #4133, Covina, CA 91723, États-Unis",
+      url: "https://vercel.com",
+    },
+    /**
+     * Durées de conservation annoncées dans la politique de confidentialité.
+     *
+     * ⚠️ Ce sont des ENGAGEMENTS : rien ne les applique aujourd'hui, aucune
+     * purge n'est programmée. Une politique qui promet un effacement qui
+     * n'arrive jamais est pire que pas de politique du tout — c'est une
+     * déclaration inexacte à la CNIL en cas de contrôle. À implémenter côté
+     * base avant la mise en ligne, ou à revoir à la baisse ici.
+     *
+     * 13 mois pour l'audience : c'est le plafond que la CNIL tolère pour une
+     * mesure d'audience dispensée de consentement.
+     */
+    retention: {
+      reservationMonths: 12,
+      analyticsMonths: 13,
+    },
+
+    /** Dernière mise à jour des textes légaux, affichée en bas de page. */
+    updatedOn: "2026-09-23",
+  },
+
   happyHour: {
     label: "Happy hour",
     value: "Tous les jours, 16h – 22h",

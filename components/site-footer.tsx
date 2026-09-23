@@ -133,8 +133,19 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-14 flex flex-col gap-4 border-t border-footer-ink/15 pt-7 text-xs text-footer-ink/55 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {year} {site.fullName}. Tous droits réservés.
+          <p className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span>
+              © {year} {site.fullName}.
+            </span>
+            <Link href="/mentions-legales" className="py-1 transition-colors hover:text-footer-ink">
+              Mentions légales
+            </Link>
+            <span aria-hidden className="text-footer-ink/30">
+              ·
+            </span>
+            <Link href="/confidentialite" className="py-1 transition-colors hover:text-footer-ink">
+              Confidentialité
+            </Link>
           </p>
           <p>
             Prix en euros, taxes et service compris. L’abus d’alcool est dangereux pour

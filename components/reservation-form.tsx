@@ -346,7 +346,13 @@ export function ReservationForm() {
       </button>
 
       <p className="mt-4 text-center text-xs/relaxed text-muted">
-        Vos coordonnées servent uniquement à gérer cette réservation.
+        Vos coordonnées servent uniquement à gérer cette réservation.{" "}
+        <a
+          href="/confidentialite"
+          className="text-brand-accent underline-offset-4 hover:underline"
+        >
+          En savoir plus
+        </a>
       </p>
     </form>
   );
