@@ -98,9 +98,10 @@ export const site = {
   /**
    * Identité légale de l'éditeur — mentions légales (LCEN art. 6 III).
    *
-   * ⚠️ À COMPLÉTER avec l'extrait Kbis du restaurant. Obligatoire : un site
-   * professionnel sans mentions légales expose son éditeur à une sanction, et
-   * c'est le client qui est responsable, pas nous.
+   * Complet et vérifié. Ne modifier qu'à partir d'une source officielle : un
+   * site professionnel dont les mentions légales sont fausses ou absentes
+   * expose son éditeur à une sanction, et c'est le client qui est
+   * responsable, pas nous.
    */
   legal: {
     /**
@@ -111,7 +112,7 @@ export const site = {
      */
     companyName: "RESTO B 56",
     legalForm: "SARL (société à responsabilité limitée)",
-    capital: "À COMPLÉTER — capital social, sur les statuts ou le Kbis",
+    capital: "2 000 €",
     siren: "502 155 716",
     rcs: "Paris",
     /** Calculé : clé = (12 + 3 × (SIREN mod 97)) mod 97 = 27. */
