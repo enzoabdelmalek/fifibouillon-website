@@ -4,25 +4,26 @@ import { MenuTabs, type MenuGroup } from "@/components/menu-tabs";
 import { PageHeader } from "@/components/page-header";
 import { Photo } from "@/components/photo";
 import { Reveal } from "@/components/reveal";
-import { beersAndSpirits, cocktails, happyHour, snacks, softDrinks, wines } from "@/lib/menu";
+import { beers, cocktails, happyHour, snacks, softDrinks, spirits, wines } from "@/lib/menu";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Les boissons",
   description:
-    "Cocktails signature, vins à la verse, bières pression, apéritifs et cafétéria. Happy hour tous les jours de 16h à 22h au bouillon FiFi, Paris 9ᵉ.",
+    "Cocktails signature, vins à la verse, bières pression, apéritifs, whiskies et cafétéria. Happy hour tous les jours de 16h à 22h au bouillon FiFi, Paris 9ᵉ.",
   alternates: { canonical: "/les-boissons" },
 };
 
 /**
- * La carte des boissons compte une centaine de références : regroupées en six
+ * La carte des boissons compte une centaine de références : regroupées en sept
  * familles, chacune tient sur un écran ou deux.
  */
 const groups: MenuGroup[] = [
   { id: "cocktails", label: "Cocktails", sections: [cocktails[0]] },
   { id: "sans-alcool", label: "Sans alcool", sections: [cocktails[1]] },
   { id: "vins", label: "Vins", sections: wines },
-  { id: "bieres", label: "Bières", sections: beersAndSpirits },
+  { id: "bieres", label: "Bières", sections: beers },
+  { id: "alcools", label: "Alcools", sections: spirits },
   { id: "softs", label: "Softs", sections: softDrinks },
   { id: "pouce", label: "Sur le pouce", sections: [snacks] },
 ];

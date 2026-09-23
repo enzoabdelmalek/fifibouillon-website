@@ -267,7 +267,7 @@ export const wines: MenuSection[] = [
   },
 ];
 
-export const beersAndSpirits: MenuSection[] = [
+export const beers: MenuSection[] = [
   {
     title: "Bières pression",
     subtitle: "25 cl / 50 cl",
@@ -288,6 +288,10 @@ export const beersAndSpirits: MenuSection[] = [
       { name: "Corona", price: "6,50 €" },
     ],
   },
+];
+
+/** Apéritifs et whiskies : les alcools servis au verre, hors bière et vin. */
+export const spirits: MenuSection[] = [
   {
     title: "Apéritifs",
     items: [
