@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Diamond } from "@/components/menu";
 import { MenuTabs, type MenuGroup } from "@/components/menu-tabs";
 import { PageHeader } from "@/components/page-header";
+import { Photo } from "@/components/photo";
 import { Reveal } from "@/components/reveal";
 import { beersAndSpirits, cocktails, happyHour, snacks, softDrinks, wines } from "@/lib/menu";
 import { site } from "@/lib/site";
@@ -40,6 +41,11 @@ export default function LesBoissonsPage() {
       <MenuTabs groups={groups} />
 
       <div className="mx-auto max-w-3xl px-5 pb-20 sm:px-8 lg:pb-28">
+        {/* Le comptoir ferme la page, là où la carte s'arrête et où l'on commande. */}
+        <Reveal className="mt-16">
+          <Photo name="comptoir" className="mx-auto max-w-sm" sizes="(min-width: 640px) 24rem, 100vw" />
+        </Reveal>
+
         <Reveal className="mt-20 border-t border-line pt-10 text-center">
           <p className="text-sm/relaxed text-muted">
             Prix en euros, taxes et service compris. L’abus d’alcool est dangereux

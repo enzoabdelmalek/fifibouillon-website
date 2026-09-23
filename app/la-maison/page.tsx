@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CatMark } from "@/components/logo";
 import { Diamond } from "@/components/menu";
 import { PageHeader } from "@/components/page-header";
+import { Photo } from "@/components/photo";
 import { Reveal } from "@/components/reveal";
 import { site } from "@/lib/site";
 
@@ -21,6 +22,7 @@ const chapters = [
       "Le bouillon naît à Paris au milieu du XIXᵉ siècle. Un boucher a l’idée de servir aux ouvriers des halles un bouillon de viande réconfortant, pour quelques sous, dans une grande salle où tout le monde s’assoit côte à côte.",
       "Le principe fait fureur : une cuisine française sans chichis, servie vite, à un prix que chacun peut s’offrir. C’est cette promesse-là, intacte, que nous reprenons à notre compte.",
     ],
+    photo: "facade" as const,
   },
   {
     eyebrow: "La cuisine",
@@ -29,6 +31,7 @@ const chapters = [
       "Le bœuf bourguignon mijote longuement, la soupe à l’oignon est gratinée à la commande, les desserts sortent de notre cuisine. Les grands classiques sont là — œufs mayonnaise, poireaux vinaigrette, confit de canard, crème brûlée.",
       "À côté, quelques écarts assumés : une burrata bien fraîche, des coquillettes crémeuses à la truffe, un burger maison. Le bouillon d’aujourd’hui, pas celui du musée.",
     ],
+    photo: "assiette" as const,
   },
   {
     eyebrow: "La salle",
@@ -37,6 +40,7 @@ const chapters = [
       "On sert à 15h comme à 22h. Pas de coupure, pas de créneau à négocier : on pousse la porte quand on a faim, ou simplement soif — le comptoir reste ouvert bien après le dessert.",
       "Et de 16h à 22h, les pintes et les cocktails signature passent au tarif happy hour, tous les jours.",
     ],
+    photo: "salle" as const,
   },
 ];
 
@@ -62,6 +66,7 @@ export default function LaMaisonPage() {
                   <p key={paragraph.slice(0, 32)}>{paragraph}</p>
                 ))}
               </div>
+              <Photo name={chapter.photo} className="mt-10" sizes="(min-width: 768px) 48rem, 100vw" />
             </Reveal>
           ))}
         </div>

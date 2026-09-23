@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/page-header";
+import { Photo } from "@/components/photo";
 import { Reveal } from "@/components/reveal";
 import { site } from "@/lib/site";
 
@@ -52,6 +53,9 @@ export default function NousTrouverPage() {
           </Reveal>
 
           <Reveal delay={140} className="space-y-6">
+            {/* La devanture : c'est elle qu'on cherche du regard en arrivant. */}
+            <Photo name="facade" sizes="(min-width: 1024px) 34rem, 100vw" />
+
             <div className="rounded-sm border border-line bg-paper-alt p-8 sm:p-10">
               <h2 className="eyebrow text-gold">Horaires</h2>
               <dl className="mt-6 divide-y divide-line">

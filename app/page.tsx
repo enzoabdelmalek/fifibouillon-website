@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CatMark, Logo } from "@/components/logo";
 import { Diamond } from "@/components/menu";
+import { Photo } from "@/components/photo";
 import { Reveal } from "@/components/reveal";
 import { signatures } from "@/lib/menu";
 import { site } from "@/lib/site";
@@ -113,7 +114,9 @@ function Maison() {
           </Link>
         </Reveal>
 
-        <Reveal delay={160}>
+        <Reveal delay={160} className="space-y-8">
+          <Photo name="salle" sizes="(min-width: 1024px) 34rem, 100vw" />
+
           <div className="grain relative overflow-hidden rounded-sm border border-line bg-paper-alt p-8 shadow-card sm:p-12">
             {/* double filet or, à la manière d'un cartouche de menu */}
             <div
