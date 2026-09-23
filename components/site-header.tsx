@@ -60,7 +60,9 @@ export function SiteHeader() {
           : "border-b border-transparent bg-transparent",
       )}
     >
-      <div className="mx-auto flex h-[72px] max-w-7xl items-center gap-6 px-5 sm:px-8 lg:h-20">
+      {/* Pleine largeur : l'en-tête va d'un bord à l'autre, sans la gouttière
+          d'un conteneur centré. Seule la marge de sécurité subsiste. */}
+      <div className="flex h-[72px] w-full items-center gap-6 px-5 sm:px-8 lg:h-20 lg:px-10">
         <Link
           href="/"
           aria-label="FiFi — retour à l'accueil"
@@ -104,19 +106,10 @@ export function SiteHeader() {
           </ul>
         </nav>
 
+        {/* Pas de téléphone ici : « Réserver » est l'action de l'en-tête, et
+            le numéro reste accessible dans le menu mobile et en pied de page,
+            où on va le chercher. */}
         <div className="ml-auto flex shrink-0 items-center gap-2 lg:ml-0">
-          <a
-            href={`tel:${site.contact.phone.replace(/\s/g, "")}`}
-            aria-label={`Appeler le ${site.contact.phoneDisplay}`}
-            className={cn(
-              "hidden items-center gap-2 rounded-full border border-current/30 px-4 py-2.5",
-              "text-[0.8rem] tracking-[0.12em] uppercase transition-colors hover:bg-current/10 sm:inline-flex",
-            )}
-          >
-            <PhoneIcon className="size-3.5" />
-            <span className="hidden xl:inline">{site.contact.phoneDisplay}</span>
-          </a>
-
           <Link
             href="/reserver"
             className="rounded-full bg-primary px-5 py-2.5 text-[0.8rem] tracking-[0.12em] whitespace-nowrap text-on-primary uppercase transition-colors hover:bg-primary-hover sm:px-6"
