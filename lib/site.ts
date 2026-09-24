@@ -19,7 +19,7 @@
 
 export const site = {
   name: "FiFi",
-  fullName: "FiFi - Bouillon & Brasserie",
+  fullName: "FiFi Bouillon & Brasserie",
   tagline: "Bouillon & Brasserie",
   district: "9ᵉ arrondissement",
   city: "Paris",
