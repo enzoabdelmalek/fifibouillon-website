@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
-import { nav, site } from "@/lib/site";
+import { footerNav, site } from "@/lib/site";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -63,7 +63,7 @@ export function SiteFooter() {
           <div>
             <h2 className="eyebrow text-accent">Le restaurant</h2>
             <ul className="mt-5 text-sm">
-              {nav.slice(1).map((item) => (
+              {footerNav.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
@@ -152,6 +152,21 @@ export function SiteFooter() {
             la santé, à consommer avec modération.
           </p>
         </div>
+
+        {/* Signature de l'agence. Lien suivi volontairement : c'est ce qui en
+            fait un vrai signal pour les moteurs, et donc la contrepartie SEO
+            d'un site livré. */}
+        <p className="mt-6 text-center text-xs text-footer-ink/45">
+          Powered &amp; Designed by{" "}
+          <a
+            href="https://www.vibewebagency.fr"
+            target="_blank"
+            rel="noopener"
+            className="underline underline-offset-4 decoration-1 transition-colors hover:text-footer-ink/80"
+          >
+            Vibe Web Agency
+          </a>
+        </p>
       </div>
     </footer>
   );

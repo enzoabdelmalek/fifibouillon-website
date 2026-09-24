@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { listPosts, machineDate } from "@/lib/blog";
-import { nav, site } from "@/lib/site";
+import { indexedPages, site } from "@/lib/site";
 
 /** Le sitemap suit les publications : il se régénère comme les pages du journal. */
 export const revalidate = 600;
@@ -8,7 +8,7 @@ export const revalidate = 600;
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date();
 
-  const pages: MetadataRoute.Sitemap = nav.map((item) => ({
+  const pages: MetadataRoute.Sitemap = indexedPages.map((item) => ({
     url: new URL(item.href, site.url).toString(),
     lastModified,
     changeFrequency: item.href === "/" ? "monthly" : "yearly",
