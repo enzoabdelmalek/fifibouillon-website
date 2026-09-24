@@ -162,6 +162,7 @@ export const nav = [
   { href: "/la-carte", label: "La carte" },
   { href: "/les-boissons", label: "Les boissons" },
   { href: "/la-maison", label: "La maison" },
+  { href: "/journal", label: "Le journal" },
   { href: "/nous-trouver", label: "Nous trouver" },
   { href: "/reserver", label: "Réserver" },
 ] as const;

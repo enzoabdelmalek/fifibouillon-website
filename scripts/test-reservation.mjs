@@ -3,6 +3,7 @@ import {
   todayInParis, lastBookableDate,
 } from "@/lib/reservation.ts";
 import { clientIp, rateLimit, resetRateLimits } from "@/lib/rate-limit.ts";
+import { renderMarkdown } from "@/lib/markdown.ts";
 
 let fails = 0;
 const eq = (label, got, want) => {
@@ -114,6 +115,28 @@ eq("adresse du client derrière un proxy",
    clientIp(req({ "x-forwarded-for": "203.0.113.7, 70.41.3.18, 150.172.238.178" })), "203.0.113.7");
 eq("repli sur x-real-ip", clientIp(req({ "x-real-ip": "203.0.113.9" })), "203.0.113.9");
 eq("aucune adresse fournie", clientIp(req({})), "inconnue");
+
+console.log("\n- Rendu Markdown des articles -");
+const md = (src) => renderMarkdown(src);
+// Le contenu vient de la base : tout doit être échappé avant d'être rendu.
+eq("une balise script est neutralisée",
+   md("<script>alert(1)</script>").includes("<script>"), false);
+eq("elle apparaît en texte", md("<script>alert(1)</script>").includes("&lt;script&gt;"), true);
+eq("un gestionnaire d'événement ne produit pas de balise",
+   md('<img src=x onerror="alert(1)">').includes("<img"), false);
+eq("un lien javascript: n'est pas transformé en lien",
+   md("[clic](javascript:alert(1))").includes("<a "), false);
+eq("un lien http est autorisé et s'ouvre ailleurs",
+   md("[VWA](https://vibewebagency.fr)").includes('target="_blank"'), true);
+eq("un lien interne reste dans l'onglet",
+   md("[la carte](/la-carte)").includes('target="_blank"'), false);
+eq("titre de niveau 2", md("## Le bouillon").includes("<h2"), true);
+eq("liste à puces", md("- un\n- deux").match(/<li>/g).length, 2);
+eq("citation", md("> Bien manger").includes("<blockquote"), true);
+eq("gras", md("du **vrai** fait maison").includes("<strong"), true);
+eq("les paragraphes sont séparés", md("un\n\ndeux").match(/<p /g).length, 2);
+eq("une apostrophe typographique passe sans dommage",
+   md("l'équipe").includes("l'équipe"), true);
 
 console.log(fails === 0 ? "\n✅ tout passe\n" : `\n❌ ${fails} échec(s)\n`);
 process.exit(fails ? 1 : 0);

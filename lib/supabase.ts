@@ -36,6 +36,28 @@ export type ReservationRow = {
   attended: boolean | null;
 };
 
+/**
+ * Un article de la table `blog`, partagée par tous les sites clients.
+ *
+ * `date` est du texte libre déjà mis en forme (« 24 août 2024 ») : il ne se
+ * trie pas et ne vaut rien pour un moteur. `created_at` sert pour tout ce qui
+ * doit être lisible par une machine.
+ */
+export type BlogRow = {
+  id: string;
+  business_id: string;
+  slug: string;
+  title: string;
+  date: string | null;
+  category: string | null;
+  excerpt: string | null;
+  content: string | null;
+  cover_url: string | null;
+  active: boolean;
+  display_order: number;
+  created_at: string;
+};
+
 /** Schéma minimal : sans lui, supabase-js type toutes les tables en `never`. */
 type Database = {
   public: {
@@ -44,6 +66,12 @@ type Database = {
         Row: ReservationRow & { id: string };
         Insert: ReservationRow;
         Update: Partial<ReservationRow>;
+        Relationships: [];
+      };
+      blog: {
+        Row: BlogRow;
+        Insert: Partial<BlogRow>;
+        Update: Partial<BlogRow>;
         Relationships: [];
       };
     };
