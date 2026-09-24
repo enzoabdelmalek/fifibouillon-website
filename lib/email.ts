@@ -69,7 +69,7 @@ function shell(title: string, intro: string, table: string, footer: string): str
 </body></html>`;
 }
 
-export function customerTemplate(input: ReservationInput): string {
+export function customerTemplate(input: ReservationInput, reservationId: string | null = null): string {
   return shell(
     "Votre table est réservée",
     `Bonjour <strong style="color:${INK};">${esc(input.name)}</strong>, nous avons bien noté votre réservation et serons heureux de vous accueillir.`,
@@ -79,8 +79,18 @@ export function customerTemplate(input: ReservationInput): string {
       row("Convives", `${input.guests} ${input.guests > 1 ? "personnes" : "personne"}`),
       input.message ? row("Votre note", esc(input.message)) : "",
     ].join(""),
-    `<p style="margin:24px 0 0;font-size:14px;line-height:1.65;color:${MUTED};">
-       Un empêchement ? Prévenez-nous au plus tôt au
+    `${
+       reservationId
+         ? `<p style="margin:24px 0 0;text-align:center;">
+              <a href="${new URL(`/reserver/${reservationId}`, site.url).toString()}"
+                 style="display:inline-block;background:${ROSEWOOD};color:${BUTTER};text-decoration:none;padding:14px 28px;border-radius:999px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;">
+                Voir ou annuler ma réservation
+              </a>
+            </p>`
+         : ""
+     }
+     <p style="margin:24px 0 0;font-size:14px;line-height:1.65;color:${MUTED};">
+       Un empêchement ? Annulez depuis le lien ci-dessus, ou appelez-nous au
        <a href="tel:${site.contact.phone.replace(/\s/g, "")}" style="color:${ROSEWOOD};font-weight:600;text-decoration:none;">${site.contact.phoneDisplay}</a>,
        nous libérerons la table.
      </p>
@@ -116,6 +126,7 @@ export function restaurantTemplate(input: ReservationInput): string {
  */
 export async function sendReservationEmails(
   input: ReservationInput,
+  reservationId: string | null = null,
 ): Promise<{ sent: boolean; reason?: string }> {
   const apiKey = env.resendApiKey();
   const from = env.resendFrom();
@@ -141,7 +152,7 @@ export async function sendReservationEmails(
         from: from!,
         to: input.email,
         subject: `Votre table chez FiFi - ${date}`,
-        html: customerTemplate(input),
+        html: customerTemplate(input, reservationId),
       }),
       resend.emails.send({
         from: from!,

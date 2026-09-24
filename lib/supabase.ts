@@ -23,6 +23,8 @@ function readEnv() {
  * les deux restaurants partagent le même projet Supabase et le même dashboard,
  * distingués par `business_id`. Ne pas renommer sans migrer le dashboard.
  */
+export type ReservationStatus = "scheduled" | "cancelled";
+
 export type ReservationRow = {
   business_id: string;
   customer_name: string;
@@ -32,7 +34,12 @@ export type ReservationRow = {
   date: string;
   guests: number;
   message: string | null;
-  status: "scheduled";
+  /**
+   * Le site ne crée que des réservations « scheduled ». Les autres valeurs
+   * viennent du dashboard ou de l'annulation par le client : il faut les
+   * connaître pour les lire, même si on ne les écrit pas toutes.
+   */
+  status: ReservationStatus;
   attended: boolean | null;
 };
 

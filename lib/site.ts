@@ -162,7 +162,6 @@ export const nav = [
   { href: "/la-carte", label: "La carte" },
   { href: "/les-boissons", label: "Les boissons" },
   { href: "/la-maison", label: "La maison" },
-  { href: "/journal", label: "Le journal" },
   { href: "/nous-trouver", label: "Nous trouver" },
   { href: "/reserver", label: "Réserver" },
 ] as const;
@@ -172,3 +171,16 @@ export const nav = [
  * doit pas apparaître deux fois dans la barre de navigation.
  */
 export const desktopNav = nav.filter((item) => item.href !== "/reserver");
+
+/**
+ * Le journal ne figure QUE dans le pied de page : il n'est pas ce qu'on vient
+ * chercher sur le site d'un restaurant, et l'ajouter à l'en-tête diluerait les
+ * cinq entrées qui comptent. Il reste dans le sitemap, donc indexé.
+ */
+export const footerNav = [
+  ...nav.slice(1),
+  { href: "/journal", label: "Le journal" },
+] as const;
+
+/** Pages à indexer : la navigation visible, plus le journal. */
+export const indexedPages = [...nav, { href: "/journal", label: "Le journal" }] as const;
