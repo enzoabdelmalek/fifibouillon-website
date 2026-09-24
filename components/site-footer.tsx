@@ -12,7 +12,7 @@ export function SiteFooter() {
           <div>
             <Logo variant="onDark" className="h-24" />
             <p className="mt-6 max-w-xs text-sm/relaxed text-footer-ink/70">
-              {site.tagline} — {site.district}. La cuisine française de toujours,
+              {site.tagline} - {site.district}. La cuisine française de toujours,
               généreuse et à prix juste.
             </p>
             <div className="mt-6 flex gap-3">
@@ -28,6 +28,19 @@ export function SiteFooter() {
                     <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
                     <circle cx="12" cy="12" r="3.9" />
                     <circle cx="17.2" cy="6.8" r="1.05" fill="currentColor" stroke="none" />
+                  </svg>
+                </a>
+              ) : null}
+              {site.social.tiktok ? (
+                <a
+                  href={site.social.tiktok}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  aria-label="TikTok"
+                  className="grid size-10 place-items-center rounded-full border border-footer-ink/25 transition-colors hover:bg-footer-ink/10"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden className="size-4" fill="currentColor">
+                    <path d="M16.6 2h-2.9v13.1a2.6 2.6 0 1 1-2.2-2.6v-3a5.6 5.6 0 1 0 5.1 5.6V8.9a6.8 6.8 0 0 0 4 1.3V7.3a4 4 0 0 1-4-4Z" />
                   </svg>
                 </a>
               ) : null}
@@ -49,12 +62,12 @@ export function SiteFooter() {
 
           <div>
             <h2 className="eyebrow text-accent">Le restaurant</h2>
-            <ul className="mt-5 space-y-1 text-sm">
+            <ul className="mt-5 text-sm">
               {nav.slice(1).map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="inline-block py-1 text-footer-ink/75 transition-colors hover:text-footer-ink"
+                    className="inline-block py-2.5 text-footer-ink/75 transition-colors hover:text-footer-ink"
                   >
                     {item.label}
                   </Link>
@@ -65,7 +78,7 @@ export function SiteFooter() {
                   href="/Menu%20food.pdf"
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="inline-block py-1 text-footer-ink/75 transition-colors hover:text-footer-ink"
+                  className="inline-block py-2.5 text-footer-ink/75 transition-colors hover:text-footer-ink"
                 >
                   Carte à manger (PDF)
                 </a>
@@ -75,7 +88,7 @@ export function SiteFooter() {
                   href="/Menu%20boisson.pdf"
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="inline-block py-1 text-footer-ink/75 transition-colors hover:text-footer-ink"
+                  className="inline-block py-2.5 text-footer-ink/75 transition-colors hover:text-footer-ink"
                 >
                   Carte des boissons (PDF)
                 </a>
@@ -94,13 +107,13 @@ export function SiteFooter() {
               <p>
                 <a
                   href={`tel:${site.contact.phone.replace(/\s/g, "")}`}
-                  className="block py-1 transition-colors hover:text-footer-ink"
+                  className="block py-2.5 transition-colors hover:text-footer-ink"
                 >
                   {site.contact.phoneDisplay}
                 </a>
                 <a
                   href={`mailto:${site.contact.email}`}
-                  className="block py-1 transition-colors hover:text-footer-ink"
+                  className="block py-2.5 transition-colors hover:text-footer-ink"
                 >
                   {site.contact.email}
                 </a>
@@ -120,8 +133,19 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-14 flex flex-col gap-4 border-t border-footer-ink/15 pt-7 text-xs text-footer-ink/55 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {year} {site.fullName}. Tous droits réservés.
+          <p className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span>
+              © {year} {site.fullName}.
+            </span>
+            <Link href="/mentions-legales" className="py-3 transition-colors hover:text-footer-ink">
+              Mentions légales
+            </Link>
+            <span aria-hidden className="text-footer-ink/30">
+              ·
+            </span>
+            <Link href="/confidentialite" className="py-3 transition-colors hover:text-footer-ink">
+              Confidentialité
+            </Link>
           </p>
           <p>
             Prix en euros, taxes et service compris. L’abus d’alcool est dangereux pour

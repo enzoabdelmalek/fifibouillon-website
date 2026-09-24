@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CatMark, Logo } from "@/components/logo";
 import { Diamond } from "@/components/menu";
+import { Photo } from "@/components/photo";
 import { Reveal } from "@/components/reveal";
 import { signatures } from "@/lib/menu";
 import { site } from "@/lib/site";
@@ -24,11 +25,11 @@ function Hero() {
   return (
     <section className="grain relative flex min-h-[100svh] flex-col overflow-hidden bg-paper-alt text-ink">
       <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col items-center justify-center px-5 py-24 text-center sm:px-8">
-        <Reveal>
+        <Reveal immediate>
           <Logo className="h-40 sm:h-48 lg:h-56" priority />
         </Reveal>
 
-        <Reveal delay={140}>
+        <Reveal immediate delay={140}>
           <p className="eyebrow mt-8 text-brand-accent">
             {site.district} · {site.city}
           </p>
@@ -41,18 +42,18 @@ function Hero() {
           </p>
         </Reveal>
 
-        <Reveal delay={260} className="mt-9 flex flex-wrap items-center justify-center gap-3">
+        <Reveal immediate delay={260} className="mt-9 flex flex-wrap items-center justify-center gap-3">
           <Link
-            href="/la-carte"
+            href="/reserver"
             className="rounded-full bg-primary px-7 py-3.5 text-[0.8rem] tracking-[0.16em] text-on-primary uppercase transition-transform duration-200 hover:-translate-y-0.5"
           >
-            Découvrir la carte
+            Réserver une table
           </Link>
           <Link
-            href="/nous-trouver"
+            href="/la-carte"
             className="rounded-full border border-line-strong px-7 py-3.5 text-[0.8rem] tracking-[0.16em] uppercase transition-colors duration-200 hover:bg-surface"
           >
-            Nous trouver
+            Découvrir la carte
           </Link>
         </Reveal>
       </div>
@@ -101,19 +102,21 @@ function Maison() {
           </div>
           <Link
             href="/la-maison"
-            className="group mt-9 inline-flex items-center gap-3 text-[0.8rem] tracking-[0.16em] text-ink uppercase"
+            className="group mt-9 inline-flex items-center gap-3 py-2.5 text-[0.8rem] tracking-[0.16em] text-ink uppercase"
           >
             <span className="border-b border-accent pb-1">Notre histoire</span>
             <span
               aria-hidden
-              className="text-accent transition-transform duration-200 group-hover:translate-x-1"
+              className="text-gold transition-transform duration-200 group-hover:translate-x-1"
             >
               →
             </span>
           </Link>
         </Reveal>
 
-        <Reveal delay={160}>
+        <Reveal delay={160} className="space-y-8">
+          <Photo name="salle" sizes="(min-width: 1024px) 34rem, 100vw" />
+
           <div className="grain relative overflow-hidden rounded-sm border border-line bg-paper-alt p-8 shadow-card sm:p-12">
             {/* double filet or, à la manière d'un cartouche de menu */}
             <div
@@ -179,7 +182,7 @@ function Signatures() {
           {signatures.map((dish, index) => (
             <li key={dish.name} className="bg-surface">
               <Reveal delay={index * 70} className="flex h-full flex-col p-7 sm:p-9">
-                <span aria-hidden className="eyebrow text-accent/70">
+                <span aria-hidden className="eyebrow text-gold">
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <h3 className="mt-5 font-display text-2xl/tight text-ink">{dish.name}</h3>
@@ -204,7 +207,7 @@ function Signatures() {
                   Entrées · Plats · Desserts
                   <span
                     aria-hidden
-                    className="text-accent transition-transform duration-200 group-hover:translate-x-1"
+                    className="text-gold transition-transform duration-200 group-hover:translate-x-1"
                   >
                     →
                   </span>
@@ -259,12 +262,12 @@ function Cartes() {
               <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3">
                 <Link
                   href={card.href}
-                  className="inline-flex items-center gap-3 text-[0.8rem] tracking-[0.16em] text-ink uppercase after:absolute after:inset-0 after:content-['']"
+                  className="inline-flex items-center gap-3 py-2.5 text-[0.8rem] tracking-[0.16em] text-ink uppercase after:absolute after:inset-0 after:content-['']"
                 >
                   <span className="border-b border-accent pb-1">Consulter</span>
                   <span
                     aria-hidden
-                    className="text-accent transition-transform duration-200 group-hover:translate-x-1"
+                    className="text-gold transition-transform duration-200 group-hover:translate-x-1"
                   >
                     →
                   </span>
@@ -273,7 +276,7 @@ function Cartes() {
                   href={card.pdf}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="relative z-10 -my-2 py-2 text-[0.8rem] tracking-[0.12em] text-muted uppercase transition-colors hover:text-ink"
+                  className="relative z-10 -my-2 px-2 py-3 text-[0.8rem] tracking-[0.12em] text-muted uppercase transition-colors hover:text-ink"
                 >
                   PDF
                 </a>
@@ -297,7 +300,7 @@ function HappyHour() {
             <p className="eyebrow text-brand-accent">{site.happyHour.label}</p>
             <p className="mt-6 font-display text-6xl/[0.95] tracking-tight text-brand-accent sm:text-7xl/[0.95] lg:text-[5.5rem]/[0.92]">
               16h
-              <span className="mx-3 text-gold">—</span>
+              <span className="mx-3 text-gold">-</span>
               22h
             </p>
             <p className="mt-6 max-w-sm text-base/relaxed text-muted">
@@ -348,11 +351,17 @@ function Trouver() {
           </address>
 
           <div className="mt-9 flex flex-wrap gap-3">
+            <Link
+              href="/reserver"
+              className="rounded-full bg-primary px-7 py-3.5 text-[0.8rem] tracking-[0.16em] text-on-primary uppercase transition-colors hover:bg-primary-hover"
+            >
+              Réserver une table
+            </Link>
             <a
               href={site.mapsUrl}
               target="_blank"
               rel="noreferrer noopener"
-              className="rounded-full bg-primary px-7 py-3.5 text-[0.8rem] tracking-[0.16em] text-on-primary uppercase transition-colors hover:bg-primary-hover"
+              className="rounded-full border border-line-strong px-7 py-3.5 text-[0.8rem] tracking-[0.16em] text-ink uppercase transition-colors hover:bg-paper-alt"
             >
               Itinéraire
             </a>

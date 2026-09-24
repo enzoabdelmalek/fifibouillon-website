@@ -2,26 +2,28 @@ import type { Metadata } from "next";
 import { Diamond } from "@/components/menu";
 import { MenuTabs, type MenuGroup } from "@/components/menu-tabs";
 import { PageHeader } from "@/components/page-header";
+import { Photo } from "@/components/photo";
 import { Reveal } from "@/components/reveal";
-import { beersAndSpirits, cocktails, happyHour, snacks, softDrinks, wines } from "@/lib/menu";
+import { beers, cocktails, happyHour, snacks, softDrinks, spirits, wines } from "@/lib/menu";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Les boissons",
   description:
-    "Cocktails signature, vins à la verse, bières pression, apéritifs et cafétéria. Happy hour tous les jours de 16h à 22h au bouillon FiFi, Paris 9ᵉ.",
+    "Cocktails signature, vins à la verse, bières pression, apéritifs, whiskies et cafétéria. Happy hour tous les jours de 16h à 22h au bouillon FiFi, Paris 9ᵉ.",
   alternates: { canonical: "/les-boissons" },
 };
 
 /**
- * La carte des boissons compte une centaine de références : regroupées en six
+ * La carte des boissons compte une centaine de références : regroupées en sept
  * familles, chacune tient sur un écran ou deux.
  */
 const groups: MenuGroup[] = [
   { id: "cocktails", label: "Cocktails", sections: [cocktails[0]] },
   { id: "sans-alcool", label: "Sans alcool", sections: [cocktails[1]] },
   { id: "vins", label: "Vins", sections: wines },
-  { id: "bieres", label: "Bières", sections: beersAndSpirits },
+  { id: "bieres", label: "Bières", sections: beers },
+  { id: "alcools", label: "Alcools", sections: spirits },
   { id: "softs", label: "Softs", sections: softDrinks },
   { id: "pouce", label: "Sur le pouce", sections: [snacks] },
 ];
@@ -40,10 +42,15 @@ export default function LesBoissonsPage() {
       <MenuTabs groups={groups} />
 
       <div className="mx-auto max-w-3xl px-5 pb-20 sm:px-8 lg:pb-28">
+        {/* Le comptoir ferme la page, là où la carte s'arrête et où l'on commande. */}
+        <Reveal className="mt-16">
+          <Photo name="comptoir" className="mx-auto max-w-sm" sizes="(min-width: 640px) 24rem, 100vw" />
+        </Reveal>
+
         <Reveal className="mt-20 border-t border-line pt-10 text-center">
           <p className="text-sm/relaxed text-muted">
             Prix en euros, taxes et service compris. L’abus d’alcool est dangereux
-            pour la santé — à consommer avec modération.
+            pour la santé - à consommer avec modération.
           </p>
           <div className="mt-7 flex flex-wrap justify-center gap-3">
             <a

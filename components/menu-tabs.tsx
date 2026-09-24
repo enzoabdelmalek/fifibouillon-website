@@ -15,7 +15,7 @@ export type MenuGroup = {
  * Carte présentée par onglets : une famille à la fois, au lieu d'une colonne
  * de 90 lignes où l'on se perd.
  *
- * Tous les panneaux sont rendus dans le HTML — seul l'affichage est basculé.
+ * Tous les panneaux sont rendus dans le HTML - seul l'affichage est basculé.
  * Google indexe donc la carte entière, et sans JavaScript la page reste
  * complète (le masquage est conditionné à la classe `js`, cf. globals.css).
  */
@@ -90,7 +90,7 @@ export function MenuTabs({ groups }: { groups: MenuGroup[] }) {
                 onClick={() => select(group.id)}
                 onKeyDown={(event) => onKeyDown(event, index)}
                 className={cn(
-                  "shrink-0 rounded-full px-4 py-2 text-[0.75rem] tracking-[0.14em] whitespace-nowrap uppercase transition-colors duration-200",
+                  "shrink-0 rounded-full px-4 py-3 text-[0.75rem] tracking-[0.14em] whitespace-nowrap uppercase transition-colors duration-200",
                   active
                     ? "bg-primary text-on-primary"
                     : "text-muted hover:bg-paper-alt hover:text-ink",

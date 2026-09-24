@@ -1,7 +1,8 @@
 import Image from "next/image";
+import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
-const ALT = "FiFi — Bouillon & Brasserie, 9ᵉ arrondissement";
+const ALT = `${site.fullName}, ${site.district}`;
 
 /**
  * Logo FiFi, blason vertical complet (chat + FIFI + « Bouillon & Brasserie »).
@@ -27,7 +28,8 @@ export function Logo({
         alt={ALT}
         width={480}
         height={744}
-        priority={priority}
+        sizes="180px"
+        preload={priority}
         className={cn("w-auto", className)}
       />
     );
@@ -40,7 +42,8 @@ export function Logo({
         alt={ALT}
         width={576}
         height={784}
-        priority={priority}
+        sizes="180px"
+        preload={priority}
         className={cn("w-auto dark:hidden", className)}
       />
       <Image
@@ -49,7 +52,8 @@ export function Logo({
         aria-hidden
         width={480}
         height={744}
-        priority={priority}
+        sizes="180px"
+        loading="lazy"
         className={cn("hidden w-auto dark:block", className)}
       />
     </>
@@ -76,7 +80,8 @@ export function Wordmark({
         alt={ALT}
         width={464}
         height={278}
-        priority={priority}
+        sizes="72px"
+        preload={priority}
         className={cn("w-auto", className)}
       />
     );
@@ -89,7 +94,8 @@ export function Wordmark({
         alt={ALT}
         width={551}
         height={307}
-        priority={priority}
+        sizes="72px"
+        preload={priority}
         className={cn("w-auto dark:hidden", className)}
       />
       <Image
@@ -98,14 +104,15 @@ export function Wordmark({
         aria-hidden
         width={464}
         height={278}
-        priority={priority}
+        sizes="72px"
+        loading="lazy"
         className={cn("hidden w-auto dark:block", className)}
       />
     </>
   );
 }
 
-/** Le chat du logo, seul — utilisé comme ornement. */
+/** Le chat du logo, seul - utilisé comme ornement. */
 export function CatMark({ className }: { className?: string }) {
   return (
     <Image
@@ -114,6 +121,8 @@ export function CatMark({ className }: { className?: string }) {
       aria-hidden
       width={126}
       height={208}
+      sizes="200px"
+      loading="lazy"
       className={cn("w-auto", className)}
     />
   );

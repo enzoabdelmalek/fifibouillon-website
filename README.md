@@ -1,4 +1,4 @@
-# FiFi — Bouillon & Brasserie
+# FiFi - Bouillon & Brasserie
 
 Site vitrine du bouillon FiFi (9ᵉ arrondissement, Paris).
 Next.js 16 (App Router) · React 19 · Tailwind CSS v4 · TypeScript.
@@ -66,13 +66,13 @@ lib/
 Le contenu des cartes vit dans **[`lib/menu.ts`](lib/menu.ts)**, transcrit depuis les
 PDF fournis par le client. Les PDF restent téléchargeables depuis le site
 (`public/Menu food.pdf`, `public/Menu boisson.pdf`) : **lors d'un changement de
-carte, mettre à jour les deux** — les données ET les PDF.
+carte, mettre à jour les deux** - les données ET les PDF.
 
 ### Affichage par onglets
 
 Les deux pages de carte utilisent [`components/menu-tabs.tsx`](components/menu-tabs.tsx) :
 une famille affichée à la fois, barre d'onglets collante sous l'en-tête. Sans ça, la
-page boissons faisait 10 500 px de haut pour une centaine de références — on s'y perdait.
+page boissons faisait 10 500 px de haut pour une centaine de références - on s'y perdait.
 
 Le regroupement en onglets se déclare dans chaque page (`const groups`), ce qui permet
 de réunir plusieurs sections sous un même onglet (« Bières » couvre pression, bouteilles,
@@ -81,7 +81,7 @@ apéritifs et whiskies).
 Trois points à garder en tête si tu y touches :
 
 - **Tous les panneaux sont rendus dans le HTML**, seul l'affichage bascule. Google indexe
-  donc la carte entière — vérifiable avec `curl` sur la page.
+  donc la carte entière - vérifiable avec `curl` sur la page.
 - **Le masquage est conditionné à la classe `js`** (cf. `globals.css`). Sans JavaScript,
   tous les panneaux restent affichés : la page est longue mais complète.
 - **`MenuSectionBlock` reçoit `animate={false}` dans les onglets.** L'apparition au scroll
@@ -101,7 +101,7 @@ Piloté par la classe `dark` sur `<html>`.
 - Un script inline dans `<head>` (`themeInitScript`) applique le thème **avant
   le premier rendu** : pas de flash au chargement.
 - Ce même script pose la classe `js` sur `<html>`. Les animations d'apparition
-  et les onglets de carte ne masquent leur contenu que sous `.js` — sans
+  et les onglets de carte ne masquent leur contenu que sous `.js` - sans
   JavaScript, la page reste entièrement lisible.
 - La balise `<meta name="theme-color">` (couleur de la barre d'adresse mobile)
   est réécrite à chaque bascule pour rester en accord avec la page.
@@ -118,7 +118,7 @@ Deux points à respecter si tu y touches :
   dans `.theme-transition` (globals.css).
 - La règle `!important` couvre `opacity` et `rotate` : sans ça, elle écraserait
   le fondu croisé des icônes pendant la bascule. Et Tailwind v4 génère la
-  propriété autonome `rotate`, pas `transform` — une transition sur `transform`
+  propriété autonome `rotate`, pas `transform` - une transition sur `transform`
   n'animerait rien.
 - L'ensemble est désactivé sous `prefers-reduced-motion`.
 
@@ -139,7 +139,7 @@ variables : `bg-paper`, `text-ink`, `text-gold`, `border-line`, etc. suivent.
 
 ### Hiérarchie
 
-**Primaires : blanc et jaune beurre.** Ce sont eux qui portent la page — fonds,
+**Primaires : blanc et jaune beurre.** Ce sont eux qui portent la page - fonds,
 bandeaux d'ouverture, cartes. **Secondaires : marron et rouge**, employés par
 touches et jamais en grands aplats : le marron porte le texte, le rouge les
 boutons, surtitres, ornements et l'onglet actif.
@@ -151,7 +151,7 @@ le bas de page.
 `--primary` ne sert que de **fond** de bouton (texte crème dessus). `--brand-accent`
 sert au **texte** accentué : surtitres, chiffres, ornements, onglet actif du menu
 mobile. Un rouge assez sombre pour porter du texte crème est trop sombre pour être
-lu *en texte* sur fond sombre — en mode sombre, `--brand-accent` bascule donc sur
+lu *en texte* sur fond sombre - en mode sombre, `--brand-accent` bascule donc sur
 l'or du logo (1,87:1 → 8:1). Utiliser `text-primary` pour du texte rouvre le bug.
 
 En mode sombre, les fonds sont un anthracite chaud **désaturé**
@@ -164,7 +164,7 @@ de la page et se détache franchement.
 
 - `app/opengraph-image.png` / `app/twitter-image.png` (1200 × 630) : aperçu affiché
   quand un lien du site est partagé (WhatsApp, Facebook, Instagram, iMessage).
-  Régénérés à la main depuis le logo — à refaire si le logo change.
+  Régénérés à la main depuis le logo - à refaire si le logo change.
 - Données structurées `Restaurant` dans `app/layout.tsx` : nom, adresse, téléphone,
   horaires, carte, image, fourchette de prix. Alimentées par `lib/site.ts`.
   Les horaires `schema` doivent rester cohérents avec les horaires affichés.
@@ -178,18 +178,69 @@ recadrés ; les fichiers dérivés sont dans `public/assets/` :
 | Fichier | Usage |
 | --- | --- |
 | `logo-light.png` / `logo-dark.png` | blason complet, pour fonds clairs / sombres |
-| `wordmark-light.png` / `wordmark-dark.png` | lettrage « FiFi » seul — le blason vertical devient illisible sous ~80 px, c'est cette version qu'utilise l'en-tête |
+| `wordmark-light.png` / `wordmark-dark.png` | lettrage « FiFi » seul - le blason vertical devient illisible sous ~80 px, c'est cette version qu'utilise l'en-tête |
 | `cat.png` | le chat seul, en ornement (filigranes, 404) |
 | `app/icon.png` | favicon |
 
-Les originaux (`LogoNoir.jpeg`, `LogoBlanc.jpeg`, `Couleurs.jpeg`) sont conservés.
+Les originaux fournis par le client (`LogoNoir.jpeg` 1600x1600, `LogoBlanc.jpeg`,
+`Couleurs.jpeg`) sont conservés dans **`design/`**, à la racine - pas dans
+`public/`. Tout ce que contient `public/` est servi et téléchargeable par
+n'importe qui : ces trois fichiers pesaient 304 Ko offerts au premier venu,
+sans jamais être affichés. Ils restent dans le dépôt parce qu'ils servent à
+regénérer les PNG si besoin.
 
-## Pas de réservation
+## Réservation
 
-Le site est volontairement une vitrine : les appels à l'action pointent vers le
-téléphone et l'itinéraire. Pour ajouter un module de réservation plus tard, les
-boutons concernés sont dans `app/page.tsx` (hero et section « Nous trouver »),
-`components/site-header.tsx` et `app/nous-trouver/page.tsx`.
+Reprend l'architecture du site **La Toscana** : même projet Supabase, même table
+`reservations`, mêmes colonnes (`business_id`, `customer_name`, `customer_phone`,
+`customer_mail`, `date`, `guests`, `message`, `status`, `attended`). Le dashboard
+existant fonctionne donc sans modification - les deux restaurants sont
+distingués par `business_id`.
+
+| Fichier | Rôle |
+| --- | --- |
+| `lib/reservation.ts` | créneaux, fuseau horaire, validation (partagée client/serveur) |
+| `lib/supabase.ts` | client **serveur uniquement** + schéma de la table |
+| `lib/email.ts` | gabarits d'e-mails aux couleurs FiFi + envoi Resend |
+| `app/api/reservations/route.ts` | POST : valide, vérifie la capacité, enregistre, notifie |
+| `app/api/reservations/availability/route.ts` | GET : compteurs de couverts par créneau |
+| `components/reservation-form.tsx` | formulaire |
+| `app/reserver/page.tsx` | page |
+
+Variables d'environnement : voir `.env.example`. Sans elles, le site se
+construit et s'affiche normalement - c'est l'envoi du formulaire qui renvoie un
+message invitant à téléphoner.
+
+```bash
+npm run test:reservation   # fuseau horaire, créneaux, validation (24 assertions)
+```
+
+### Trois écarts volontaires avec Toscana
+
+**1. Aucune clé Supabase dans le navigateur.** Toscana expose
+`NEXT_PUBLIC_SUPABASE_ANON_KEY` et lit la table `reservations` depuis le client.
+Cette table contient des noms, téléphones et e-mails : tout ce que les
+politiques RLS autorisent l'anon à lire, n'importe quel visiteur peut le lire
+aussi. Ici les clés restent serveur, et l'API ne renvoie jamais que des
+compteurs de places - jamais le contenu des réservations.
+
+**2. Contrôle de capacité côté serveur.** Sur Toscana il est fait dans le
+navigateur : deux visiteurs peuvent réserver la dernière table simultanément, et
+un formulaire modifié passe outre. Ici la vérification est refaite avant
+l'insertion, et un créneau qui vient de se remplir renvoie un 409.
+
+**3. Créneaux dérivés des horaires.** Ils sont calculés depuis `site.hours`
+plutôt que codés en dur : corriger les horaires corrige les créneaux. Le dernier
+service est fixé à `LAST_SEATING_BEFORE_CLOSE_MINUTES` avant la fermeture, et le
+regroupement Déjeuner / Après-midi / Dîner n'est qu'un confort de lecture - FiFi
+sert en continu, il ne doit jamais créer de trou.
+
+### Fuseau horaire
+
+`parisDateTimeToUtc()` convertit l'heure locale parisienne en instant UTC avant
+enregistrement, en deux passes pour absorber les bascules heure d'été / hiver.
+Sans ça, un serveur en UTC enregistrerait une table de 20h à 18h ou 22h selon la
+saison. Couvert par les tests.
 
 ## Accessibilité
 

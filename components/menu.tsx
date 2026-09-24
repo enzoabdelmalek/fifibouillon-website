@@ -32,7 +32,7 @@ export function MenuRow({
  * Un bloc de carte complet : titre orné, lignes, mention de bas de section.
  *
  * `animate={false}` à l'intérieur d'un onglet : l'apparition au scroll repose
- * sur IntersectionObserver, qui ne se déclenche jamais pour un panneau masqué —
+ * sur IntersectionObserver, qui ne se déclenche jamais pour un panneau masqué -
  * le contenu resterait invisible au changement d'onglet.
  */
 export function MenuSectionBlock({

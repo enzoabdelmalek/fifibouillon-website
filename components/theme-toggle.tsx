@@ -13,7 +13,7 @@ const TRANSITION_MS = 260;
 
 /**
  * Script injecté dans le <head> pour appliquer le thème avant le premier
- * rendu — sans lui, un flash apparaît au chargement.
+ * rendu - sans lui, un flash apparaît au chargement.
  *
  * Le site démarre TOUJOURS en clair : la préférence système n'est pas suivie.
  * Le mode sombre ne s'applique que si le visiteur l'a explicitement choisi.
@@ -33,7 +33,7 @@ set();document.addEventListener("DOMContentLoaded",set);
 })();`.replace(/\n/g, "");
 
 /**
- * Le thème vit dans la classe `dark` de <html> — une source de vérité
+ * Le thème vit dans la classe `dark` de <html> - une source de vérité
  * extérieure à React. On s'y abonne plutôt que de la recopier dans un état :
  * pas d'effet, pas de rendu en double, et le rendu serveur reste stable.
  */
@@ -100,7 +100,7 @@ export function ThemeToggle({ className }: { className?: string }) {
     >
       {/* Les deux icônes sont empilées dans la même cellule de grille et
           permutées en CSS : rendu serveur stable, et un fondu croisé possible
-          — `display` ne s'anime pas. */}
+          - `display` ne s'anime pas. */}
       <svg
         viewBox="0 0 24 24"
         aria-hidden

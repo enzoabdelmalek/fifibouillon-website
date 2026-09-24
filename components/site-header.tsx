@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Wordmark } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { nav, site } from "@/lib/site";
+import { desktopNav, nav, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
@@ -48,7 +48,7 @@ export function SiteHeader() {
 
   /* Les pages ouvrent sur un bandeau jaune beurre : l'en-tête y flotte sans
      fond. Au défilement, il se pose sur du blanc. Le texte reste marron dans
-     les deux cas — plus de bascule de couleur à gérer. */
+     les deux cas - plus de bascule de couleur à gérer. */
   const solid = scrolled || open;
 
   return (
@@ -60,11 +60,13 @@ export function SiteHeader() {
           : "border-b border-transparent bg-transparent",
       )}
     >
-      <div className="mx-auto flex h-[72px] max-w-7xl items-center gap-6 px-5 sm:px-8 lg:h-20">
+      {/* Pleine largeur : l'en-tête va d'un bord à l'autre, sans la gouttière
+          d'un conteneur centré. Seule la marge de sécurité subsiste. */}
+      <div className="flex h-[72px] w-full items-center gap-6 px-5 sm:px-8 lg:h-20 lg:px-10">
         <Link
           href="/"
-          aria-label="FiFi — retour à l'accueil"
-          className="flex shrink-0 items-center gap-3.5 transition-opacity hover:opacity-80"
+          aria-label="FiFi - retour à l'accueil"
+          className="flex shrink-0 items-center gap-3.5 py-2 transition-opacity hover:opacity-80"
         >
           <Wordmark className="h-7 sm:h-8" priority />
           <span aria-hidden className="hidden h-8 w-px bg-current/25 sm:block" />
@@ -76,7 +78,7 @@ export function SiteHeader() {
 
         <nav aria-label="Navigation principale" className="hidden flex-1 lg:block">
           <ul className="flex items-center justify-center gap-2 xl:gap-5">
-            {nav.map((item) => {
+            {desktopNav.map((item) => {
               const active =
                 item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
               return (
@@ -104,17 +106,16 @@ export function SiteHeader() {
           </ul>
         </nav>
 
+        {/* Pas de téléphone ici : « Réserver » est l'action de l'en-tête, et
+            le numéro reste accessible dans le menu mobile et en pied de page,
+            où on va le chercher. */}
         <div className="ml-auto flex shrink-0 items-center gap-2 lg:ml-0">
-          <a
-            href={`tel:${site.contact.phone.replace(/\s/g, "")}`}
-            className={cn(
-              "hidden items-center gap-2 rounded-full px-4 py-2.5 text-[0.8rem] tracking-[0.12em] uppercase sm:inline-flex",
-              "border border-current/30 transition-colors hover:bg-current/10",
-            )}
+          <Link
+            href="/reserver"
+            className="rounded-full bg-primary px-5 py-3 text-[0.8rem] tracking-[0.12em] whitespace-nowrap text-on-primary uppercase transition-colors hover:bg-primary-hover sm:px-6"
           >
-            <PhoneIcon className="size-3.5" />
-            {site.contact.phoneDisplay}
-          </a>
+            Réserver
+          </Link>
 
           <ThemeToggle />
 
@@ -171,7 +172,7 @@ export function SiteHeader() {
             <p className="flex items-start gap-3">
               <ClockIcon className="mt-0.5 size-4 shrink-0 text-brand-accent" />
               <span>
-                {site.happyHour.label} — {site.happyHour.value}
+                {site.happyHour.label} - {site.happyHour.value}
               </span>
             </p>
           </div>
