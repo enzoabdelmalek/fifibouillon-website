@@ -28,12 +28,12 @@ export default function MentionsLegalesPage() {
           {site.address.street}, {site.address.postalCode} {site.address.city}
         </LegalRow>
         <LegalRow label="Téléphone">
-          <a href={`tel:${site.contact.phone.replace(/\s/g, "")}`} className="underline-offset-4 hover:underline">
+          <a href={`tel:${site.contact.phone.replace(/\s/g, "")}`} className="underline underline-offset-4 decoration-1 hover:decoration-2">
             {site.contact.phoneDisplay}
           </a>
         </LegalRow>
         <LegalRow label="E-mail">
-          <a href={`mailto:${site.contact.email}`} className="underline-offset-4 hover:underline">
+          <a href={`mailto:${site.contact.email}`} className="underline underline-offset-4 decoration-1 hover:decoration-2">
             {site.contact.email}
           </a>
         </LegalRow>
@@ -51,7 +51,7 @@ export default function MentionsLegalesPage() {
             href={site.legal.host.url}
             target="_blank"
             rel="noreferrer noopener"
-            className="underline-offset-4 hover:underline"
+            className="underline underline-offset-4 decoration-1 hover:decoration-2"
           >
             {site.legal.host.url.replace("https://", "")}
           </a>
@@ -71,7 +71,7 @@ export default function MentionsLegalesPage() {
         <p>
           Le formulaire de réservation collecte des données personnelles. Leur
           traitement est détaillé dans notre{" "}
-          <a href="/confidentialite" className="text-brand-accent underline-offset-4 hover:underline">
+          <a href="/confidentialite" className="text-brand-accent underline underline-offset-4 decoration-1 hover:decoration-2">
             politique de confidentialité
           </a>
           .
@@ -83,7 +83,7 @@ export default function MentionsLegalesPage() {
           Ce site ne dépose aucun cookie publicitaire et ne partage rien avec des régies
           ou des réseaux sociaux. Il utilise une mesure d’audience limitée à ses propres
           pages, décrite dans la{" "}
-          <a href="/confidentialite" className="text-brand-accent underline-offset-4 hover:underline">
+          <a href="/confidentialite" className="text-brand-accent underline underline-offset-4 decoration-1 hover:decoration-2">
             politique de confidentialité
           </a>
           .

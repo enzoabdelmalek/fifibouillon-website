@@ -73,14 +73,14 @@ function PendingPhoto({ name, className }: { name: PhotoName; className: string 
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-3 rounded-sm border border-accent/35"
+        className="pointer-events-none absolute inset-3 rounded-sm border border-accent/60"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-[18px] rounded-sm border border-accent/15"
+        className="pointer-events-none absolute inset-[18px] rounded-sm border border-accent/30"
       />
       <div className="absolute inset-0 grid place-items-center">
-        <CatMark className="h-1/2 opacity-[0.12]" />
+        <CatMark className="h-1/2 opacity-20 [filter:brightness(0)] dark:opacity-25 dark:[filter:brightness(0)_invert(1)]" />
       </div>
 
       {process.env.NODE_ENV === "development" ? (

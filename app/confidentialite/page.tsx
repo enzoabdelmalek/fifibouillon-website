@@ -21,7 +21,7 @@ export default function ConfidentialitePage() {
           {site.legal.companyName}, qui exploite le restaurant {site.fullName}, situé{" "}
           {site.address.street}, {site.address.postalCode} {site.address.city}. Pour toute
           question relative à vos données, écrivez à{" "}
-          <a href={`mailto:${site.contact.email}`} className="text-brand-accent underline-offset-4 hover:underline">
+          <a href={`mailto:${site.contact.email}`} className="text-brand-accent underline underline-offset-4 decoration-1 hover:decoration-2">
             {site.contact.email}
           </a>
           .
@@ -94,7 +94,7 @@ export default function ConfidentialitePage() {
         <p>
           Vous pouvez demander à consulter vos données, les faire corriger ou effacer, en
           limiter l’usage, ou vous opposer à leur traitement. Écrivez à{" "}
-          <a href={`mailto:${site.contact.email}`} className="text-brand-accent underline-offset-4 hover:underline">
+          <a href={`mailto:${site.contact.email}`} className="text-brand-accent underline underline-offset-4 decoration-1 hover:decoration-2">
             {site.contact.email}
           </a>{" "}
           : nous répondons sous un mois.
@@ -105,7 +105,7 @@ export default function ConfidentialitePage() {
             href="https://www.cnil.fr"
             target="_blank"
             rel="noreferrer noopener"
-            className="text-brand-accent underline-offset-4 hover:underline"
+            className="text-brand-accent underline underline-offset-4 decoration-1 hover:decoration-2"
           >
             cnil.fr
           </a>

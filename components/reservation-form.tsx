@@ -349,7 +349,7 @@ export function ReservationForm() {
         Vos coordonnées servent uniquement à gérer cette réservation.{" "}
         <a
           href="/confidentialite"
-          className="text-brand-accent underline-offset-4 hover:underline"
+          className="text-brand-accent underline underline-offset-4 decoration-1 hover:decoration-2"
         >
           En savoir plus
         </a>
