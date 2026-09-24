@@ -268,11 +268,38 @@
     transform: none;
   }
 
+  /* Apparition immédiate, pour les blocs visibles sans défiler.
+     Une animation CSS pure, qui démarre au premier rendu : elle n'attend ni
+     l'hydratation ni l'IntersectionObserver. C'est ce qui compte pour le LCP,
+     que Chrome ne mesure qu'une fois l'élément opaque - avec `.reveal`, le
+     titre d'accueil restait invisible jusqu'à ce que le JavaScript ait fini
+     de s'exécuter, soit plus de deux secondes sur un téléphone d'entrée de
+     gamme. */
+  .reveal-now {
+    animation: reveal-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms) both;
+  }
+
+  /* Le mouvement seul, sans fondu : Chrome ne compte un élément dans le LCP
+     qu'une fois opaque, donc un fondu d'entrée sur le plus gros élément de la
+     page retarde mécaniquement la mesure. Une translation donne la même
+     impression d'arrivée sans rien coûter. */
+  @keyframes reveal-in {
+    from {
+      transform: translateY(18px);
+    }
+    to {
+      transform: none;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .js .reveal {
       opacity: 1;
       transform: none;
       transition: none;
+    }
+    .reveal-now {
+      animation: none;
     }
   }
 }

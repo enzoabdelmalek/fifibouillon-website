@@ -25,11 +25,11 @@ function Hero() {
   return (
     <section className="grain relative flex min-h-[100svh] flex-col overflow-hidden bg-paper-alt text-ink">
       <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col items-center justify-center px-5 py-24 text-center sm:px-8">
-        <Reveal>
+        <Reveal immediate>
           <Logo className="h-40 sm:h-48 lg:h-56" priority />
         </Reveal>
 
-        <Reveal delay={140}>
+        <Reveal immediate delay={140}>
           <p className="eyebrow mt-8 text-brand-accent">
             {site.district} · {site.city}
           </p>
@@ -42,7 +42,7 @@ function Hero() {
           </p>
         </Reveal>
 
-        <Reveal delay={260} className="mt-9 flex flex-wrap items-center justify-center gap-3">
+        <Reveal immediate delay={260} className="mt-9 flex flex-wrap items-center justify-center gap-3">
           <Link
             href="/reserver"
             className="rounded-full bg-primary px-7 py-3.5 text-[0.8rem] tracking-[0.16em] text-on-primary uppercase transition-transform duration-200 hover:-translate-y-0.5"

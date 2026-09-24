@@ -7,15 +7,21 @@ type RevealProps = {
   children: ReactNode;
   /** Retard d'apparition en ms - sert à cascader plusieurs blocs. */
   delay?: number;
+  /**
+   * Pour les blocs visibles sans défiler. Une animation CSS pure prend le
+   * relais : rien n'attend l'hydratation, donc rien ne retarde le LCP.
+   */
+  immediate?: boolean;
   as?: ElementType;
   className?: string;
 };
 
 /** Fait apparaître son contenu en fondu/translation dès qu'il entre dans le viewport. */
-export function Reveal({ children, delay = 0, as: Tag = "div", className }: RevealProps) {
+export function Reveal({ children, delay = 0, as: Tag = "div", className, immediate = false }: RevealProps) {
   const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    if (immediate) return;
     const el = ref.current;
     if (!el) return;
 
@@ -41,12 +47,12 @@ export function Reveal({ children, delay = 0, as: Tag = "div", className }: Reve
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, []);
+  }, [immediate]);
 
   return (
     <Tag
       ref={ref}
-      className={cn("reveal", className)}
+      className={cn(immediate ? "reveal-now" : "reveal", className)}
       style={{ "--reveal-delay": `${delay}ms` } as CSSProperties}
     >
       {children}
