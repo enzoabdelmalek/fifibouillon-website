@@ -6,6 +6,7 @@ import {
   slotToUtc,
   slotsForDate,
 } from "@/lib/reservation";
+import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { getSupabase } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
@@ -18,6 +19,16 @@ export const dynamic = "force-dynamic";
  * navigateur, qui exposerait les coordonnées des clients.
  */
 export async function GET(request: Request) {
+  // Plus permissif que la création : le formulaire interroge cette route à
+  // chaque changement de date, une personne indécise en fait vite dix.
+  const verdict = rateLimit(`availability:${clientIp(request)}`, 40, 60_000);
+  if (!verdict.allowed) {
+    return NextResponse.json(
+      { error: "Trop de requêtes." },
+      { status: 429, headers: { "Retry-After": String(verdict.retryAfter) } },
+    );
+  }
+
   const date = new URL(request.url).searchParams.get("date") ?? "";
 
   if (!isValidIsoDate(date)) {

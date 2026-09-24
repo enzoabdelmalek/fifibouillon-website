@@ -6,11 +6,29 @@ import {
   validateReservation,
   type ReservationInput,
 } from "@/lib/reservation";
+import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { getSupabase, type ReservationRow } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
 
+/* Une vraie personne réserve une table, pas quinze. Deux plafonds : un
+   court, contre la rafale, et un long, contre le remplissage patient du
+   carnet. Le premier atteint suffit à refuser. */
+const BURST = { limit: 3, windowMs: 60_000 };
+const HOURLY = { limit: 8, windowMs: 60 * 60_000 };
+
 export async function POST(request: Request) {
+  const ip = clientIp(request);
+  for (const [name, rule] of [["rafale", BURST], ["heure", HOURLY]] as const) {
+    const verdict = rateLimit(`reservation:${name}:${ip}`, rule.limit, rule.windowMs);
+    if (!verdict.allowed) {
+      return NextResponse.json(
+        { error: "Trop de tentatives. Merci de patienter un instant, ou de nous appeler." },
+        { status: 429, headers: { "Retry-After": String(verdict.retryAfter) } },
+      );
+    }
+  }
+
   let body: Partial<ReservationInput>;
   try {
     body = await request.json();

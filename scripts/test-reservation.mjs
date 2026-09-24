@@ -2,6 +2,7 @@ import {
   parisDateTimeToUtc, slotToUtc, slotsForDate, groupSlots, validateReservation,
   todayInParis, lastBookableDate,
 } from "@/lib/reservation.ts";
+import { clientIp, rateLimit, resetRateLimits } from "@/lib/rate-limit.ts";
 
 let fails = 0;
 const eq = (label, got, want) => {
@@ -92,6 +93,27 @@ eq("message trop long", !!validateReservation({ ...base, message: "x".repeat(501
 console.log("\n- Bornes du sélecteur de date -");
 eq("min = aujourd'hui", /^\d{4}-\d{2}-\d{2}$/.test(todayInParis()), true);
 eq("max > min", lastBookableDate() > todayInParis(), true);
+
+console.log("\n- Limitation de débit -");
+resetRateLimits();
+const verdicts = Array.from({ length: 4 }, () => rateLimit("t", 3, 60_000));
+eq("les 3 premières passent", verdicts.slice(0, 3).map(v => v.allowed), [true, true, true]);
+eq("la 4e est refusée", verdicts[3].allowed, false);
+eq("elle indique combien de temps attendre", verdicts[3].retryAfter > 0, true);
+resetRateLimits();
+eq("une autre clé a son propre compteur",
+   [rateLimit("a", 1, 60_000).allowed, rateLimit("b", 1, 60_000).allowed], [true, true]);
+resetRateLimits();
+eq("la fenêtre écoulée remet le compteur à zéro",
+   [rateLimit("c", 1, 1).allowed, (Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 5), rateLimit("c", 1, 1).allowed)],
+   [true, true]);
+// Derrière un proxy, c'est la PREMIÈRE adresse qui est celle du client :
+// prendre la dernière limiterait le proxy, donc tous ses visiteurs d'un coup.
+const req = (h) => new Request("https://x.fr", { headers: h });
+eq("adresse du client derrière un proxy",
+   clientIp(req({ "x-forwarded-for": "203.0.113.7, 70.41.3.18, 150.172.238.178" })), "203.0.113.7");
+eq("repli sur x-real-ip", clientIp(req({ "x-real-ip": "203.0.113.9" })), "203.0.113.9");
+eq("aucune adresse fournie", clientIp(req({})), "inconnue");
 
 console.log(fails === 0 ? "\n✅ tout passe\n" : `\n❌ ${fails} échec(s)\n`);
 process.exit(fails ? 1 : 0);
