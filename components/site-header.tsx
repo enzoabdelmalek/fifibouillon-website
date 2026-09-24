@@ -66,7 +66,7 @@ export function SiteHeader() {
         <Link
           href="/"
           aria-label="FiFi - retour à l'accueil"
-          className="flex shrink-0 items-center gap-3.5 transition-opacity hover:opacity-80"
+          className="flex shrink-0 items-center gap-3.5 py-2 transition-opacity hover:opacity-80"
         >
           <Wordmark className="h-7 sm:h-8" priority />
           <span aria-hidden className="hidden h-8 w-px bg-current/25 sm:block" />
@@ -112,7 +112,7 @@ export function SiteHeader() {
         <div className="ml-auto flex shrink-0 items-center gap-2 lg:ml-0">
           <Link
             href="/reserver"
-            className="rounded-full bg-primary px-5 py-2.5 text-[0.8rem] tracking-[0.12em] whitespace-nowrap text-on-primary uppercase transition-colors hover:bg-primary-hover sm:px-6"
+            className="rounded-full bg-primary px-5 py-3 text-[0.8rem] tracking-[0.12em] whitespace-nowrap text-on-primary uppercase transition-colors hover:bg-primary-hover sm:px-6"
           >
             Réserver
           </Link>

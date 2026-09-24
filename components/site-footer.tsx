@@ -62,12 +62,12 @@ export function SiteFooter() {
 
           <div>
             <h2 className="eyebrow text-accent">Le restaurant</h2>
-            <ul className="mt-5 space-y-1 text-sm">
+            <ul className="mt-5 text-sm">
               {nav.slice(1).map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="inline-block py-1 text-footer-ink/75 transition-colors hover:text-footer-ink"
+                    className="inline-block py-2.5 text-footer-ink/75 transition-colors hover:text-footer-ink"
                   >
                     {item.label}
                   </Link>
@@ -78,7 +78,7 @@ export function SiteFooter() {
                   href="/Menu%20food.pdf"
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="inline-block py-1 text-footer-ink/75 transition-colors hover:text-footer-ink"
+                  className="inline-block py-2.5 text-footer-ink/75 transition-colors hover:text-footer-ink"
                 >
                   Carte à manger (PDF)
                 </a>
@@ -88,7 +88,7 @@ export function SiteFooter() {
                   href="/Menu%20boisson.pdf"
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="inline-block py-1 text-footer-ink/75 transition-colors hover:text-footer-ink"
+                  className="inline-block py-2.5 text-footer-ink/75 transition-colors hover:text-footer-ink"
                 >
                   Carte des boissons (PDF)
                 </a>
@@ -107,13 +107,13 @@ export function SiteFooter() {
               <p>
                 <a
                   href={`tel:${site.contact.phone.replace(/\s/g, "")}`}
-                  className="block py-1 transition-colors hover:text-footer-ink"
+                  className="block py-2.5 transition-colors hover:text-footer-ink"
                 >
                   {site.contact.phoneDisplay}
                 </a>
                 <a
                   href={`mailto:${site.contact.email}`}
-                  className="block py-1 transition-colors hover:text-footer-ink"
+                  className="block py-2.5 transition-colors hover:text-footer-ink"
                 >
                   {site.contact.email}
                 </a>
@@ -137,13 +137,13 @@ export function SiteFooter() {
             <span>
               © {year} {site.fullName}.
             </span>
-            <Link href="/mentions-legales" className="py-1 transition-colors hover:text-footer-ink">
+            <Link href="/mentions-legales" className="py-3 transition-colors hover:text-footer-ink">
               Mentions légales
             </Link>
             <span aria-hidden className="text-footer-ink/30">
               ·
             </span>
-            <Link href="/confidentialite" className="py-1 transition-colors hover:text-footer-ink">
+            <Link href="/confidentialite" className="py-3 transition-colors hover:text-footer-ink">
               Confidentialité
             </Link>
           </p>

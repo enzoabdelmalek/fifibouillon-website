@@ -90,7 +90,7 @@ export function MenuTabs({ groups }: { groups: MenuGroup[] }) {
                 onClick={() => select(group.id)}
                 onKeyDown={(event) => onKeyDown(event, index)}
                 className={cn(
-                  "shrink-0 rounded-full px-4 py-2 text-[0.75rem] tracking-[0.14em] whitespace-nowrap uppercase transition-colors duration-200",
+                  "shrink-0 rounded-full px-4 py-3 text-[0.75rem] tracking-[0.14em] whitespace-nowrap uppercase transition-colors duration-200",
                   active
                     ? "bg-primary text-on-primary"
                     : "text-muted hover:bg-paper-alt hover:text-ink",

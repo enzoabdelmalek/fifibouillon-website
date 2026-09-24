@@ -56,7 +56,7 @@ export default function ReserverPage() {
                       href={site.mapsUrl}
                       target="_blank"
                       rel="noreferrer noopener"
-                      className="mt-2 inline-block text-brand-accent underline underline-offset-4"
+                      className="mt-1 inline-block py-2.5 text-brand-accent underline underline-offset-4"
                     >
                       Voir l’itinéraire
                     </a>
@@ -71,7 +71,7 @@ export default function ReserverPage() {
                     <br />
                     <a
                       href={`tel:${site.contact.phone.replace(/\s/g, "")}`}
-                      className="mt-2 inline-block text-brand-accent underline underline-offset-4"
+                      className="mt-1 inline-block py-2.5 text-brand-accent underline underline-offset-4"
                     >
                       {site.contact.phoneDisplay}
                     </a>

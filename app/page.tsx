@@ -102,7 +102,7 @@ function Maison() {
           </div>
           <Link
             href="/la-maison"
-            className="group mt-9 inline-flex items-center gap-3 text-[0.8rem] tracking-[0.16em] text-ink uppercase"
+            className="group mt-9 inline-flex items-center gap-3 py-2.5 text-[0.8rem] tracking-[0.16em] text-ink uppercase"
           >
             <span className="border-b border-accent pb-1">Notre histoire</span>
             <span
@@ -262,7 +262,7 @@ function Cartes() {
               <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3">
                 <Link
                   href={card.href}
-                  className="inline-flex items-center gap-3 text-[0.8rem] tracking-[0.16em] text-ink uppercase after:absolute after:inset-0 after:content-['']"
+                  className="inline-flex items-center gap-3 py-2.5 text-[0.8rem] tracking-[0.16em] text-ink uppercase after:absolute after:inset-0 after:content-['']"
                 >
                   <span className="border-b border-accent pb-1">Consulter</span>
                   <span
@@ -276,7 +276,7 @@ function Cartes() {
                   href={card.pdf}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="relative z-10 -my-2 py-2 text-[0.8rem] tracking-[0.12em] text-muted uppercase transition-colors hover:text-ink"
+                  className="relative z-10 -my-2 px-2 py-3 text-[0.8rem] tracking-[0.12em] text-muted uppercase transition-colors hover:text-ink"
                 >
                   PDF
                 </a>
