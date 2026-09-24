@@ -107,7 +107,7 @@ function Maison() {
             <span className="border-b border-accent pb-1">Notre histoire</span>
             <span
               aria-hidden
-              className="text-accent transition-transform duration-200 group-hover:translate-x-1"
+              className="text-gold transition-transform duration-200 group-hover:translate-x-1"
             >
               →
             </span>
@@ -182,7 +182,7 @@ function Signatures() {
           {signatures.map((dish, index) => (
             <li key={dish.name} className="bg-surface">
               <Reveal delay={index * 70} className="flex h-full flex-col p-7 sm:p-9">
-                <span aria-hidden className="eyebrow text-accent/70">
+                <span aria-hidden className="eyebrow text-gold">
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <h3 className="mt-5 font-display text-2xl/tight text-ink">{dish.name}</h3>
@@ -207,7 +207,7 @@ function Signatures() {
                   Entrées · Plats · Desserts
                   <span
                     aria-hidden
-                    className="text-accent transition-transform duration-200 group-hover:translate-x-1"
+                    className="text-gold transition-transform duration-200 group-hover:translate-x-1"
                   >
                     →
                   </span>
@@ -267,7 +267,7 @@ function Cartes() {
                   <span className="border-b border-accent pb-1">Consulter</span>
                   <span
                     aria-hidden
-                    className="text-accent transition-transform duration-200 group-hover:translate-x-1"
+                    className="text-gold transition-transform duration-200 group-hover:translate-x-1"
                   >
                     →
                   </span>
