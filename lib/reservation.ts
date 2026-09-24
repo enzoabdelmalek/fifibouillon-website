@@ -239,3 +239,37 @@ export function validateReservation(input: Partial<ReservationInput>): string | 
 
   return null;
 }
+
+/* ------------------------------------------------------------------ */
+/*  Lien de suivi d'une réservation                                    */
+/* ------------------------------------------------------------------ */
+
+/** Le lien reste valide pendant le service, puis se ferme. */
+export const LINK_GRACE_HOURS = 3;
+
+/**
+ * État d'un lien à un instant donné.
+ *
+ * Fonction pure, sans base : c'est la règle, et c'est elle qu'on teste.
+ * `now` est un paramètre pour que les tests n'aient pas à attendre trois
+ * heures.
+ */
+export function linkState(
+  dateIso: string,
+  status: string,
+  now: number = Date.now(),
+): { expired: boolean; cancelled: boolean; cancellable: boolean } {
+  const when = new Date(dateIso).getTime();
+  const expired = now > when + LINK_GRACE_HOURS * 3_600_000;
+  const cancelled = status === "cancelled";
+  return { expired, cancelled, cancellable: !expired && !cancelled && now < when };
+}
+
+export function isUuid(value: string): boolean {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
+}
+
+/** Le prénom seul : « Marie » plutôt que « Marie Dupont ». */
+export function firstNameOf(fullName: string | null): string {
+  return (fullName ?? "").trim().split(/\s+/)[0] || "";
+}

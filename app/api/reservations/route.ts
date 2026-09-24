@@ -100,7 +100,14 @@ export async function POST(request: Request) {
     attended: null,
   };
 
-  const { error: insertError } = await supabase.client.from("reservations").insert(row);
+  // On récupère l'identifiant : il sert de jeton dans le lien de suivi envoyé
+  // par e-mail. Impossible à deviner (UUID v4), donc il tient lieu de preuve
+  // que le porteur du lien est bien celui qui a réservé.
+  const { data: created, error: insertError } = await supabase.client
+    .from("reservations")
+    .insert(row)
+    .select("id")
+    .single();
 
   if (insertError) {
     console.error("[reservations] insertion :", insertError.message);
@@ -112,7 +119,7 @@ export async function POST(request: Request) {
 
   // La table est réservée : un e-mail qui échoue ne doit pas faire croire
   // le contraire au client. On signale seulement que l'accusé n'est pas parti.
-  const emails = await sendReservationEmails(input);
+  const emails = await sendReservationEmails(input, created?.id ?? null);
 
   return NextResponse.json({ ok: true, emailSent: emails.sent });
 }

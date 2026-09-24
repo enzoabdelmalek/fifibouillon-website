@@ -1,6 +1,6 @@
 import {
   parisDateTimeToUtc, slotToUtc, slotsForDate, groupSlots, validateReservation,
-  todayInParis, lastBookableDate,
+  todayInParis, lastBookableDate, linkState, isUuid, firstNameOf, LINK_GRACE_HOURS,
 } from "@/lib/reservation.ts";
 import { clientIp, rateLimit, resetRateLimits } from "@/lib/rate-limit.ts";
 import { renderMarkdown } from "@/lib/markdown.ts";
@@ -137,6 +137,31 @@ eq("gras", md("du **vrai** fait maison").includes("<strong"), true);
 eq("les paragraphes sont séparés", md("un\n\ndeux").match(/<p /g).length, 2);
 eq("une apostrophe typographique passe sans dommage",
    md("l'équipe").includes("l'équipe"), true);
+
+console.log("\n- Lien de suivi d'une réservation -");
+const T = (iso) => new Date(iso).getTime();
+const RDV = "2027-01-15T19:00:00.000Z";
+eq("avant le service : consultable et annulable",
+   linkState(RDV, "scheduled", T("2027-01-15T12:00:00Z")), { expired: false, cancelled: false, cancellable: true });
+eq("quinze minutes avant : encore annulable",
+   linkState(RDV, "scheduled", T("2027-01-15T18:45:00Z")).cancellable, true);
+// L'heure passée, la table est dressée : on consulte encore, on n'annule plus.
+eq("pendant le service : consultable, plus annulable",
+   linkState(RDV, "scheduled", T("2027-01-15T20:00:00Z")), { expired: false, cancelled: false, cancellable: false });
+eq(`après ${LINK_GRACE_HOURS}h, le lien est mort`,
+   linkState(RDV, "scheduled", T("2027-01-15T22:01:00Z")).expired, true);
+eq("juste avant l'expiration, il vit encore",
+   linkState(RDV, "scheduled", T("2027-01-15T21:59:00Z")).expired, false);
+eq("une réservation annulée ne se ré-annule pas",
+   linkState(RDV, "cancelled", T("2027-01-15T12:00:00Z")), { expired: false, cancelled: true, cancellable: false });
+
+eq("un UUID est accepté", isUuid("11111111-2222-3333-4444-555555555555"), true);
+eq("une chaîne quelconque est refusée", isUuid("nawak"), false);
+eq("un UUID tronqué est refusé", isUuid("11111111-2222-3333-4444-55555555555"), false);
+// La page n'affiche que le prénom : ni nom de famille, ni téléphone, ni e-mail.
+eq("prénom seul", firstNameOf("Marie Dupont"), "Marie");
+eq("nom composé", firstNameOf("  Jean-Pierre  Martin "), "Jean-Pierre");
+eq("nom absent", firstNameOf(null), "");
 
 console.log(fails === 0 ? "\n✅ tout passe\n" : `\n❌ ${fails} échec(s)\n`);
 process.exit(fails ? 1 : 0);
