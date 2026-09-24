@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 type RevealProps = {
   children: ReactNode;
-  /** Retard d'apparition en ms — sert à cascader plusieurs blocs. */
+  /** Retard d'apparition en ms - sert à cascader plusieurs blocs. */
   delay?: number;
   as?: ElementType;
   className?: string;

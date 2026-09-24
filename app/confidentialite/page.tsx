@@ -100,7 +100,7 @@ export default function ConfidentialitePage() {
           : nous répondons sous un mois.
         </p>
         <p>
-          Si la réponse ne vous satisfait pas, vous pouvez saisir la CNIL —{" "}
+          Si la réponse ne vous satisfait pas, vous pouvez saisir la CNIL -{" "}
           <a
             href="https://www.cnil.fr"
             target="_blank"

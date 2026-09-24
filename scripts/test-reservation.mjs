@@ -10,7 +10,7 @@ const eq = (label, got, want) => {
   console.log(`  ${ok ? "✓" : "✗"} ${label}${ok ? "" : `\n      obtenu ${JSON.stringify(got)}\n      attendu ${JSON.stringify(want)}`}`);
 };
 
-console.log("\n— Fuseau horaire (le piège : serveur en UTC, restaurant à Paris) —");
+console.log("\n- Fuseau horaire (le piège : serveur en UTC, restaurant à Paris) -");
 eq("20h00 le 15 janvier (heure d'hiver, UTC+1)",
    parisDateTimeToUtc("2027-01-15", "20:00").toISOString(), "2027-01-15T19:00:00.000Z");
 eq("20h00 le 15 juillet (heure d'été, UTC+2)",
@@ -20,7 +20,7 @@ eq("veille du passage à l'heure d'été",
 eq("lendemain du passage à l'heure d'été",
    parisDateTimeToUtc("2027-03-29", "20:00").toISOString(), "2027-03-29T18:00:00.000Z");
 
-console.log("\n— Créneaux dérivés des horaires de lib/site.ts —");
+console.log("\n- Créneaux dérivés des horaires de lib/site.ts -");
 const lundi = slotsForDate("2027-01-11");   // lundi, 11h00–00h00
 const samedi = slotsForDate("2027-01-16");  // samedi, 11h00–02h00
 const dimanche = slotsForDate("2027-01-17");// dimanche, 11h00–00h00
@@ -40,8 +40,8 @@ eq("les créneaux d'après minuit restent au dîner",
 
 // Le bug que les horaires réels ont révélé : « samedi, 01:00 » désigne la nuit
 // de samedi à dimanche. Converti naïvement, il partait vingt-quatre heures
-// trop tôt — la table aurait été réservée pour le petit matin du samedi.
-console.log("\n— Créneaux après minuit : le bon jour —");
+// trop tôt - la table aurait été réservée pour le petit matin du samedi.
+console.log("\n- Créneaux après minuit : le bon jour -");
 eq("samedi 20h00 reste le samedi",
    slotToUtc("2027-01-16", "20:00").toISOString(), "2027-01-16T19:00:00.000Z");
 eq("samedi 01:00 bascule au dimanche",
@@ -53,7 +53,7 @@ eq("lundi 23:00 ne bascule pas",
 eq("la bascule franchit aussi le changement de mois",
    slotToUtc("2027-01-30", "01:00").toISOString(), "2027-01-31T00:00:00.000Z");
 
-console.log("\n— Validation (rejouée côté serveur) —");
+console.log("\n- Validation (rejouée côté serveur) -");
 // Dates calculées à partir d'aujourd'hui : une date codée en dur finirait
 // par sortir de l'horizon de réservation et ferait échouer le test.
 const nextWeekday = (target) => {
@@ -89,7 +89,7 @@ eq("22h accepté le dimanche (le service va jusqu'à minuit)",
    validateReservation({ ...base, date: dimancheProchain, time: "22:00" }), null);
 eq("message trop long", !!validateReservation({ ...base, message: "x".repeat(501) }), true);
 
-console.log("\n— Bornes du sélecteur de date —");
+console.log("\n- Bornes du sélecteur de date -");
 eq("min = aujourd'hui", /^\d{4}-\d{2}-\d{2}$/.test(todayInParis()), true);
 eq("max > min", lastBookableDate() > todayInParis(), true);
 

@@ -48,7 +48,7 @@ export function SiteHeader() {
 
   /* Les pages ouvrent sur un bandeau jaune beurre : l'en-tête y flotte sans
      fond. Au défilement, il se pose sur du blanc. Le texte reste marron dans
-     les deux cas — plus de bascule de couleur à gérer. */
+     les deux cas - plus de bascule de couleur à gérer. */
   const solid = scrolled || open;
 
   return (
@@ -65,7 +65,7 @@ export function SiteHeader() {
       <div className="flex h-[72px] w-full items-center gap-6 px-5 sm:px-8 lg:h-20 lg:px-10">
         <Link
           href="/"
-          aria-label="FiFi — retour à l'accueil"
+          aria-label="FiFi - retour à l'accueil"
           className="flex shrink-0 items-center gap-3.5 transition-opacity hover:opacity-80"
         >
           <Wordmark className="h-7 sm:h-8" priority />
@@ -172,7 +172,7 @@ export function SiteHeader() {
             <p className="flex items-start gap-3">
               <ClockIcon className="mt-0.5 size-4 shrink-0 text-brand-accent" />
               <span>
-                {site.happyHour.label} — {site.happyHour.value}
+                {site.happyHour.label} - {site.happyHour.value}
               </span>
             </p>
           </div>

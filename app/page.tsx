@@ -300,7 +300,7 @@ function HappyHour() {
             <p className="eyebrow text-brand-accent">{site.happyHour.label}</p>
             <p className="mt-6 font-display text-6xl/[0.95] tracking-tight text-brand-accent sm:text-7xl/[0.95] lg:text-[5.5rem]/[0.92]">
               16h
-              <span className="mx-3 text-gold">—</span>
+              <span className="mx-3 text-gold">-</span>
               22h
             </p>
             <p className="mt-6 max-w-sm text-base/relaxed text-muted">

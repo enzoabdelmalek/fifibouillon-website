@@ -140,14 +140,14 @@ export async function sendReservationEmails(
       resend.emails.send({
         from: from!,
         to: input.email,
-        subject: `Votre table chez FiFi — ${date}`,
+        subject: `Votre table chez FiFi - ${date}`,
         html: customerTemplate(input),
       }),
       resend.emails.send({
         from: from!,
         to: adminMail!,
         replyTo: input.email,
-        subject: `Réservation — ${input.name}, ${input.guests} couv. le ${date} à ${input.time}`,
+        subject: `Réservation - ${input.name}, ${input.guests} couv. le ${date} à ${input.time}`,
         html: restaurantTemplate(input),
       }),
     ]);

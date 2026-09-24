@@ -28,7 +28,7 @@ const chapters = [
     eyebrow: "La cuisine",
     title: "Des mijotés, tous les jours",
     body: [
-      "Le bœuf bourguignon mijote longuement, la soupe à l’oignon est gratinée à la commande, les desserts sortent de notre cuisine. Les grands classiques sont là — œufs mayonnaise, poireaux vinaigrette, confit de canard, crème brûlée.",
+      "Le bœuf bourguignon mijote longuement, la soupe à l’oignon est gratinée à la commande, les desserts sortent de notre cuisine. Les grands classiques sont là - œufs mayonnaise, poireaux vinaigrette, confit de canard, crème brûlée.",
       "À côté, quelques écarts assumés : une burrata bien fraîche, des coquillettes crémeuses à la truffe, un burger maison. Le bouillon d’aujourd’hui, pas celui du musée.",
     ],
     photo: "assiette" as const,
@@ -37,7 +37,7 @@ const chapters = [
     eyebrow: "La salle",
     title: "Ouverte en continu",
     body: [
-      "On sert à 15h comme à 22h. Pas de coupure, pas de créneau à négocier : on pousse la porte quand on a faim, ou simplement soif — le comptoir reste ouvert bien après le dessert.",
+      "On sert à 15h comme à 22h. Pas de coupure, pas de créneau à négocier : on pousse la porte quand on a faim, ou simplement soif - le comptoir reste ouvert bien après le dessert.",
       "Et de 16h à 22h, les pintes et les cocktails signature passent au tarif happy hour, tous les jours.",
     ],
     photo: "salle" as const,

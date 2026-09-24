@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-const ALT = "FiFi — Bouillon & Brasserie, 9ᵉ arrondissement";
+const ALT = "FiFi - Bouillon & Brasserie, 9ᵉ arrondissement";
 
 /**
  * Logo FiFi, blason vertical complet (chat + FIFI + « Bouillon & Brasserie »).
@@ -105,7 +105,7 @@ export function Wordmark({
   );
 }
 
-/** Le chat du logo, seul — utilisé comme ornement. */
+/** Le chat du logo, seul - utilisé comme ornement. */
 export function CatMark({ className }: { className?: string }) {
   return (
     <Image

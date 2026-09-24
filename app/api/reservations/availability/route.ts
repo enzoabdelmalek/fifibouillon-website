@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 /**
  * Disponibilité d'une journée.
  *
- * Ne renvoie que des compteurs de couverts — jamais le contenu des
+ * Ne renvoie que des compteurs de couverts - jamais le contenu des
  * réservations. C'est la différence avec une lecture directe depuis le
  * navigateur, qui exposerait les coordonnées des clients.
  */

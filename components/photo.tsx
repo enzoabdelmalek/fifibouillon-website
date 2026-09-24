@@ -17,7 +17,7 @@ const RATIO_CLASS: Record<string, string> = {
  * Tant que le client n'a pas fourni l'image, l'emplacement affiche un panneau
  * ornemental aux mêmes proportions : double filet or et chat en filigrane,
  * le vocabulaire graphique déjà utilisé ailleurs. Le visiteur voit un élément
- * de décor assumé, pas un trou — et le jour où la photo arrive, elle prend
+ * de décor assumé, pas un trou - et le jour où la photo arrive, elle prend
  * exactement la même place, sans que rien ne bouge autour.
  *
  * En développement seulement, le panneau affiche le brief de la photo
@@ -85,7 +85,7 @@ function PendingPhoto({ name, className }: { name: PhotoName; className: string 
 
       {process.env.NODE_ENV === "development" ? (
         <p className="absolute inset-x-6 bottom-6 text-center text-xs/relaxed text-muted">
-          <span className="font-medium text-ink">{name}</span> — {photo.brief}
+          <span className="font-medium text-ink">{name}</span> - {photo.brief}
         </p>
       ) : null}
     </div>

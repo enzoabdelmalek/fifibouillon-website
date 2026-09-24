@@ -15,7 +15,7 @@ export type MenuGroup = {
  * Carte présentée par onglets : une famille à la fois, au lieu d'une colonne
  * de 90 lignes où l'on se perd.
  *
- * Tous les panneaux sont rendus dans le HTML — seul l'affichage est basculé.
+ * Tous les panneaux sont rendus dans le HTML - seul l'affichage est basculé.
  * Google indexe donc la carte entière, et sans JavaScript la page reste
  * complète (le masquage est conditionné à la classe `js`, cf. globals.css).
  */

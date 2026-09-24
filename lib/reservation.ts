@@ -109,13 +109,6 @@ const toMinutes = (time: string) => {
 const toTime = (minutes: number) =>
   `${String(Math.floor(minutes / 60) % 24).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
 
-/**
- * Créneaux proposés pour une date donnée.
- *
- * Ils sont dérivés des horaires d'ouverture de `lib/site.ts` : une seule
- * source de vérité. Corriger les horaires corrige aussi les créneaux — pas
- * de risque de proposer une table à une heure où la salle est fermée.
- */
 /** Horaires applicables à une date, ou `null` si la salle est fermée ce jour-là. */
 function openingFor(isoDate: string) {
   if (!isValidIsoDate(isoDate)) return null;
@@ -129,7 +122,7 @@ function openingFor(isoDate: string) {
  *
  * Le vendredi, le service va jusqu'à 2h : « 01:00 » y désigne la nuit de
  * vendredi à **samedi**, pas le petit matin du vendredi. Un créneau antérieur
- * à l'ouverture appartient donc au lendemain — sans ce décalage, la table
+ * à l'ouverture appartient donc au lendemain - sans ce décalage, la table
  * serait réservée vingt-quatre heures trop tôt.
  */
 export function slotToUtc(isoDate: string, time: string): Date {
@@ -142,6 +135,13 @@ export function slotToUtc(isoDate: string, time: string): Date {
   return parisDateTimeToUtc(isoDate, time);
 }
 
+/**
+ * Créneaux proposés pour une date donnée.
+ *
+ * Ils sont dérivés des horaires d'ouverture de `lib/site.ts` : une seule
+ * source de vérité. Corriger les horaires corrige aussi les créneaux - pas
+ * de risque de proposer une table à une heure où la salle est fermée.
+ */
 export function slotsForDate(isoDate: string): string[] {
   const slot = openingFor(isoDate);
   if (!slot) return [];
@@ -161,7 +161,7 @@ export function slotsForDate(isoDate: string): string[] {
 /**
  * Regroupe les créneaux en moments de la journée.
  * FiFi sert en continu : ce découpage est un confort de lecture, pas une
- * coupure de service — il ne doit jamais créer de trou entre deux groupes.
+ * coupure de service - il ne doit jamais créer de trou entre deux groupes.
  */
 export function groupSlots(slots: string[]) {
   const groups: { label: string; slots: string[] }[] = [
@@ -181,7 +181,7 @@ export function groupSlots(slots: string[]) {
   return groups.filter((g) => g.slots.length > 0);
 }
 
-/** Créneaux déjà passés pour aujourd'hui — on ne propose pas une table pour 13h à 15h. */
+/** Créneaux déjà passés pour aujourd'hui - on ne propose pas une table pour 13h à 15h. */
 export function isSlotInPast(isoDate: string, time: string): boolean {
   return slotToUtc(isoDate, time).getTime() <= Date.now();
 }

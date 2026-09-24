@@ -76,7 +76,7 @@ export default function NousTrouverPage() {
               <h2 className="eyebrow text-gold">Nous contacter</h2>
               <p className="mt-6 text-sm/relaxed text-muted">
                 Une question, un groupe à installer, une privatisation ? Le plus
-                simple reste le téléphone — on décroche pendant le service.
+                simple reste le téléphone - on décroche pendant le service.
               </p>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <a

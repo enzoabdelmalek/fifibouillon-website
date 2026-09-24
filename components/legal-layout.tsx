@@ -5,7 +5,7 @@ import { site } from "@/lib/site";
  * Mise en page commune aux textes légaux.
  *
  * Volontairement sobre et en pleine largeur de lecture : ces pages se lisent,
- * elles ne se contemplent pas. Pas d'animation d'apparition non plus — un
+ * elles ne se contemplent pas. Pas d'animation d'apparition non plus - un
  * texte légal doit être visible même si le JavaScript ne s'exécute pas.
  */
 export function LegalLayout({

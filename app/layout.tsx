@@ -23,8 +23,8 @@ const jost = Jost({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.fullName} — ${site.district}, ${site.city}`,
-    template: `%s — ${site.name}`,
+    default: `${site.fullName} - ${site.district}, ${site.city}`,
+    template: `%s - ${site.name}`,
   },
   description: site.description,
   applicationName: site.fullName,
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "fr_FR",
     siteName: site.fullName,
-    title: `${site.fullName} — ${site.district}, ${site.city}`,
+    title: `${site.fullName} - ${site.district}, ${site.city}`,
     description: site.description,
     url: site.url,
   },
@@ -60,7 +60,7 @@ export const viewport: Viewport = {
   themeColor: "#fffdf6",
 };
 
-/** Données structurées — aide Google à afficher horaires, adresse et carte. */
+/** Données structurées - aide Google à afficher horaires, adresse et carte. */
 const restaurantJsonLd = {
   "@context": "https://schema.org",
   "@type": "Restaurant",

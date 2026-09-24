@@ -3,7 +3,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ---------------------------------------------------------------
-   Design tokens — palette Bouillon FiFi
+   Design tokens - palette Bouillon FiFi
    Lemon Chiffon #FFF8CA · Rosewood #6B0B0C
    Coffee Bean  #2D120D · Botticelli #CDE3E8
    Or du logo   #C8920E
@@ -12,11 +12,11 @@
   color-scheme: light;
 
   /* PRIMAIRES : blanc + jaune beurre. Ce sont eux qui portent la page.
-     SECONDAIRES : marron (texte) et rouge (boutons, accents, ornements) —
+     SECONDAIRES : marron (texte) et rouge (boutons, accents, ornements) -
      employés par touches, jamais en grands aplats. */
-  --paper: #fffdf6; /* blanc chaud — surface dominante */
-  --paper-alt: #fff8ca; /* jaune beurre — bandeaux et bandes alternées */
-  --surface: #ffffff; /* blanc pur — cartes posées sur le beurre */
+  --paper: #fffdf6; /* blanc chaud - surface dominante */
+  --paper-alt: #fff8ca; /* jaune beurre - bandeaux et bandes alternées */
+  --surface: #ffffff; /* blanc pur - cartes posées sur le beurre */
 
   --ink: #2d120d;
   --muted: #7a544a;
@@ -51,7 +51,7 @@
   color-scheme: dark;
 
   /* Fonds : anthracite chaud, presque neutre.
-     Le Coffee Bean n'est PAS utilisé comme fond de page ici — c'est un brun
+     Le Coffee Bean n'est PAS utilisé comme fond de page ici - c'est un brun
      rouge trop proche du Rosewood des bandeaux : côte à côte, les deux teintes
      se brouillent. En laissant le fond désaturé, le bordeaux redevient la
      seule couleur saturée de la page et se détache franchement. */
@@ -65,7 +65,7 @@
   --footer-bg: #100c0a;
   --footer-ink: #fff8ca;
 
-  /* Sur fond sombre, le rouge de marque tombe à 1,87:1 — illisible.
+  /* Sur fond sombre, le rouge de marque tombe à 1,87:1 - illisible.
      L'or du logo prend le relais : même rôle d'accent, ~8:1. */
   --brand-accent: #dfaa36;
 
@@ -145,7 +145,7 @@
 }
 
 @layer components {
-  /* Grain papier — posé en overlay sur les grands aplats */
+  /* Grain papier - posé en overlay sur les grands aplats */
   .grain::after {
     content: "";
     position: absolute;
@@ -165,7 +165,7 @@
     font-weight: 500;
   }
 
-  /* Filet orné : ligne — losange — ligne */
+  /* Filet orné : ligne - losange - ligne */
   .rule-ornament {
     display: flex;
     align-items: center;
@@ -221,7 +221,7 @@
   }
 
   /* Onglets de carte : le panneau inactif n'est masqué que si JS tourne.
-     Sans JavaScript, les panneaux restent tous affichés — la carte est alors
+     Sans JavaScript, les panneaux restent tous affichés - la carte est alors
      longue, mais complète et lisible. Le script du <head> pose `js` avant le
      premier rendu, donc aucun clignotement. */
   .js [data-menu-panel="false"] {

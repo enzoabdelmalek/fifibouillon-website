@@ -4,14 +4,14 @@
  * Le site est livré sans photographie : le client doit les fournir. Plutôt
  * que de laisser des trous dans les pages, chaque emplacement est déclaré ici
  * avec ses proportions et son texte alternatif. Tant que `file` vaut `null`,
- * le composant `<Photo>` affiche un panneau ornemental — le site reste fini.
+ * le composant `<Photo>` affiche un panneau ornemental - le site reste fini.
  *
  * Pour livrer une photo : déposer le fichier dans `public/photos/`, puis
  * renseigner `file` et `width`/`height` (les dimensions réelles du fichier,
  * elles réservent la place et évitent que la page saute au chargement).
  *
  * Le texte alternatif n'est pas facultatif : il est lu par les lecteurs
- * d'écran et indexé par Google. Il décrit ce qu'on voit, pas ce qu'on vend —
+ * d'écran et indexé par Google. Il décrit ce qu'on voit, pas ce qu'on vend -
  * « salle voûtée aux banquettes rouges », pas « notre superbe restaurant ».
  */
 export type PhotoSlot = {
@@ -24,7 +24,7 @@ export type PhotoSlot = {
   alt: string;
   /** Proportions de l'emplacement, respectées même sans photo. */
   ratio: "3/4" | "4/3" | "1/1" | "16/9" | "3/2";
-  /** Ce qu'il faut demander au client — affiché en développement seulement. */
+  /** Ce qu'il faut demander au client - affiché en développement seulement. */
   brief: string;
 };
 
@@ -57,7 +57,7 @@ export const photos = {
 
 export type PhotoName = keyof typeof photos;
 
-/** Emplacements encore vides — sert au récapitulatif à demander au client. */
+/** Emplacements encore vides - sert au récapitulatif à demander au client. */
 export function missingPhotos(): PhotoName[] {
   return (Object.keys(photos) as PhotoName[]).filter((name) => !photos[name].file);
 }

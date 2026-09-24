@@ -50,7 +50,7 @@ export default function LesBoissonsPage() {
         <Reveal className="mt-20 border-t border-line pt-10 text-center">
           <p className="text-sm/relaxed text-muted">
             Prix en euros, taxes et service compris. L’abus d’alcool est dangereux
-            pour la santé — à consommer avec modération.
+            pour la santé - à consommer avec modération.
           </p>
           <div className="mt-7 flex flex-wrap justify-center gap-3">
             <a

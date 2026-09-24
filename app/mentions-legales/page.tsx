@@ -60,8 +60,8 @@ export default function MentionsLegalesPage() {
 
       <LegalSection title="Propriété intellectuelle">
         <p>
-          L’ensemble des contenus de ce site — textes, photographies, illustrations,
-          identité visuelle et structure — est protégé par le droit d’auteur. Toute
+          L’ensemble des contenus de ce site - textes, photographies, illustrations,
+          identité visuelle et structure - est protégé par le droit d’auteur. Toute
           reproduction ou représentation, totale ou partielle, sans autorisation écrite
           préalable est interdite.
         </p>

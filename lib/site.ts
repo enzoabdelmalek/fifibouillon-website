@@ -6,20 +6,20 @@
  * Les mêmes horaires existent aussi dans `businesses.hours` en base, où le
  * dashboard les lit. Tant que FiFi n'a pas de compte dashboard, personne ne
  * peut les y modifier et les deux ne peuvent pas diverger. **Le jour où tu
- * crées un accès client, il faut brancher le site sur la base** — sinon le
+ * crées un accès client, il faut brancher le site sur la base** - sinon le
  * client changera ses horaires dans le dashboard, le site gardera les
  * anciens, et continuera de proposer des créneaux sur un service fermé.
  *
  * Toutes les valeurs sont celles du client, validées avec lui. Elles
  * alimentent l'en-tête, le pied de page, la page « Nous trouver » et les
- * données structurées Schema.org (SEO / Google) — et, pour les horaires,
+ * données structurées Schema.org (SEO / Google) - et, pour les horaires,
  * les créneaux de réservation. Une seule source de vérité : modifier une
  * valeur ici la corrige partout.
  */
 
 export const site = {
   name: "FiFi",
-  fullName: "FiFi — Bouillon & Brasserie",
+  fullName: "FiFi - Bouillon & Brasserie",
   tagline: "Bouillon & Brasserie",
   district: "9ᵉ arrondissement",
   city: "Paris",
@@ -27,7 +27,7 @@ export const site = {
   description:
     "Bouillon & brasserie dans le 9ᵉ arrondissement de Paris. La cuisine française de toujours, généreuse et à prix juste, servie dans une salle chaleureuse du matin au soir.",
 
-  /** URL de production — sert aux métadonnées Open Graph et au sitemap. */
+  /** URL de production - sert aux métadonnées Open Graph et au sitemap. */
   url: "https://www.fifibouillon.com",
 
   contact: {
@@ -67,7 +67,7 @@ export const site = {
   },
 
   /**
-   * Horaires de service — ouvert 7j/7, en service continu.
+   * Horaires de service - ouvert 7j/7, en service continu.
    *
    * `days` / `value` sont affichés tels quels sur le site ; `schema` alimente
    * le OpeningHoursSpecification de Schema.org, que Google utilise pour
@@ -96,7 +96,7 @@ export const site = {
   ],
 
   /**
-   * Identité légale de l'éditeur — mentions légales (LCEN art. 6 III).
+   * Identité légale de l'éditeur - mentions légales (LCEN art. 6 III).
    *
    * Complet et vérifié. Ne modifier qu'à partir d'une source officielle : un
    * site professionnel dont les mentions légales sont fausses ou absentes
@@ -108,7 +108,7 @@ export const site = {
      * L'enseigne est « FiFi », la société est « RESTO B 56 » : ce sont les
      * informations de la SOCIÉTÉ qui doivent figurer ici, pas celles de
      * l'enseigne. Source : SIREN 502155716, base Sirene / RNE, siège déclaré
-     * au 56 B rue de Clichy — c'est bien le même établissement.
+     * au 56 B rue de Clichy - c'est bien le même établissement.
      */
     companyName: "RESTO B 56",
     legalForm: "SARL (société à responsabilité limitée)",
@@ -128,7 +128,7 @@ export const site = {
      *
      * ⚠️ Ce sont des ENGAGEMENTS : rien ne les applique aujourd'hui, aucune
      * purge n'est programmée. Une politique qui promet un effacement qui
-     * n'arrive jamais est pire que pas de politique du tout — c'est une
+     * n'arrive jamais est pire que pas de politique du tout - c'est une
      * déclaration inexacte à la CNIL en cas de contrôle. À implémenter côté
      * base avant la mise en ligne, ou à revoir à la baisse ici.
      *

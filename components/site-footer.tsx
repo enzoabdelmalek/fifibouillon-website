@@ -12,7 +12,7 @@ export function SiteFooter() {
           <div>
             <Logo variant="onDark" className="h-24" />
             <p className="mt-6 max-w-xs text-sm/relaxed text-footer-ink/70">
-              {site.tagline} — {site.district}. La cuisine française de toujours,
+              {site.tagline} - {site.district}. La cuisine française de toujours,
               généreuse et à prix juste.
             </p>
             <div className="mt-6 flex gap-3">

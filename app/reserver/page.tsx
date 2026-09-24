@@ -40,7 +40,7 @@ export default function ReserverPage() {
                       </p>
                     ))}
                     <p className="pt-2 text-brand-accent">
-                      {site.happyHour.label} — {site.happyHour.value}
+                      {site.happyHour.label} - {site.happyHour.value}
                     </p>
                   </dd>
                 </div>
