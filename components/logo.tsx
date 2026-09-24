@@ -1,7 +1,8 @@
 import Image from "next/image";
+import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
-const ALT = "FiFi - Bouillon & Brasserie, 9ᵉ arrondissement";
+const ALT = `${site.fullName}, ${site.district}`;
 
 /**
  * Logo FiFi, blason vertical complet (chat + FIFI + « Bouillon & Brasserie »).
