@@ -182,7 +182,12 @@ recadrés ; les fichiers dérivés sont dans `public/assets/` :
 | `cat.png` | le chat seul, en ornement (filigranes, 404) |
 | `app/icon.png` | favicon |
 
-Les originaux (`LogoNoir.jpeg`, `LogoBlanc.jpeg`, `Couleurs.jpeg`) sont conservés.
+Les originaux fournis par le client (`LogoNoir.jpeg` 1600x1600, `LogoBlanc.jpeg`,
+`Couleurs.jpeg`) sont conservés dans **`design/`**, à la racine - pas dans
+`public/`. Tout ce que contient `public/` est servi et téléchargeable par
+n'importe qui : ces trois fichiers pesaient 304 Ko offerts au premier venu,
+sans jamais être affichés. Ils restent dans le dépôt parce qu'ils servent à
+regénérer les PNG si besoin.
 
 ## Réservation
 
