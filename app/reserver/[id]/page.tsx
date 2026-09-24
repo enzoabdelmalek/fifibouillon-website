@@ -22,10 +22,13 @@ export const dynamic = "force-dynamic";
 
 export default async function ReservationPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ confirmee?: string; mail?: string }>;
 }) {
   const { id } = await params;
+  const { confirmee, mail } = await searchParams;
   const reservation = await findByLink(id);
 
   // Lien inconnu, identifiant mal formé ou service passé : la même réponse
@@ -43,10 +46,21 @@ export default async function ReservationPage({
     .toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Paris" })
     .replace(":", "h");
 
+  // On arrive du formulaire : c'est le moment le plus important du parcours,
+  // il mérite d'être marqué. Revenir plus tard par l'e-mail donne la même
+  // page, en plus sobre.
+  const juste = confirmee === "1" && !reservation.cancelled;
+
   return (
     <>
       <PageHeader
-        eyebrow={reservation.cancelled ? "Réservation annulée" : "Votre réservation"}
+        eyebrow={
+          reservation.cancelled
+            ? "Réservation annulée"
+            : juste
+              ? "Votre table est réservée"
+              : "Votre réservation"
+        }
         title={
           reservation.cancelled
             ? "Cette table a été libérée"
@@ -55,7 +69,11 @@ export default async function ReservationPage({
         intro={
           reservation.cancelled
             ? "Nous serons heureux de vous accueillir une autre fois."
-            : undefined
+            : juste
+              ? mail === "ko"
+                ? "Votre table est retenue. L’e-mail de confirmation n’a pas pu partir, mais gardez cette page : c’est ici que vous pourrez annuler."
+                : "Un e-mail de confirmation vient de vous être envoyé. Il contient le lien de cette page."
+              : undefined
         }
       />
 

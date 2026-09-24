@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { Diamond } from "@/components/menu";
 import {
@@ -27,6 +28,7 @@ type Form = {
 };
 
 export function ReservationForm() {
+  const router = useRouter();
   const id = useId();
   const [form, setForm] = useState<Form>(EMPTY);
   // La disponibilité est mémorisée AVEC sa date : on en déduit si elle
@@ -95,14 +97,29 @@ export function ReservationForm() {
       if (!response.ok) {
         setError(data.error ?? "Une erreur est survenue. Merci de réessayer.");
         if (response.status === 409) setForm((f) => ({ ...f, time: "" }));
+        setSubmitting(false);
+        return;
+      }
+
+      setForm(EMPTY);
+
+      // La table est prise : on emmène le visiteur sur sa page de réservation,
+      // celle-là même que reprend l'e-mail de confirmation. Le récapitulatif
+      // en place ne sert plus que de repli, si l'identifiant manque.
+      //
+      // `submitting` reste vrai jusqu'à la navigation : sans ça le bouton
+      // redeviendrait cliquable une fraction de seconde, le temps que la page
+      // change - assez pour une double réservation sur une connexion lente.
+      if (typeof data.id === "string" && data.id) {
+        const mail = data.emailSent ? "" : "&mail=ko";
+        router.push(`/reserver/${data.id}?confirmee=1${mail}`);
         return;
       }
 
       setDone({ emailSent: Boolean(data.emailSent) });
-      setForm(EMPTY);
+      setSubmitting(false);
     } catch {
       setError("Connexion interrompue. Vérifiez votre réseau et réessayez.");
-    } finally {
       setSubmitting(false);
     }
   }

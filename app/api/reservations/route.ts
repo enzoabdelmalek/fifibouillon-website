@@ -121,5 +121,12 @@ export async function POST(request: Request) {
   // le contraire au client. On signale seulement que l'accusé n'est pas parti.
   const emails = await sendReservationEmails(input, created?.id ?? null);
 
-  return NextResponse.json({ ok: true, emailSent: emails.sent });
+  // L'identifiant repart au navigateur : c'est lui qui sert d'adresse à la
+  // page de confirmation. S'il manque - insertion réussie mais lecture en
+  // échec - le formulaire retombe sur son récapitulatif en place.
+  return NextResponse.json({
+    ok: true,
+    id: created?.id ?? null,
+    emailSent: emails.sent,
+  });
 }
