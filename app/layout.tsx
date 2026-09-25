@@ -8,8 +8,20 @@ import { env } from "@/lib/env";
 import { site } from "@/lib/site";
 import "./globals.css";
 
+/**
+ * Playfair ne sert qu'aux titres, toujours dans la même graisse et jamais en
+ * italique. Sans `weight`, next/font charge la police VARIABLE - tout l'axe
+ * de graisses, plus son italique, soit deux fichiers dont un préchargé à
+ * 38 Ko sur le chemin critique. La version statique en 400 suffit.
+ *
+ * Jost, lui, garde sa version variable : le site en utilise le 400, le 500
+ * (surtitres) et l'italique, et un seul fichier variable pèse moins que
+ * trois fichiers statiques.
+ */
 const playfair = Playfair_Display({
   subsets: ["latin"],
+  weight: ["400"],
+  style: ["normal"],
   display: "swap",
   variable: "--font-playfair",
 });
