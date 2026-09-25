@@ -231,6 +231,12 @@ function Cartes() {
       title: "La carte",
       detail: "Entrées, salades, plats mijotés et desserts maison.",
       pdf: "/Menu%20food.pdf",
+      // Complète le nom accessible : deux liens « Consulter » menant à deux
+      // pages différentes sont indistinguables au lecteur d'écran. Écrits à
+      // la main plutôt que dérivés du titre - « de les boissons » n'est pas
+      // du français.
+      pour: "la carte",
+      duPdf: "de la carte",
     },
     {
       href: "/les-boissons",
@@ -238,6 +244,8 @@ function Cartes() {
       title: "Les boissons",
       detail: "Cocktails, vins à la verse, bières pression et cafétéria.",
       pdf: "/Menu%20boisson.pdf",
+      pour: "les boissons",
+      duPdf: "des boissons",
     },
   ];
 
@@ -264,7 +272,10 @@ function Cartes() {
                   href={card.href}
                   className="inline-flex items-center gap-3 py-2.5 text-[0.8rem] tracking-[0.16em] text-ink uppercase after:absolute after:inset-0 after:content-['']"
                 >
-                  <span className="border-b border-accent pb-1">Consulter</span>
+                  <span className="border-b border-accent pb-1">
+                    Consulter
+                    <span className="sr-only"> {card.pour}</span>
+                  </span>
                   <span
                     aria-hidden
                     className="text-gold transition-transform duration-200 group-hover:translate-x-1"
@@ -279,6 +290,7 @@ function Cartes() {
                   className="relative z-10 -my-2 px-2 py-3 text-[0.8rem] tracking-[0.12em] text-muted uppercase transition-colors hover:text-ink"
                 >
                   PDF
+                  <span className="sr-only"> {card.duPdf}</span>
                 </a>
               </div>
             </article>

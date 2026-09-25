@@ -375,8 +375,20 @@ export function ReservationForm() {
   );
 }
 
+/**
+ * `focus:outline-none` a été retiré : il supprimait le contour du navigateur
+ * et ne laissait qu'un changement de couleur de bordure pour signaler le
+ * champ actif. Une couleur seule ne se voit pas de tout le monde, et c'est le
+ * seul repère dont dispose quelqu'un qui remplit le formulaire au clavier.
+ * Le contour global de `:focus-visible` reprend donc la main.
+ */
 const inputClass =
-  "w-full rounded-sm border border-line-strong bg-paper px-4 py-3 text-base text-ink transition-colors placeholder:text-muted/60 focus:border-primary focus:outline-none";
+  "w-full rounded-sm border border-line-strong bg-paper px-4 py-3 text-base text-ink transition-colors placeholder:text-muted/60 focus:border-primary " +
+  // `focus-within` en plus de `:focus-visible` : sur un champ de type date,
+  // Chrome place le focus sur un segment interne (jour, mois, année) et
+  // l'élément hôte cesse alors de correspondre à `:focus-visible`. Le champ
+  // paraissait donc inactif au clavier alors qu'il l'était.
+  "focus-within:outline-2 focus-within:outline-offset-[3px] focus-within:outline-accent";
 
 function Field({
   label,
