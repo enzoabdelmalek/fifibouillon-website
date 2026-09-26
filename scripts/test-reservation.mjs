@@ -27,18 +27,19 @@ const lundi = slotsForDate("2027-01-11");   // lundi, 11h00–00h00
 const samedi = slotsForDate("2027-01-16");  // samedi, 11h00–02h00
 const dimanche = slotsForDate("2027-01-17");// dimanche, 11h00–00h00
 eq("lundi : premier créneau", lundi[0], "11:00");
-eq("lundi : dernier créneau (1h avant fermeture à minuit)", lundi.at(-1), "23:00");
-eq("samedi : dernier créneau (fermeture à 2h)", samedi.at(-1), "01:00");
-eq("dimanche : fermeture à minuit comme en semaine", dimanche.at(-1), "23:00");
+eq("lundi : dernier créneau, 1h30 avant la fermeture à minuit", lundi.at(-1), "22:30");
+eq("samedi : dernier créneau, 1h30 avant la fermeture à 2h", samedi.at(-1), "00:30");
+eq("dimanche : fermeture à minuit comme en semaine", dimanche.at(-1), "22:30");
 eq("pas de trou entre les créneaux (service continu)",
-   lundi.length, 25);
-eq("le week-end ajoute les quatre créneaux d'après minuit",
+   lundi.length, 24);
+// Le week-end ferme deux heures plus tard, soit quatre créneaux de plus.
+eq("le week-end ajoute quatre créneaux",
    samedi.length - lundi.length, 4);
 eq("groupes de lecture", groupSlots(lundi).map(g => g.label), ["Déjeuner", "Après-midi", "Dîner"]);
 eq("aucun créneau perdu au regroupement",
    groupSlots(samedi).reduce((n, g) => n + g.slots.length, 0), samedi.length);
 eq("les créneaux d'après minuit restent au dîner",
-   groupSlots(samedi).at(-1).slots.slice(-3), ["00:00", "00:30", "01:00"]);
+   groupSlots(samedi).at(-1).slots.slice(-3), ["23:30", "00:00", "00:30"]);
 
 // Le bug que les horaires réels ont révélé : « samedi, 01:00 » désigne la nuit
 // de samedi à dimanche. Converti naïvement, il partait vingt-quatre heures
@@ -85,10 +86,16 @@ eq("horaire hors service (10h)", !!validateReservation({ ...base, time: "10:00" 
 // un jour et refusé l'autre. C'est le cœur de la règle, il faut les deux.
 eq("1h du matin refusé le dimanche (fermeture à minuit)",
    !!validateReservation({ ...base, date: dimancheProchain, time: "01:00" }), true);
-eq("1h du matin accepté le samedi (fermeture à 2h)",
-   validateReservation({ ...base, date: samediProchain, time: "01:00" }), null);
-eq("22h accepté le dimanche (le service va jusqu'à minuit)",
-   validateReservation({ ...base, date: dimancheProchain, time: "22:00" }), null);
+eq("00h30 accepté le samedi, dernier créneau",
+   validateReservation({ ...base, date: samediProchain, time: "00:30" }), null);
+// La salle ferme à 2h, mais on ne prend plus de table après 00h30 : c'est la
+// règle du dernier service qui coupe ici, pas l'horaire d'ouverture.
+eq("1h du matin refusé même le samedi",
+   !!validateReservation({ ...base, date: samediProchain, time: "01:00" }), true);
+eq("22h30 accepté le dimanche, dernier créneau",
+   validateReservation({ ...base, date: dimancheProchain, time: "22:30" }), null);
+eq("23h refusé le dimanche, trop près de la fermeture",
+   !!validateReservation({ ...base, date: dimancheProchain, time: "23:00" }), true);
 eq("message trop long", !!validateReservation({ ...base, message: "x".repeat(501) }), true);
 
 console.log("\n- Bornes du sélecteur de date -");

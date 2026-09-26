@@ -7,8 +7,22 @@ import { site } from "@/lib/site";
 /** Pas entre deux créneaux proposés, en minutes. */
 export const SLOT_STEP_MINUTES = 30;
 
-/** Dernier service : on cesse de proposer des créneaux N minutes avant la fermeture. */
-export const LAST_SEATING_BEFORE_CLOSE_MINUTES = 60;
+/**
+ * Dernier service : on cesse de proposer des créneaux N minutes avant la
+ * fermeture.
+ *
+ * Une heure et demie. C'est un arbitrage entre deux torts :
+ *
+ * Trop court, le client réserve pour un repas que la cuisine n'a plus le
+ * temps de faire, et le restaurant choisit entre servir en retard ou
+ * décevoir quelqu'un qui avait réservé.
+ *
+ * Trop long, on refuse des tables que la salle aurait pu prendre. À deux
+ * heures, le dernier créneau du dimanche au jeudi tombait à 22h alors que
+ * le service court jusqu'à minuit : deux heures de salle perdues, et un
+ * client qui va ailleurs.
+ */
+export const LAST_SEATING_BEFORE_CLOSE_MINUTES = 90;
 
 /** Au-delà, on invite à appeler : un groupe se cale au téléphone. */
 export const MAX_GUESTS_ONLINE = 10;
