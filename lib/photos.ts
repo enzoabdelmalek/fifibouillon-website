@@ -30,15 +30,21 @@ export type PhotoSlot = {
 
 export const photos = {
   salle: {
-    file: null,
-    alt: "La salle du bouillon FiFi, ses tables dressées et son comptoir",
-    ratio: "4/3",
+    file: "salle-chat.jpg",
+    width: 1799,
+    height: 2400,
+    alt: "Le chat du bouillon FiFi assis sur une chaise bistrot, devant les banquettes de la salle",
+    ratio: "3/4",
     brief: "La salle en service, plutôt le soir, lumière chaude, des clients attablés",
   },
   facade: {
-    file: null,
-    alt: "La devanture de FiFi, 56B rue de Clichy",
-    ratio: "3/2",
+    file: "facade.jpg",
+    width: 2400,
+    height: 1800,
+    // Proportions calées sur la photo elle-même : recadrer une devanture
+    // en 3/2 aurait rogné l'auvent ou la terrasse, c'est-à-dire le sujet.
+    ratio: "4/3",
+    alt: "La devanture de FiFi au crépuscule, 56B rue de Clichy, sa terrasse et son auvent éclairé",
     brief: "La devanture depuis le trottoir d'en face, enseigne lisible, de jour",
   },
   assiette: {
@@ -60,4 +66,17 @@ export type PhotoName = keyof typeof photos;
 /** Emplacements encore vides - sert au récapitulatif à demander au client. */
 export function missingPhotos(): PhotoName[] {
   return (Object.keys(photos) as PhotoName[]).filter((name) => !photos[name].file);
+}
+
+/**
+ * Faut-il montrer un cartouche à la place d'une photo manquante ?
+ *
+ * Non, dès qu'une vraie photo existe ailleurs sur le site. Le panneau
+ * ornemental ne fonctionne que s'ils sont TOUS vides : il se lit alors comme
+ * un élément de décor. À côté d'une vraie photo, il se lit comme une image
+ * qui n'a pas chargé - et un trou se remarque bien plus qu'une section en
+ * moins.
+ */
+export function showPlaceholders(): boolean {
+  return missingPhotos().length === Object.keys(photos).length;
 }

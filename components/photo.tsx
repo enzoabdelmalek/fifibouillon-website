@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { CatMark } from "@/components/logo";
-import { photos, type PhotoName } from "@/lib/photos";
+import { photos, showPlaceholders, type PhotoName } from "@/lib/photos";
 import { cn } from "@/lib/utils";
 
 const RATIO_CLASS: Record<string, string> = {
@@ -43,8 +43,10 @@ export function Photo({
     className,
   );
 
+  // Emplacement vide : cartouche tant que le site n'a aucune photo, rien
+  // du tout dès qu'il en a. Voir `showPlaceholders`.
   if (!photo.file) {
-    return <PendingPhoto name={name} className={shape} />;
+    return showPlaceholders() ? <PendingPhoto name={name} className={shape} /> : null;
   }
 
   return (
@@ -54,6 +56,7 @@ export function Photo({
         alt={photo.alt}
         fill
         sizes={sizes}
+        quality={70}
         preload={preload}
         className="object-cover"
       />

@@ -115,7 +115,7 @@ function Maison() {
         </Reveal>
 
         <Reveal delay={160} className="space-y-8">
-          <Photo name="salle" sizes="(min-width: 1024px) 34rem, 100vw" />
+          <Photo name="facade" sizes="(min-width: 1024px) 34rem, 100vw" />
 
           <div className="grain relative overflow-hidden rounded-sm border border-line bg-paper-alt p-8 shadow-card sm:p-12">
             {/* double filet or, à la manière d'un cartouche de menu */}
