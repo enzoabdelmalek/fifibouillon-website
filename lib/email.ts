@@ -1,6 +1,6 @@
 import { Resend } from "resend";
 import { env } from "@/lib/env";
-import type { ReservationInput } from "@/lib/reservation";
+import { isGroupRequest, type ReservationInput } from "@/lib/reservation";
 import { site } from "@/lib/site";
 
 /* Palette de la marque, en dur : un e-mail ne peut pas lire nos variables CSS. */
@@ -158,7 +158,12 @@ export async function sendReservationEmails(
         from: from!,
         to: adminMail!,
         replyTo: input.email,
-        subject: `Réservation - ${input.name}, ${input.guests} couv. le ${date} à ${input.time}`,
+        // L'objet doit dire d'un coup d'œil qu'une demande attend une
+        // réponse : une table de 14 non confirmée, c'est 14 personnes
+        // devant la porte.
+        subject: isGroupRequest(input.guests)
+          ? `DEMANDE DE GROUPE - ${input.guests} couv. le ${date} à ${input.time} (${input.name})`
+          : `Réservation - ${input.name}, ${input.guests} couv. le ${date} à ${input.time}`,
         html: restaurantTemplate(input),
       }),
     ]);

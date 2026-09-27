@@ -1,6 +1,7 @@
 import {
   parisDateTimeToUtc, slotToUtc, slotsForDate, groupSlots, validateReservation,
   todayInParis, lastBookableDate, linkState, isUuid, firstNameOf, LINK_GRACE_HOURS,
+  composeMessage, isGroupRequest, GROUP_SENTINEL, MAX_GUESTS_REQUEST,
 } from "@/lib/reservation.ts";
 import { clientIp, rateLimit, resetRateLimits } from "@/lib/rate-limit.ts";
 import { renderMarkdown } from "@/lib/markdown.ts";
@@ -79,7 +80,18 @@ eq("téléphone trop court", !!validateReservation({ ...base, phone: "0612" }), 
 eq("e-mail invalide", !!validateReservation({ ...base, email: "jean@" }), true);
 eq("date passée", !!validateReservation({ ...base, date: "2020-01-01" }), true);
 eq("au-delà de l'horizon", !!validateReservation({ ...base, date: "2099-01-01" }), true);
-eq("11 convives refusés en ligne", !!validateReservation({ ...base, guests: 11 }), true);
+// Au-delà de 10, la réservation devient une demande : acceptée, mais le
+// nombre exact est obligatoire — « plus de 10 » ne dresse pas une table.
+eq("le choix « plus de 10 » seul est refusé",
+   !!validateReservation({ ...base, guests: GROUP_SENTINEL }), true);
+eq("14 convives acceptés comme demande",
+   validateReservation({ ...base, guests: 14 }), null);
+eq(`au-delà de ${MAX_GUESTS_REQUEST}, c'est une privatisation`,
+   !!validateReservation({ ...base, guests: MAX_GUESTS_REQUEST + 1 }), true);
+eq(`${MAX_GUESTS_REQUEST} pile reste accepté`,
+   validateReservation({ ...base, guests: MAX_GUESTS_REQUEST }), null);
+eq("10 n'est pas une demande de groupe", isGroupRequest(10), false);
+eq("11 en est une", isGroupRequest(11), true);
 eq("0 convive", !!validateReservation({ ...base, guests: 0 }), true);
 eq("horaire hors service (10h)", !!validateReservation({ ...base, time: "10:00" }), true);
 // Le dimanche ferme à minuit, le samedi à 2h : un même horaire est accepté
@@ -144,6 +156,26 @@ eq("gras", md("du **vrai** fait maison").includes("<strong"), true);
 eq("les paragraphes sont séparés", md("un\n\ndeux").match(/<p /g).length, 2);
 eq("une apostrophe typographique passe sans dommage",
    md("l'équipe").includes("l'équipe"), true);
+
+console.log("\n- Message enregistré -");
+// Composé côté serveur : c'est la seule version qui fasse foi. Un navigateur
+// modifié ne peut pas faire passer un groupe pour une table de deux.
+const msg = (o) => composeMessage({ ...base, ...o });
+eq("rien à signaler → pas de message", msg({ guests: 4 }), null);
+eq("préférence salle",
+   msg({ guests: 4, seating: { indoor: true } }), "Préférence : en salle");
+eq("préférence terrasse",
+   msg({ guests: 4, seating: { terrace: true } }), "Préférence : en terrasse");
+// Les deux cochées disent la même chose qu'aucune : indifférent. Mais le
+// client l'a exprimé, donc on l'écrit.
+eq("les deux cases → indifférent",
+   msg({ guests: 4, seating: { indoor: true, terrace: true } }),
+   "Préférence : en salle ou en terrasse, indifférent");
+eq("un groupe est signalé en tête",
+   msg({ guests: 14 }).startsWith("⚠️ DEMANDE DE GROUPE — 14 convives"), true);
+eq("le message du client vient en dernier",
+   msg({ guests: 14, seating: { terrace: true }, message: "Anniversaire" }).split("\n"),
+   ["⚠️ DEMANDE DE GROUPE — 14 convives, à confirmer", "Préférence : en terrasse", "Anniversaire"]);
 
 console.log("\n- Lien de suivi d'une réservation -");
 const T = (iso) => new Date(iso).getTime();

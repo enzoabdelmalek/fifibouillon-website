@@ -24,8 +24,25 @@ export const SLOT_STEP_MINUTES = 30;
  */
 export const LAST_SEATING_BEFORE_CLOSE_MINUTES = 90;
 
-/** Au-delà, on invite à appeler : un groupe se cale au téléphone. */
+/** Au-delà, la réservation devient une DEMANDE, à confirmer par le restaurant. */
 export const MAX_GUESTS_ONLINE = 10;
+
+/**
+ * Plafond d'une demande de groupe. Au-delà, c'est une privatisation : ça se
+ * discute au téléphone, pas dans un formulaire.
+ */
+export const MAX_GUESTS_REQUEST = 30;
+
+/** Valeur du choix « plus de 10 » dans le menu déroulant. */
+export const GROUP_SENTINEL = MAX_GUESTS_ONLINE + 1;
+
+/** Emplacement souhaité. Deux cases : ni l'une ni l'autre vaut « indifférent ». */
+export type Seating = { indoor: boolean; terrace: boolean };
+
+export const SEATING_LABELS: Record<keyof Seating, string> = {
+  indoor: "en salle",
+  terrace: "en terrasse",
+};
 
 /** Couverts réservables en ligne sur un même créneau. */
 export const MAX_COVERS_PER_SLOT = 24;
@@ -212,7 +229,41 @@ export type ReservationInput = {
   time: string;
   guests: number;
   message?: string;
+  seating?: Partial<Seating>;
 };
+
+/** Une demande de groupe, que le restaurant doit confirmer. */
+export function isGroupRequest(guests: number): boolean {
+  return guests > MAX_GUESTS_ONLINE;
+}
+
+/**
+ * Message finalement enregistré.
+ *
+ * Composé ICI plutôt que dans le formulaire : c'est la seule version que le
+ * serveur écrit en base, donc la seule qui fasse foi. Un navigateur modifié
+ * ne peut pas envoyer une demande de groupe sans que le restaurant le voie.
+ */
+export function composeMessage(input: ReservationInput): string | null {
+  const morceaux: string[] = [];
+
+  if (isGroupRequest(input.guests)) {
+    morceaux.push(`⚠️ DEMANDE DE GROUPE — ${input.guests} convives, à confirmer`);
+  }
+
+  const places = (["indoor", "terrace"] as const).filter((k) => input.seating?.[k]);
+  // Les deux cases cochées ou aucune reviennent au même : pas de préférence.
+  if (places.length === 1) {
+    morceaux.push(`Préférence : ${SEATING_LABELS[places[0]]}`);
+  } else if (places.length === 2) {
+    morceaux.push("Préférence : en salle ou en terrasse, indifférent");
+  }
+
+  const libre = input.message?.trim();
+  if (libre) morceaux.push(libre);
+
+  return morceaux.length ? morceaux.join("\n") : null;
+}
 
 /**
  * Renvoie un message d'erreur, ou `null` si tout va bien.
@@ -241,8 +292,12 @@ export function validateReservation(input: Partial<ReservationInput>): string | 
 
   const guests = Number(input.guests);
   if (!Number.isInteger(guests) || guests < 1) return "Merci d’indiquer le nombre de convives.";
-  if (guests > MAX_GUESTS_ONLINE)
-    return `Au-delà de ${MAX_GUESTS_ONLINE} convives, appelez-nous au ${site.contact.phoneDisplay} : nous organiserons la table avec vous.`;
+  // Au-delà du plafond en ligne, on accepte une demande — mais le nombre exact
+  // devient obligatoire : « plus de 10 » ne dresse pas une table.
+  if (guests === GROUP_SENTINEL)
+    return "Merci d’indiquer le nombre exact de convives.";
+  if (guests > MAX_GUESTS_REQUEST)
+    return `Au-delà de ${MAX_GUESTS_REQUEST} convives, c’est une privatisation : appelez-nous au ${site.contact.phoneDisplay}.`;
 
   if (!input.time) return "Merci de choisir un horaire.";
   if (!slotsForDate(input.date).includes(input.time))
