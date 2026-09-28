@@ -36,12 +36,19 @@ export const MAX_GUESTS_REQUEST = 30;
 /** Valeur du choix « plus de 10 » dans le menu déroulant. */
 export const GROUP_SENTINEL = MAX_GUESTS_ONLINE + 1;
 
-/** Emplacement souhaité. Deux cases : ni l'une ni l'autre vaut « indifférent ». */
-export type Seating = { indoor: boolean; terrace: boolean };
+/**
+ * Emplacement souhaité. Un choix unique, pas deux cases.
+ *
+ * Avec deux cases, « les deux cochées » et « aucune cochée » voulaient dire
+ * la même chose — indifférent — sans que le visiteur le sache. Mieux vaut
+ * l'écrire en clair comme troisième option.
+ */
+export type Seating = "any" | "indoor" | "terrace";
 
-export const SEATING_LABELS: Record<keyof Seating, string> = {
-  indoor: "en salle",
-  terrace: "en terrasse",
+export const SEATING_LABELS: Record<Seating, string> = {
+  any: "Indifférent",
+  indoor: "En salle",
+  terrace: "En terrasse",
 };
 
 /** Couverts réservables en ligne sur un même créneau. */
@@ -229,7 +236,7 @@ export type ReservationInput = {
   time: string;
   guests: number;
   message?: string;
-  seating?: Partial<Seating>;
+  seating?: Seating;
 };
 
 /** Une demande de groupe, que le restaurant doit confirmer. */
@@ -251,12 +258,10 @@ export function composeMessage(input: ReservationInput): string | null {
     morceaux.push(`⚠️ DEMANDE DE GROUPE — ${input.guests} convives, à confirmer`);
   }
 
-  const places = (["indoor", "terrace"] as const).filter((k) => input.seating?.[k]);
-  // Les deux cases cochées ou aucune reviennent au même : pas de préférence.
-  if (places.length === 1) {
-    morceaux.push(`Préférence : ${SEATING_LABELS[places[0]]}`);
-  } else if (places.length === 2) {
-    morceaux.push("Préférence : en salle ou en terrasse, indifférent");
+  // « Indifférent » ne mérite pas d'être écrit : c'est le cas par défaut, et
+  // une ligne de plus dans le message le rend moins lisible au coup d'œil.
+  if (input.seating === "indoor" || input.seating === "terrace") {
+    morceaux.push(`Préférence : ${SEATING_LABELS[input.seating].toLowerCase()}`);
   }
 
   const libre = input.message?.trim();

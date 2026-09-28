@@ -5,6 +5,8 @@ import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { Diamond } from "@/components/menu";
 import {
   GROUP_SENTINEL,
+  SEATING_LABELS,
+  type Seating,
   MAX_GUESTS_ONLINE,
   MAX_GUESTS_REQUEST,
   isGroupRequest,
@@ -21,7 +23,7 @@ type Availability = { closed: boolean; slots: Slot[]; degraded?: boolean };
 
 const EMPTY: Form = {
   name: "", phone: "", email: "", date: "", time: "", guests: 2, message: "",
-  indoor: false, terrace: false,
+  seating: "any",
 };
 type Form = {
   name: string;
@@ -31,9 +33,8 @@ type Form = {
   time: string;
   guests: number;
   message: string;
-  /** Emplacement souhaité. Les deux, ou aucun, valent « indifférent ». */
-  indoor: boolean;
-  terrace: boolean;
+  /** Emplacement souhaité : un seul choix possible. */
+  seating: Seating;
 };
 
 export function ReservationForm() {
@@ -108,7 +109,7 @@ export function ReservationForm() {
         body: JSON.stringify({
           ...form,
           message: form.message || undefined,
-          seating: { indoor: form.indoor, terrace: form.terrace },
+          seating: form.seating,
         }),
       });
       const data = await response.json().catch(() => ({}));
@@ -377,26 +378,21 @@ export function ReservationForm() {
         )}
       </div>
 
-      {/* Deux cases plutôt qu'un choix : ni l'une ni l'autre, ou les deux,
-          expriment « indifférent » — ce qu'un bouton radio ne permet pas de
-          dire sans ajouter une troisième option. La préférence est jointe au
-          message, faute de colonne dédiée en base. */}
+      {/* Un choix unique. Avec deux cases, « les deux » et « aucune »
+          disaient la même chose sans que le visiteur le sache : autant
+          l'écrire. La préférence est jointe au message, faute de colonne
+          dédiée en base. */}
       <fieldset className="mt-8">
         <legend className="eyebrow text-muted">Où souhaitez-vous être installé ?</legend>
         <div className="mt-3 flex flex-wrap gap-3">
-          {(
-            [
-              { cle: "indoor", label: "En salle" },
-              { cle: "terrace", label: "En terrasse" },
-            ] as const
-          ).map((choix) => {
-            const actif = form[choix.cle];
+          {(Object.keys(SEATING_LABELS) as Seating[]).map((cle) => {
+            const actif = form.seating === cle;
             return (
               <label
-                key={choix.cle}
+                key={cle}
                 className={cn(
                   "cursor-pointer rounded-full border px-5 py-3 text-[0.8rem] tracking-[0.12em] uppercase transition-colors",
-                  // La case elle-même est masquée : sans ça, personne ne
+                  // Le bouton lui-même est masqué : sans ça, personne ne
                   // verrait où se trouve le focus au clavier.
                   "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-[3px] has-[:focus-visible]:outline-accent",
                   actif
@@ -405,20 +401,18 @@ export function ReservationForm() {
                 )}
               >
                 <input
-                  type="checkbox"
-                  name={choix.cle}
+                  type="radio"
+                  name="seating"
+                  value={cle}
                   checked={actif}
-                  onChange={(e) => setForm((f) => ({ ...f, [choix.cle]: e.target.checked }))}
+                  onChange={() => setForm((f) => ({ ...f, seating: cle }))}
                   className="sr-only"
                 />
-                {choix.label}
+                {SEATING_LABELS[cle]}
               </label>
             );
           })}
         </div>
-        <p className="mt-2 text-xs text-muted">
-          Sans préférence, laissez les deux décochées — nous vous installerons au mieux.
-        </p>
       </fieldset>
 
       <div className="mt-8">
