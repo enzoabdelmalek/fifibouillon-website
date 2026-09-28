@@ -162,19 +162,15 @@ console.log("\n- Message enregistré -");
 // modifié ne peut pas faire passer un groupe pour une table de deux.
 const msg = (o) => composeMessage({ ...base, ...o });
 eq("rien à signaler → pas de message", msg({ guests: 4 }), null);
-eq("préférence salle",
-   msg({ guests: 4, seating: { indoor: true } }), "Préférence : en salle");
-eq("préférence terrasse",
-   msg({ guests: 4, seating: { terrace: true } }), "Préférence : en terrasse");
-// Les deux cochées disent la même chose qu'aucune : indifférent. Mais le
-// client l'a exprimé, donc on l'écrit.
-eq("les deux cases → indifférent",
-   msg({ guests: 4, seating: { indoor: true, terrace: true } }),
-   "Préférence : en salle ou en terrasse, indifférent");
+eq("préférence salle", msg({ guests: 4, seating: "indoor" }), "Préférence : en salle");
+eq("préférence terrasse", msg({ guests: 4, seating: "terrace" }), "Préférence : en terrasse");
+// « Indifférent » est le cas par défaut : l'écrire dans le message
+// n'apprendrait rien au restaurant et le rendrait moins lisible.
+eq("indifférent ne produit rien", msg({ guests: 4, seating: "any" }), null);
 eq("un groupe est signalé en tête",
    msg({ guests: 14 }).startsWith("⚠️ DEMANDE DE GROUPE — 14 convives"), true);
 eq("le message du client vient en dernier",
-   msg({ guests: 14, seating: { terrace: true }, message: "Anniversaire" }).split("\n"),
+   msg({ guests: 14, seating: "terrace", message: "Anniversaire" }).split("\n"),
    ["⚠️ DEMANDE DE GROUPE — 14 convives, à confirmer", "Préférence : en terrasse", "Anniversaire"]);
 
 console.log("\n- Lien de suivi d'une réservation -");
