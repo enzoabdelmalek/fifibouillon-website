@@ -46,7 +46,7 @@ export const GROUP_SENTINEL = MAX_GUESTS_ONLINE + 1;
 export type Seating = "any" | "indoor" | "terrace";
 
 export const SEATING_LABELS: Record<Seating, string> = {
-  any: "Indifférent",
+  any: "Sans préférence",
   indoor: "En salle",
   terrace: "En terrasse",
 };
