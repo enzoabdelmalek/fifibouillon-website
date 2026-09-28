@@ -25,6 +25,20 @@ function readEnv() {
  */
 export type ReservationStatus = "scheduled" | "cancelled";
 
+/**
+ * Une demande de devis. Les privatisations atterrissent ici : elles ne
+ * bloquent pas un créneau, elles ouvrent une discussion — et le dashboard a
+ * déjà un écran pour les traiter.
+ */
+export type QuoteRow = {
+  business_id: string;
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string;
+  message: string;
+  status: "pending";
+};
+
 export type ReservationRow = {
   business_id: string;
   customer_name: string;
@@ -73,6 +87,12 @@ type Database = {
         Row: ReservationRow & { id: string };
         Insert: ReservationRow;
         Update: Partial<ReservationRow>;
+        Relationships: [];
+      };
+      quotes: {
+        Row: QuoteRow & { id: string; created_at: string };
+        Insert: QuoteRow;
+        Update: Partial<QuoteRow>;
         Relationships: [];
       };
       blog: {

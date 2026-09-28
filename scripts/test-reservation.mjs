@@ -5,6 +5,9 @@ import {
 } from "@/lib/reservation.ts";
 import { clientIp, rateLimit, resetRateLimits } from "@/lib/rate-limit.ts";
 import { renderMarkdown } from "@/lib/markdown.ts";
+import {
+  validatePrivatisation, composeRequest, MIN_GUESTS, MAX_GUESTS,
+} from "@/lib/privatisation.ts";
 
 let fails = 0;
 const eq = (label, got, want) => {
@@ -197,6 +200,38 @@ eq("un UUID tronqué est refusé", isUuid("11111111-2222-3333-4444-55555555555")
 eq("prénom seul", firstNameOf("Marie Dupont"), "Marie");
 eq("nom composé", firstNameOf("  Jean-Pierre  Martin "), "Jean-Pierre");
 eq("nom absent", firstNameOf(null), "");
+
+console.log("\n- Demande de privatisation -");
+const demain = (() => { const d = new Date(); d.setDate(d.getDate() + 30); return d.toISOString().slice(0, 10); })();
+const priva = (o) => validatePrivatisation({
+  name: "Jean Dupont", email: "jean@exemple.fr", phone: "0612345678",
+  guests: 25, eventType: "anniversaire", ...o,
+});
+eq("demande valide", priva({}), null);
+// En dessous du seuil, une table suffit : on ne veut pas bloquer une salle
+// pour douze personnes qui pouvaient simplement réserver.
+eq(`moins de ${MIN_GUESTS} personnes refusé`, !!priva({ guests: MIN_GUESTS - 1 }), true);
+eq(`${MIN_GUESTS} pile accepté`, priva({ guests: MIN_GUESTS }), null);
+eq(`au-delà de ${MAX_GUESTS}, on renvoie au téléphone`, !!priva({ guests: MAX_GUESTS + 1 }), true);
+// Le téléphone est obligatoire ici, contrairement à une réservation : une
+// privatisation se cale de vive voix.
+eq("téléphone obligatoire", !!priva({ phone: "" }), true);
+eq("type d'événement inconnu refusé", !!priva({ eventType: "soiree-mousse" }), true);
+// La date est facultative, mais si elle est donnée elle doit tenir debout.
+eq("sans date, c'est accepté", priva({ date: undefined }), null);
+eq("date passée refusée", !!priva({ date: "2020-01-01" }), true);
+eq("date future acceptée", priva({ date: demain }), null);
+
+const recap = (o) => composeRequest({
+  name: "Jean", email: "j@x.fr", phone: "0612345678",
+  guests: 25, eventType: "anniversaire", ...o,
+});
+eq("le récapitulatif annonce l'événement et le nombre",
+   recap({}).split("\n").slice(0, 2), ["Privatisation - Anniversaire", "25 personnes"]);
+eq("sans date, on le dit plutôt que de se taire",
+   recap({}).includes("Date non arrêtée"), true);
+eq("le message du client vient après une ligne vide",
+   recap({ message: "Salle au calme" }).endsWith("\n\nSalle au calme"), true);
 
 console.log(fails === 0 ? "\n✅ tout passe\n" : `\n❌ ${fails} échec(s)\n`);
 process.exit(fails ? 1 : 0);
