@@ -47,17 +47,53 @@ export const photos = {
     alt: "La devanture de FiFi au crépuscule, 56B rue de Clichy, sa terrasse et son auvent éclairé",
     brief: "La devanture depuis le trottoir d'en face, enseigne lisible, de jour",
   },
-  assiette: {
-    file: null,
-    alt: "Un plat du jour servi chez FiFi",
-    ratio: "1/1",
-    brief: "Un plat signature vu de dessus, sur la nappe, sans styling excessif",
-  },
-  comptoir: {
-    file: null,
-    alt: "Le comptoir de FiFi et sa sélection de vins au verre",
+  /**
+   * ⚠️ Les cinq emplacements ci-dessous sont remplis par DÉDUCTION, pas par
+   * observation : les photos prises à 14h sont supposées intérieures (comme
+   * le chat, à 14h05), celles de 17h-18h extérieures (comme la devanture, à
+   * 17h21). Si une photo tombe au mauvais endroit, il suffit d'échanger les
+   * noms de fichiers ici — et de corriger le texte alternatif, qui décrit ce
+   * qu'on croit voir.
+   */
+  salle2: {
+    file: "salle-2.jpg",
+    width: 1799,
+    height: 2400,
+    alt: "Une vue de la salle du bouillon FiFi",
     ratio: "3/4",
-    brief: "Le comptoir à l'heure de l'apéritif, verticale",
+    brief: "Intérieur, complément de la photo principale",
+  },
+  salle3: {
+    file: "salle-3.jpg",
+    width: 1800,
+    height: 2400,
+    alt: "Un détail de la salle du bouillon FiFi",
+    ratio: "3/4",
+    brief: "Intérieur, complément de la photo principale",
+  },
+  devanture2: {
+    file: "devanture-2.jpg",
+    width: 1800,
+    height: 2400,
+    alt: "La devanture de FiFi en fin de journée",
+    ratio: "3/4",
+    brief: "Extérieur, complément de la devanture principale",
+  },
+  devanture3: {
+    file: "devanture-3.jpg",
+    width: 1800,
+    height: 2400,
+    alt: "FiFi vu depuis la rue de Clichy",
+    ratio: "3/4",
+    brief: "Extérieur, complément de la devanture principale",
+  },
+  terrasse: {
+    file: "terrasse.jpg",
+    width: 1800,
+    height: 2400,
+    alt: "La terrasse de FiFi, rue de Clichy",
+    ratio: "3/4",
+    brief: "La terrasse en service",
   },
 } as const satisfies Record<string, PhotoSlot>;
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { MenuTabs, type MenuGroup } from "@/components/menu-tabs";
 import { PageHeader } from "@/components/page-header";
+import { Photo } from "@/components/photo";
 import { Reveal } from "@/components/reveal";
 import { foodMenu } from "@/lib/menu";
 import { site } from "@/lib/site";
@@ -35,6 +36,12 @@ export default function LaCartePage() {
       <MenuTabs groups={groups} />
 
       <div className="mx-auto max-w-3xl px-5 pb-20 sm:px-8 lg:pb-28">
+        {/* Une carte est une longue liste de texte : une image en fin de
+            parcours redonne le lieu avant l'appel à réserver. */}
+        <Reveal className="mt-16">
+          <Photo name="devanture3" className="mx-auto max-w-sm" sizes="(min-width: 640px) 24rem, 100vw" />
+        </Reveal>
+
         <Reveal className="mt-20 border-t border-line pt-10 text-center">
           <p className="text-sm/relaxed text-muted">
             Prix en euros, taxes et service compris. La carte évolue au fil des

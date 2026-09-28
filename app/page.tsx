@@ -386,7 +386,9 @@ function Trouver() {
           </div>
         </Reveal>
 
-        <Reveal delay={160}>
+        <Reveal delay={160} className="space-y-8">
+          <Photo name="terrasse" className="mx-auto max-w-xs" sizes="(min-width: 1024px) 20rem, 100vw" />
+
           <div className="rounded-sm border border-line bg-paper-alt p-8 sm:p-10">
             <h3 className="eyebrow text-gold">Horaires</h3>
             <dl className="mt-7 divide-y divide-line">

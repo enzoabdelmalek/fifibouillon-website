@@ -45,10 +45,6 @@ export default function ConfidentialitePage() {
           Sans ces informations, nous ne pouvons pas enregistrer la réservation ; vous pouvez
           toujours réserver par téléphone au {site.contact.phoneDisplay}.
         </p>
-        <p>
-          Elles sont conservées {site.legal.retention.reservationMonths} mois après la date de votre
-          venue, puis supprimées.
-        </p>
       </LegalSection>
 
       <LegalSection title="Mesure d’audience">
@@ -63,7 +59,7 @@ export default function ConfidentialitePage() {
           Un identifiant aléatoire est enregistré dans votre navigateur pour ne pas compter
           deux fois la même visite. Il ne contient rien qui vous identifie, il ne suit que ce
           site et il n’est recoupé avec aucun autre. Ces données ne sont ni vendues ni
-          partagées, et sont conservées {site.legal.retention.analyticsMonths} mois.
+          partagées.
         </p>
         <p>
           Pour ne pas être compté, il suffit de refuser le stockage local dans les réglages de

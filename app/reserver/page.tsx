@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/page-header";
+import { Photo } from "@/components/photo";
 import { Reveal } from "@/components/reveal";
 import { ReservationForm } from "@/components/reservation-form";
 import { site } from "@/lib/site";
@@ -26,6 +27,8 @@ export default function ReserverPage() {
           </Reveal>
 
           <Reveal delay={120} className="lg:order-1">
+            <Photo name="devanture2" className="mb-8" sizes="(min-width: 1024px) 24rem, 100vw" />
+
             <div className="rounded-sm border border-line bg-paper-alt p-8 sm:p-10">
               <h2 className="eyebrow text-brand-accent">Informations pratiques</h2>
 
