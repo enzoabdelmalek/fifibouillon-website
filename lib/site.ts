@@ -33,7 +33,7 @@ export const site = {
   contact: {
     phone: "+33 9 51 28 34 18",
     phoneDisplay: "09 51 28 34 18",
-    email: "fifirestaurantparis@gmail.com",
+    email: "contact@fifibouillon.com",
   },
 
   address: {
@@ -124,21 +124,22 @@ export const site = {
       url: "https://vercel.com",
     },
     /**
-     * Durées de conservation annoncées dans la politique de confidentialité.
+     * Durées de conservation : volontairement ABSENTES de la page.
      *
-     * ⚠️ Ce sont des ENGAGEMENTS : rien ne les applique aujourd'hui, aucune
-     * purge n'est programmée. Une politique qui promet un effacement qui
-     * n'arrive jamais est pire que pas de politique du tout - c'est une
-     * déclaration inexacte à la CNIL en cas de contrôle. À implémenter côté
-     * base avant la mise en ligne, ou à revoir à la baisse ici.
+     * Elle annonçait 12 mois pour les réservations et 13 pour l'audience.
+     * Aucune purge ne les appliquait. Une politique qui promet un effacement
+     * qui n'arrive jamais est une déclaration inexacte, et c'est le client
+     * qui en répond.
      *
-     * 13 mois pour l'audience : c'est le plafond que la CNIL tolère pour une
-     * mesure d'audience dispensée de consentement.
+     * La page donne désormais un CRITÈRE - « le temps nécessaire à la gestion
+     * de votre réservation » - ce que le RGPD accepte quand une durée ferme
+     * ne peut pas être fixée. Se taire, en revanche, n'est pas permis :
+     * l'information sur la conservation est obligatoire.
+     *
+     * Quand la purge existera, on remettra des chiffres ici. 13 mois est le
+     * plafond que la CNIL tolère pour une mesure d'audience dispensée de
+     * consentement.
      */
-    retention: {
-      reservationMonths: 12,
-      analyticsMonths: 13,
-    },
 
     /** Dernière mise à jour des textes légaux, affichée en bas de page. */
     updatedOn: "2026-09-23",
