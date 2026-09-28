@@ -145,6 +145,28 @@ export const site = {
     updatedOn: "2026-09-23",
   },
 
+  /**
+   * Privatisation - contenu de la page dédiée.
+   *
+   * La capacité est la valeur sensible : annoncer un chiffre faux, c'est
+   * promettre une salle qu'on ne peut pas tenir, et le client s'en aperçoit
+   * le jour même. 70 est provisoire, à confirmer avec le restaurant.
+   */
+  privatisation: {
+    /**
+     * Capacité de la salle. Un seul chiffre tant que la répartition
+     * assis/debout n'est pas connue : inventer une ligne « debout » serait
+     * promettre une configuration qu'on n'a pas vérifiée.
+     *
+     * C'est aussi le plafond du formulaire — voir MAX_GUESTS. Sans ça, on
+     * recevrait des demandes pour cent personnes dans une salle qui en
+     * tient soixante-dix.
+     */
+    capacity: 70,
+    /** ⚠️ À CONFIRMER : peut-on ne privatiser qu'une partie de la salle ? */
+    partial: "Salle entière ou partie, selon la formule",
+  },
+
   happyHour: {
     label: "Happy hour",
     value: "Tous les jours, 16h – 22h",
@@ -163,8 +185,22 @@ export const nav = [
   { href: "/la-carte", label: "La carte" },
   { href: "/les-boissons", label: "Les boissons" },
   { href: "/la-maison", label: "La maison" },
-  { href: "/nous-trouver", label: "Nous trouver" },
+  { href: "/privatisation", label: "Privatisation" },
   { href: "/reserver", label: "Réserver" },
+] as const;
+
+/**
+ * Pages hors navigation principale, mais qui doivent rester indexées et
+ * accessibles depuis le pied de page.
+ *
+ * « Nous trouver » y figure alors qu'elle porte l'adresse : l'accueil la
+ * donne déjà en bas de page, et la barre ne peut pas tout contenir. La page
+ * reste en revanche indispensable au référencement local — c'est elle que
+ * Google associe au 56B rue de Clichy.
+ */
+const HORS_NAV = [
+  { href: "/nous-trouver", label: "Nous trouver" },
+  { href: "/journal", label: "Le journal" },
 ] as const;
 
 /**
@@ -178,10 +214,7 @@ export const desktopNav = nav.filter((item) => item.href !== "/reserver");
  * chercher sur le site d'un restaurant, et l'ajouter à l'en-tête diluerait les
  * cinq entrées qui comptent. Il reste dans le sitemap, donc indexé.
  */
-export const footerNav = [
-  ...nav.slice(1),
-  { href: "/journal", label: "Le journal" },
-] as const;
+export const footerNav = [...nav.slice(1), ...HORS_NAV] as const;
 
-/** Pages à indexer : la navigation visible, plus le journal. */
-export const indexedPages = [...nav, { href: "/journal", label: "Le journal" }] as const;
+/** Pages à indexer : la navigation visible, plus celles du pied de page. */
+export const indexedPages = [...nav, ...HORS_NAV] as const;

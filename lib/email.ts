@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 import { env } from "@/lib/env";
+import { EVENT_LABELS, type PrivatisationInput } from "@/lib/privatisation";
 import { isGroupRequest, type ReservationInput } from "@/lib/reservation";
 import { site } from "@/lib/site";
 
@@ -183,5 +184,117 @@ export async function sendReservationEmails(
   } catch (error) {
     console.error("[reservations] envoi des e-mails :", error);
     return { sent: false, reason: "send" };
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Privatisation                                                      */
+/* ------------------------------------------------------------------ */
+
+function privatisationCustomer(input: PrivatisationInput): string {
+  return shell(
+    "Votre demande est bien arrivée",
+    `Bonjour <strong style="color:${INK};">${esc(input.name)}</strong>, nous avons bien reçu votre demande de privatisation et revenons vers vous rapidement.`,
+    [
+      row("Événement", esc(EVENT_LABELS[input.eventType])),
+      row("Personnes", String(input.guests)),
+      row("Date", input.date ? formatPrivaDate(input.date) : "à définir ensemble"),
+      input.message ? row("Votre message", esc(input.message)) : "",
+    ].join(""),
+    `<p style="margin:24px 0 0;font-size:14px;line-height:1.65;color:${MUTED};">
+       Une privatisation se cale de vive voix : nous vous appellerons au
+       <strong style="color:${INK};">${esc(input.phone)}</strong>. Vous pouvez aussi nous joindre au
+       <a href="tel:${site.contact.phone.replace(/\s/g, "")}" style="color:${ROSEWOOD};font-weight:600;text-decoration:none;">${site.contact.phoneDisplay}</a>.
+     </p>
+     <p style="margin:18px 0 0;font-size:14px;line-height:1.65;color:${MUTED};">À très bientôt,<br><em>L’équipe FiFi</em></p>`,
+  );
+}
+
+function privatisationRestaurant(input: PrivatisationInput): string {
+  return shell(
+    "Demande de privatisation",
+    `Demande reçue de <strong style="color:${INK};">${esc(input.name)}</strong>.`,
+    [
+      row("Événement", esc(EVENT_LABELS[input.eventType])),
+      row("Personnes", String(input.guests)),
+      row("Date", input.date ? formatPrivaDate(input.date) : "non arrêtée"),
+      row(
+        "Téléphone",
+        `<a href="tel:${esc(input.phone.replace(/\s/g, ""))}" style="color:${ROSEWOOD};text-decoration:none;">${esc(input.phone)}</a>`,
+      ),
+      row(
+        "E-mail",
+        `<a href="mailto:${esc(input.email)}" style="color:${ROSEWOOD};text-decoration:none;">${esc(input.email)}</a>`,
+      ),
+      input.message ? row("Message", esc(input.message)) : "",
+    ].join(""),
+    `<p style="margin:24px 0 0;font-size:13px;line-height:1.6;color:${MUTED};">
+       Cette demande est enregistrée comme devis dans le dashboard.
+     </p>`,
+  );
+}
+
+function formatPrivaDate(iso: string): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString("fr-FR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+}
+
+/**
+ * Accusé au demandeur, notification au restaurant.
+ *
+ * Ne lève jamais : la demande est déjà enregistrée quand on arrive ici.
+ */
+export async function sendPrivatisationEmails(
+  input: PrivatisationInput,
+): Promise<{ sent: boolean; reason?: string }> {
+  const apiKey = env.resendApiKey();
+  const from = env.resendFrom();
+  const adminMail = env.adminMail();
+
+  const missing = [
+    !apiKey && "RESEND_API_KEY",
+    !from && "RESEND_FROM",
+    !adminMail && "ADMIN_MAIL",
+  ].filter(Boolean);
+
+  if (missing.length) {
+    console.error(`[privatisation] e-mails non envoyés, variables manquantes : ${missing.join(", ")}`);
+    return { sent: false, reason: "config" };
+  }
+
+  try {
+    const resend = new Resend(apiKey);
+    const quand = input.date ? formatPrivaDate(input.date) : "date à définir";
+
+    const [client, restaurant] = await Promise.allSettled([
+      resend.emails.send({
+        from: from!,
+        to: input.email,
+        subject: "Votre demande de privatisation chez FiFi",
+        html: privatisationCustomer(input),
+      }),
+      resend.emails.send({
+        from: from!,
+        to: adminMail!,
+        replyTo: input.email,
+        subject: `PRIVATISATION - ${input.guests} pers., ${quand} (${input.name})`,
+        html: privatisationRestaurant(input),
+      }),
+    ]);
+
+    // Le restaurant prime : une demande qu'il ne voit pas est perdue.
+    const sent = restaurant.status === "fulfilled";
+    if (client.status === "rejected") console.error("[privatisation] accusé client :", client.reason);
+    if (!sent) console.error("[privatisation] notification restaurant :", restaurant);
+    return { sent };
+  } catch (error) {
+    console.error("[privatisation] envoi :", error);
+    return { sent: false, reason: "erreur" };
   }
 }
