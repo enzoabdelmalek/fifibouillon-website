@@ -4,7 +4,10 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { Diamond } from "@/components/menu";
 import {
+  GROUP_SENTINEL,
   MAX_GUESTS_ONLINE,
+  MAX_GUESTS_REQUEST,
+  isGroupRequest,
   groupSlots,
   lastBookableDate,
   todayInParis,
@@ -16,7 +19,10 @@ import { cn } from "@/lib/utils";
 type Slot = { time: string; seatsLeft: number; past: boolean };
 type Availability = { closed: boolean; slots: Slot[]; degraded?: boolean };
 
-const EMPTY: Form = { name: "", phone: "", email: "", date: "", time: "", guests: 2, message: "" };
+const EMPTY: Form = {
+  name: "", phone: "", email: "", date: "", time: "", guests: 2, message: "",
+  indoor: false, terrace: false,
+};
 type Form = {
   name: string;
   phone: string;
@@ -25,6 +31,9 @@ type Form = {
   time: string;
   guests: number;
   message: string;
+  /** Emplacement souhaité. Les deux, ou aucun, valent « indifférent ». */
+  indoor: boolean;
+  terrace: boolean;
 };
 
 export function ReservationForm() {
@@ -46,7 +55,13 @@ export function ReservationForm() {
   const current = availability?.date === form.date ? availability.data : null;
   const loadingSlots = Boolean(form.date) && !current && failedDate !== form.date;
 
-  const field = useCallback((name: keyof Form) => `${id}-${name}`, [id]);
+  // « exact » n'est pas un champ du formulaire mais un second contrôle sur
+  // `guests` : il lui faut quand même un identifiant propre, pour que son
+  // libellé le désigne sans ambiguïté.
+  const field = useCallback(
+    (name: keyof Form | "exact") => `${id}-${name}`,
+    [id],
+  );
 
   // Les créneaux dépendent du jour : on les recharge à chaque changement de date.
   useEffect(() => {
@@ -90,7 +105,11 @@ export function ReservationForm() {
       const response = await fetch("/api/reservations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, message: form.message || undefined }),
+        body: JSON.stringify({
+          ...form,
+          message: form.message || undefined,
+          seating: { indoor: form.indoor, terrace: form.terrace },
+        }),
       });
       const data = await response.json().catch(() => ({}));
 
@@ -211,7 +230,7 @@ export function ReservationForm() {
             id={field("guests")}
             name="guests"
             required
-            value={form.guests}
+            value={isGroupRequest(form.guests) ? GROUP_SENTINEL : form.guests}
             onChange={(e) => setForm((f) => ({ ...f, guests: Number(e.target.value) }))}
             className={inputClass}
           >
@@ -220,8 +239,36 @@ export function ReservationForm() {
                 {n} {n > 1 ? "personnes" : "personne"}
               </option>
             ))}
+            <option value={GROUP_SENTINEL}>Plus de {MAX_GUESTS_ONLINE}</option>
           </select>
         </Field>
+
+        {/* Le nombre exact n'apparaît que pour un groupe : « plus de 10 » ne
+            dresse pas une table, et le restaurant doit savoir quoi préparer. */}
+        {isGroupRequest(form.guests) ? (
+          <Field
+            label="Combien exactement ?"
+            htmlFor={field("exact")}
+            required
+            hint={`Jusqu’à ${MAX_GUESTS_REQUEST} convives. Au-delà, appelez-nous.`}
+          >
+            <input
+              id={field("exact")}
+              name="exact"
+              type="number"
+              inputMode="numeric"
+              min={MAX_GUESTS_ONLINE + 1}
+              max={MAX_GUESTS_REQUEST}
+              required
+              value={form.guests === GROUP_SENTINEL ? "" : form.guests}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, guests: Number(e.target.value) || GROUP_SENTINEL }))
+              }
+              placeholder={String(MAX_GUESTS_ONLINE + 2)}
+              className={inputClass}
+            />
+          </Field>
+        ) : null}
 
         <Field label="Téléphone" htmlFor={field("phone")} required>
           <input
@@ -329,6 +376,50 @@ export function ReservationForm() {
           </div>
         )}
       </div>
+
+      {/* Deux cases plutôt qu'un choix : ni l'une ni l'autre, ou les deux,
+          expriment « indifférent » — ce qu'un bouton radio ne permet pas de
+          dire sans ajouter une troisième option. La préférence est jointe au
+          message, faute de colonne dédiée en base. */}
+      <fieldset className="mt-8">
+        <legend className="eyebrow text-muted">Où souhaitez-vous être installé ?</legend>
+        <div className="mt-3 flex flex-wrap gap-3">
+          {(
+            [
+              { cle: "indoor", label: "En salle" },
+              { cle: "terrace", label: "En terrasse" },
+            ] as const
+          ).map((choix) => {
+            const actif = form[choix.cle];
+            return (
+              <label
+                key={choix.cle}
+                className={cn(
+                  "cursor-pointer rounded-full border px-5 py-3 text-[0.8rem] tracking-[0.12em] uppercase transition-colors",
+                  // La case elle-même est masquée : sans ça, personne ne
+                  // verrait où se trouve le focus au clavier.
+                  "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-[3px] has-[:focus-visible]:outline-accent",
+                  actif
+                    ? "border-primary bg-primary text-on-primary"
+                    : "border-line-strong text-ink hover:bg-paper-alt",
+                )}
+              >
+                <input
+                  type="checkbox"
+                  name={choix.cle}
+                  checked={actif}
+                  onChange={(e) => setForm((f) => ({ ...f, [choix.cle]: e.target.checked }))}
+                  className="sr-only"
+                />
+                {choix.label}
+              </label>
+            );
+          })}
+        </div>
+        <p className="mt-2 text-xs text-muted">
+          Sans préférence, laissez les deux décochées — nous vous installerons au mieux.
+        </p>
+      </fieldset>
 
       <div className="mt-8">
         <Field label="Message" htmlFor={field("message")} hint="Allergies, poussette, occasion…">

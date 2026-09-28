@@ -31,7 +31,7 @@ const chapters = [
       "Le bœuf bourguignon mijote longuement, la soupe à l’oignon est gratinée à la commande, les desserts sortent de notre cuisine. Les grands classiques sont là - œufs mayonnaise, poireaux vinaigrette, confit de canard, crème brûlée.",
       "À côté, quelques écarts assumés : une burrata bien fraîche, des coquillettes crémeuses à la truffe, un burger maison. Le bouillon d’aujourd’hui, pas celui du musée.",
     ],
-    photo: "assiette" as const,
+    photo: "salle2" as const,
   },
   {
     eyebrow: "La salle",

@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Originaux d'appareil photo : 68 Mo, jusqu'à 8064 px de large. Le site n'en
+# sert jamais plus de 1200. Les versions réduites vivent dans public/photos.
+public/assets/photos/
+
+# Photos réduites mais pas encore placées : elles ne servent à rien tant
+# qu'on ne sait pas ce qu'elles montrent, et public/ est servi au public.
+design/photos-a-identifier/

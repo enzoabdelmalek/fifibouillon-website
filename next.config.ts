@@ -46,6 +46,14 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  images: {
+    // Next verrouille la qualité à 75 depuis la v16 : sans cette liste, un
+    // `quality={70}` est ignoré en silence. 70 sur des photographies fait
+    // gagner un bon quart du poids sans différence visible ; 75 reste pour
+    // les logos, où les aplats marquent plus vite.
+    qualities: [70, 75],
+  },
+
   // Ne pas annoncer la version du framework : c'est une indication gratuite
   // donnée à qui cherche une faille connue.
   poweredByHeader: false,

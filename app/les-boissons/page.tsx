@@ -44,7 +44,7 @@ export default function LesBoissonsPage() {
       <div className="mx-auto max-w-3xl px-5 pb-20 sm:px-8 lg:pb-28">
         {/* Le comptoir ferme la page, là où la carte s'arrête et où l'on commande. */}
         <Reveal className="mt-16">
-          <Photo name="comptoir" className="mx-auto max-w-sm" sizes="(min-width: 640px) 24rem, 100vw" />
+          <Photo name="salle3" className="mx-auto max-w-sm" sizes="(min-width: 640px) 24rem, 100vw" />
         </Reveal>
 
         <Reveal className="mt-20 border-t border-line pt-10 text-center">

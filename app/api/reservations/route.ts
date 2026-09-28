@@ -2,11 +2,14 @@ import { NextResponse } from "next/server";
 import { sendReservationEmails } from "@/lib/email";
 import {
   MAX_COVERS_PER_SLOT,
+  composeMessage,
+  isGroupRequest,
   slotToUtc,
   validateReservation,
   type ReservationInput,
 } from "@/lib/reservation";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { site } from "@/lib/site";
 import { getSupabase, type ReservationRow } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
@@ -82,10 +85,13 @@ export async function POST(request: Request) {
   );
 
   if (taken + input.guests > MAX_COVERS_PER_SLOT) {
-    return NextResponse.json(
-      { error: "Ce créneau vient d’être complété. Merci d’en choisir un autre." },
-      { status: 409 },
-    );
+    // Un groupe qui ne rentre pas mérite mieux que « créneau complet » : la
+    // salle peut souvent l'accueillir en déplaçant des tables, ce qu'un
+    // formulaire ne sait pas arbitrer. On renvoie vers le téléphone.
+    const error = isGroupRequest(input.guests)
+      ? `Ce créneau n’a plus la place pour ${input.guests} convives. Appelez-nous au ${site.contact.phoneDisplay}, nous trouverons une solution.`
+      : "Ce créneau vient d’être complété. Merci d’en choisir un autre.";
+    return NextResponse.json({ error }, { status: 409 });
   }
 
   const row: ReservationRow = {
@@ -95,7 +101,7 @@ export async function POST(request: Request) {
     customer_mail: input.email.trim().toLowerCase(),
     date: when.toISOString(),
     guests: input.guests,
-    message: input.message?.trim() || null,
+    message: composeMessage(input),
     status: "scheduled",
     attended: null,
   };
