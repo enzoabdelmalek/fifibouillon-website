@@ -11,23 +11,35 @@ import { site } from "@/lib/site";
  * est, et le restaurant les retrouve dans l'écran « Devis » du dashboard.
  */
 
+/*
+ * Formats DEBOUT uniquement : la salle privatisée ne permet pas de dîner
+ * assis.
+ *
+ * « Repas d'entreprise » et « Repas de famille » ont été retirés pour cette
+ * raison — les proposer, c'était promettre un service qui n'existe pas, et
+ * la déception se découvrait le soir même. Les demandes déjà reçues ne sont
+ * pas affectées : le type d'événement est composé dans le texte du message
+ * à l'enregistrement, il n'est pas relu depuis cette liste.
+ */
 export const EVENT_TYPES = [
-  "anniversaire",
-  "repas d entreprise",
-  "apres travail",
+  "apero dinatoire",
   "cocktail",
-  "repas de famille",
+  "reception",
+  "buffet debout",
+  "anniversaire",
+  "apres travail",
   "autre",
 ] as const;
 
 export type EventType = (typeof EVENT_TYPES)[number];
 
 export const EVENT_LABELS: Record<EventType, string> = {
-  anniversaire: "Anniversaire",
-  "repas d entreprise": "Repas d'entreprise",
-  "apres travail": "Après-travail",
+  "apero dinatoire": "Apéritif dînatoire",
   cocktail: "Cocktail",
-  "repas de famille": "Repas de famille",
+  reception: "Réception",
+  "buffet debout": "Buffet debout",
+  anniversaire: "Anniversaire",
+  "apres travail": "Après-travail",
   autre: "Autre",
 };
 
