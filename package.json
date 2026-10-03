@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:reservation": "node --experimental-strip-types --import ./scripts/register-alias.mjs scripts/test-reservation.mjs"
+    "test:reservation": "node --experimental-strip-types --import ./scripts/register-alias.mjs scripts/test-reservation.mjs",
+    "test:schema": "node scripts/test-schema-v2.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0",

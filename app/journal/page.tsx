@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Diamond } from "@/components/menu";
 import { PageHeader } from "@/components/page-header";
 import { Reveal } from "@/components/reveal";
-import { displayDate, listPosts } from "@/lib/blog";
+import { categoryOf, displayDate, listPosts } from "@/lib/blog";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -59,7 +59,7 @@ export default async function JournalPage() {
                   >
                     <p className="eyebrow text-gold">
                       {displayDate(post)}
-                      {post.category ? ` · ${post.category}` : ""}
+                      {categoryOf(post) ? ` · ${categoryOf(post)}` : ""}
                     </p>
                     <h2 className="mt-4 font-display text-2xl/tight text-ink sm:text-3xl/tight">
                       {post.title}

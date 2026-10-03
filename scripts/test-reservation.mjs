@@ -194,16 +194,16 @@ console.log("\n- Lien de suivi d'une réservation -");
 const T = (iso) => new Date(iso).getTime();
 const RDV = "2027-01-15T19:00:00.000Z";
 eq("avant le service : consultable et annulable",
-   linkState(RDV, "scheduled", T("2027-01-15T12:00:00Z")), { expired: false, cancelled: false, cancellable: true });
+   linkState(RDV, "confirmed", T("2027-01-15T12:00:00Z")), { expired: false, cancelled: false, cancellable: true });
 eq("quinze minutes avant : encore annulable",
-   linkState(RDV, "scheduled", T("2027-01-15T18:45:00Z")).cancellable, true);
+   linkState(RDV, "confirmed", T("2027-01-15T18:45:00Z")).cancellable, true);
 // L'heure passée, la table est dressée : on consulte encore, on n'annule plus.
 eq("pendant le service : consultable, plus annulable",
-   linkState(RDV, "scheduled", T("2027-01-15T20:00:00Z")), { expired: false, cancelled: false, cancellable: false });
+   linkState(RDV, "confirmed", T("2027-01-15T20:00:00Z")), { expired: false, cancelled: false, cancellable: false });
 eq(`après ${LINK_GRACE_HOURS}h, le lien est mort`,
-   linkState(RDV, "scheduled", T("2027-01-15T22:01:00Z")).expired, true);
+   linkState(RDV, "confirmed", T("2027-01-15T22:01:00Z")).expired, true);
 eq("juste avant l'expiration, il vit encore",
-   linkState(RDV, "scheduled", T("2027-01-15T21:59:00Z")).expired, false);
+   linkState(RDV, "confirmed", T("2027-01-15T21:59:00Z")).expired, false);
 eq("une réservation annulée ne se ré-annule pas",
    linkState(RDV, "cancelled", T("2027-01-15T12:00:00Z")), { expired: false, cancelled: true, cancellable: false });
 

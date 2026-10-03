@@ -10,7 +10,8 @@ import {
 } from "@/lib/reservation";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { site } from "@/lib/site";
-import { getSupabase, type ReservationRow } from "@/lib/supabase";
+import { getSupabase, STATUTS_LIBERES, type ReservationRow } from "@/lib/supabase";
+import { retrouverOuCreerClient } from "@/lib/clients";
 
 export const dynamic = "force-dynamic";
 
@@ -65,11 +66,13 @@ export async function POST(request: Request) {
 
   const { data: existing, error: readError } = await supabase.client
     .from("reservations")
-    .select("guests")
+    .select("party_size")
     .eq("business_id", supabase.businessId)
-    .eq("status", "scheduled")
-    .gte("date", slotStart)
-    .lt("date", slotEnd);
+    // Voir la route des disponibilités : on énumère ce qui LIBÈRE la table,
+    // pas ce qui l'occupe.
+    .not("status", "in", `(${STATUTS_LIBERES.join(",")})`)
+    .gte("starts_at", slotStart)
+    .lt("starts_at", slotEnd);
 
   if (readError) {
     console.error("[reservations] lecture :", readError.message);
@@ -79,8 +82,8 @@ export async function POST(request: Request) {
     );
   }
 
-  const taken = ((existing ?? []) as { guests: number | null }[]).reduce(
-    (total, row) => total + (row.guests ?? 1),
+  const taken = ((existing ?? []) as { party_size: number | null }[]).reduce(
+    (total, row) => total + (row.party_size ?? 1),
     0,
   );
 
@@ -94,16 +97,29 @@ export async function POST(request: Request) {
     return NextResponse.json({ error }, { status: 409 });
   }
 
+  /*
+   * La fiche client d'abord — mais son échec N'ANNULE PAS la réservation.
+   *
+   * `reservations.customer_id` accepte le vide, et `guest_name` porte alors
+   * le nom. Perdre le rattachement au fichier clients est ennuyeux ; refuser
+   * la table d'un client un samedi soir ne l'est pas du tout.
+   */
+  const fiche = await retrouverOuCreerClient(supabase.client, supabase.businessId, {
+    nom: input.name.trim(),
+    telephone: input.phone,
+    email: input.email,
+  });
+  if (fiche.erreur) console.error("[reservations] fiche client :", fiche.erreur);
+
   const row: ReservationRow = {
     business_id: supabase.businessId,
-    customer_name: input.name.trim(),
-    customer_phone: input.phone.trim(),
-    customer_mail: input.email.trim().toLowerCase(),
-    date: when.toISOString(),
-    guests: input.guests,
-    message: composeMessage(input),
-    status: "scheduled",
-    attended: null,
+    customer_id: fiche.id,
+    guest_name: input.name.trim(),
+    starts_at: when.toISOString(),
+    party_size: input.guests,
+    customer_message: composeMessage(input),
+    status: "confirmed",
+    source: "website",
   };
 
   // On récupère l'identifiant : il sert de jeton dans le lien de suivi envoyé

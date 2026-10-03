@@ -7,7 +7,7 @@ import {
   slotsForDate,
 } from "@/lib/reservation";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
-import { getSupabase } from "@/lib/supabase";
+import { getSupabase, STATUTS_LIBERES } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
 
@@ -59,11 +59,20 @@ export async function GET(request: Request) {
 
   const { data, error } = await supabase.client
     .from("reservations")
-    .select("date, guests")
+    .select("starts_at, party_size")
     .eq("business_id", supabase.businessId)
-    .eq("status", "scheduled")
-    .gte("date", from.toISOString())
-    .lte("date", to.toISOString());
+    /*
+     * Ce qui OCCUPE une table, c'est TOUT sauf une annulation ou un lapin.
+     *
+     * Le filtre `status = 'scheduled'` de la v1 ne lèverait aucune erreur
+     * ici : il renverrait zéro ligne, donc tous les créneaux paraîtraient
+     * libres. Énumérer ce qui libère plutôt que ce qui occupe fait en plus
+     * qu'un statut ajouté plus tard soit compté par défaut — le sens
+     * prudent de l'erreur.
+     */
+    .not("status", "in", `(${STATUTS_LIBERES.join(",")})`)
+    .gte("starts_at", from.toISOString())
+    .lte("starts_at", to.toISOString());
 
   if (error) {
     console.error("[reservations] lecture des disponibilités :", error.message);
@@ -71,14 +80,14 @@ export async function GET(request: Request) {
   }
 
   const booked = new Map<string, number>();
-  for (const row of (data ?? []) as { date: string; guests: number | null }[]) {
+  for (const row of (data ?? []) as { starts_at: string; party_size: number | null }[]) {
     const time = new Intl.DateTimeFormat("fr-FR", {
       timeZone: "Europe/Paris",
       hour: "2-digit",
       minute: "2-digit",
       hour12: false,
-    }).format(new Date(row.date));
-    booked.set(time, (booked.get(time) ?? 0) + (row.guests ?? 1));
+    }).format(new Date(row.starts_at));
+    booked.set(time, (booked.get(time) ?? 0) + (row.party_size ?? 1));
   }
 
   return NextResponse.json({

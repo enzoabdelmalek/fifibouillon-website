@@ -49,21 +49,21 @@ export async function findByLink(id: string): Promise<Reservation | null> {
 
   const { data, error } = await supabase.client
     .from("reservations")
-    .select("id, customer_name, date, guests, status")
+    .select("id, guest_name, starts_at, party_size, status")
     .eq("id", id)
     .eq("business_id", supabase.businessId)
     .maybeSingle();
 
   if (error || !data) return null;
 
-  const state = linkState(data.date, data.status);
+  const state = linkState(data.starts_at, data.status);
   if (state.expired) return null;
 
   return {
     id: data.id,
-    firstName: firstNameOf(data.customer_name),
-    date: data.date,
-    guests: data.guests ?? 1,
+    firstName: firstNameOf(data.guest_name),
+    date: data.starts_at,
+    guests: data.party_size ?? 1,
     cancelled: state.cancelled,
     cancellable: state.cancellable,
   };
@@ -81,9 +81,19 @@ export async function cancelByLink(id: string): Promise<boolean> {
   const supabase = getSupabase();
   if (!supabase.configured) return false;
 
+  /*
+   * `cancelled_at` n'est pas facultatif.
+   *
+   * La base impose `(status = 'cancelled') = (cancelled_at is not null)`.
+   * Poser le seul statut ferait échouer la mise à jour — et le client
+   * verrait « annulation impossible » sur une table qui, elle, reste
+   * bloquée. Le dashboard a besoin de l'heure, de toute façon : « annulée
+   * il y a dix minutes » et « annulée avant-hier » ne se traitent pas
+   * pareil un soir de service.
+   */
   const { error } = await supabase.client
     .from("reservations")
-    .update({ status: "cancelled" })
+    .update({ status: "cancelled", cancelled_at: new Date().toISOString() })
     .eq("id", id)
     .eq("business_id", supabase.businessId);
 

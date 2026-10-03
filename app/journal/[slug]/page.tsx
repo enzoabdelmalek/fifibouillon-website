@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Diamond } from "@/components/menu";
 import { PageHeader } from "@/components/page-header";
-import { displayDate, getPost, listPosts, machineDate } from "@/lib/blog";
+import { categoryOf, displayDate, getPost, listPosts, machineDate } from "@/lib/blog";
 import { renderMarkdown } from "@/lib/markdown";
 import { site } from "@/lib/site";
 
@@ -78,10 +78,10 @@ export default async function ArticlePage({ params }: Params) {
           dangerouslySetInnerHTML={{ __html: renderMarkdown(post.content ?? "") }}
         />
 
-        {post.category ? (
+        {categoryOf(post) ? (
           <p className="mt-12">
             <span className="rounded-full border border-line px-4 py-1.5 text-xs tracking-[0.12em] text-muted uppercase">
-              {post.category}
+              {categoryOf(post)}
             </span>
           </p>
         ) : null}
