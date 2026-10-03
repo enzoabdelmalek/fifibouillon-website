@@ -26,8 +26,9 @@ export const EVENT_TYPES = [
   "cocktail",
   "reception",
   "buffet debout",
+  "soiree privee",
   "anniversaire",
-  "apres travail",
+  "afterwork",
   "autre",
 ] as const;
 
@@ -38,8 +39,9 @@ export const EVENT_LABELS: Record<EventType, string> = {
   cocktail: "Cocktail",
   reception: "Réception",
   "buffet debout": "Buffet debout",
+  "soiree privee": "Soirée privée",
   anniversaire: "Anniversaire",
-  "apres travail": "Après-travail",
+  afterwork: "Afterwork",
   autre: "Autre",
 };
 
