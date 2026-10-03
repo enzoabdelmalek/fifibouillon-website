@@ -80,19 +80,36 @@ export const site = {
    */
   hours: [
     {
-      days: "Dimanche – Jeudi",
+      days: "Lundi – Mercredi",
       value: "11h00 – 00h00",
       schema: {
-        days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+        days: ["Monday", "Tuesday", "Wednesday"],
         opens: "11:00",
         closes: "00:00",
       },
     },
     {
-      days: "Vendredi – Samedi",
+      days: "Jeudi – Samedi",
       value: "11h00 – 02h00",
-      schema: { days: ["Friday", "Saturday"], opens: "11:00", closes: "02:00" },
+      schema: {
+        days: ["Thursday", "Friday", "Saturday"],
+        opens: "11:00",
+        closes: "02:00",
+      },
     },
+    /*
+     * DIMANCHE : fermé, donc ABSENT de cette liste.
+     *
+     * L'absence est ce qui ferme : `openingFor` ne trouve pas le jour, rend
+     * `null`, et `slotsForDate` ne propose aucun créneau. Écrire une plage
+     * « 00:00 – 00:00 » laisserait au contraire croire à une ouverture de
+     * minuit à minuit, puisqu'une fermeture antérieure à l'ouverture se lit
+     * comme le lendemain.
+     *
+     * Vérifier après tout changement d'horaires : un dimanche réservable
+     * est un service non assuré, et personne ne s'en aperçoit avant que le
+     * client se présente.
+     */
   ],
 
   /**
@@ -162,7 +179,7 @@ export const site = {
      * recevrait des demandes pour cent personnes dans une salle qui en
      * tient soixante-dix.
      */
-    capacity: 70,
+    capacity: 60,
     /** ⚠️ À CONFIRMER : peut-on ne privatiser qu'une partie de la salle ? */
     partial: "Salle entière ou partie, selon la formule",
   },
