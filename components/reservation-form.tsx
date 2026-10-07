@@ -17,6 +17,8 @@ import {
 } from "@/lib/reservation";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
+import { trackClarityEvent } from '@/lib/clarity';
+
 
 type Slot = { time: string; seatsLeft: number; past: boolean };
 type Availability = { closed: boolean; slots: Slot[]; degraded?: boolean };
@@ -91,7 +93,7 @@ export function ReservationForm() {
     slots.some((s) => s.time === form.time && !s.past && s.seatsLeft > 0);
   if (!timeStillOffered) setForm((f) => ({ ...f, time: "" }));
 
-  async function onSubmit(event: React.FormEvent) {
+async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
     setError(null);
 
@@ -123,13 +125,10 @@ export function ReservationForm() {
 
       setForm(EMPTY);
 
-      // La table est prise : on emmène le visiteur sur sa page de réservation,
-      // celle-là même que reprend l'e-mail de confirmation. Le récapitulatif
-      // en place ne sert plus que de repli, si l'identifiant manque.
-      //
-      // `submitting` reste vrai jusqu'à la navigation : sans ça le bouton
-      // redeviendrait cliquable une fraction de seconde, le temps que la page
-      // change - assez pour une double réservation sur une connexion lente.
+      // 🎯 TRACKING CLARITY : Réservation validée avec succès
+      trackClarityEvent("reservation_confirmee");
+
+      // La table est prise : on emmène le visiteur sur sa page de réservation
       if (typeof data.id === "string" && data.id) {
         const mail = data.emailSent ? "" : "&mail=ko";
         router.push(`/reserver/${data.id}?confirmee=1${mail}`);
