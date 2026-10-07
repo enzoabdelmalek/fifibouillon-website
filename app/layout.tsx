@@ -4,6 +4,7 @@ import { Jost, Playfair_Display } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { themeInitScript } from "@/components/theme-toggle";
+import { ClarityAnalytics } from "@/components/clarity-analytics";
 import { env } from "@/lib/env";
 import { site } from "@/lib/site";
 import "./globals.css";
@@ -139,6 +140,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteHeader />
         <main id="contenu">{children}</main>
         <SiteFooter />
+        <ClarityAnalytics />
 
         <script
           type="application/ld+json"

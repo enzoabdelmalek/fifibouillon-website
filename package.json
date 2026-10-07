@@ -11,6 +11,7 @@
     "test:schema": "node scripts/test-schema-v2.mjs"
   },
   "dependencies": {
+    "@microsoft/clarity": "^1.0.2",
     "@supabase/supabase-js": "^2.116.0",
     "next": "16.3.5",
     "react": "19.2.8",
