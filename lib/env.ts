@@ -23,6 +23,10 @@ export const env = {
   resendApiKey: () => first(process.env.RESEND_API_KEY),
   resendFrom: () => first(process.env.RESEND_FROM),
   adminMail: () => first(process.env.ADMIN_MAIL),
-  /** Protège la route du cron d'avis : sans lui, n'importe qui la déclencherait. */
-  cronSecret: () => first(process.env.SECRET_CRON_KEY, process.env.CRON_SECRET),
+  /**
+   * Protège la route du cron d'avis : sans lui, n'importe qui la déclencherait.
+   * `CRON_SECRET` d'abord : c'est le seul nom que le cron Vercel envoie de
+   * lui-même dans l'en-tête Authorization.
+   */
+  cronSecret: () => first(process.env.CRON_SECRET, process.env.SECRET_CRON_KEY),
 };

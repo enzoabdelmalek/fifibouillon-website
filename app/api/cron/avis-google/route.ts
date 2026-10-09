@@ -10,9 +10,9 @@ export const dynamic = "force-dynamic";
 const DELAY_MS = 3 * 60 * 60_000;
 
 /**
- * Fenêtre de rattrapage. Le déclencheur (GitHub Actions, toutes les 15 min)
- * prend parfois une heure de retard : une fenêtre de six heures absorbe ces
- * retards sans qu'une réservation passe entre deux exécutions.
+ * Fenêtre de rattrapage. Le cron Vercel (vercel.json, toutes les 15 min)
+ * suffirait avec 15 minutes ; six heures absorbent une panne ou un
+ * déploiement raté sans qu'une réservation passe entre deux exécutions.
  *
  * Elle doit rester sous 24 h : au-delà, la clé d'idempotence de Resend a
  * expiré et le client recevrait l'e-mail deux fois.
