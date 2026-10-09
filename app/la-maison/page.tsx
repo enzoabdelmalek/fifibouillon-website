@@ -26,7 +26,7 @@ const chapters: Chapter[] = [
     eyebrow: "Le nom",
     title: "FiFi, le chat de la maison",
     body: [
-      "Avant d’être un bouillon, FiFi était un chat. Pendant près de quinze ans, il a veillé sur la salle, entre les banquettes et le comptoir, et salué les habitués bien avant nous.",
+      "Avant d’être un bouillon, FiFi était un chat. Pendant quinze ans, il a veillé sur la salle, entre les banquettes et le comptoir, et salué les habitués bien avant nous.",
       "Donner son nom au lieu, c’était notre façon de lui rendre hommage. C’est lui qu’on retrouve sur l’enseigne, et un peu partout dans la maison.",
     ],
     photo: "salle",

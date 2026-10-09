@@ -95,7 +95,7 @@ function Maison() {
             </p>
             <p>
               FiFi, c’était le chat de la maison : il a veillé sur la salle
-              pendant près de quinze ans. Le lieu porte son nom pour lui rendre
+              pendant quinze ans. Le lieu porte son nom pour lui rendre
               hommage - c’est lui, sur notre enseigne.
             </p>
             <p>
