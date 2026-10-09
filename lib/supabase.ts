@@ -23,7 +23,8 @@ function readEnv() {
  * les deux restaurants partagent le même projet Supabase et le même dashboard,
  * distingués par `business_id`. Ne pas renommer sans migrer le dashboard.
  */
-export type ReservationStatus = "scheduled" | "cancelled";
+/** « attended » est posé par le dashboard quand le client est venu. */
+export type ReservationStatus = "scheduled" | "attended" | "cancelled";
 
 /**
  * Une demande de devis. Les privatisations atterrissent ici : elles ne

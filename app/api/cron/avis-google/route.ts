@@ -24,7 +24,7 @@ const WINDOW_MS = 6 * 60 * 60_000;
  *
  * Couvre toutes les réservations du restaurant, celles du site comme celles
  * saisies dans le dashboard. Sont écartées les annulations et les absences
- * constatées (`attended = false`) : demander un avis à quelqu'un qui n'est
+ * constatées (colonne `attended = false`) : demander un avis à quelqu'un qui n'est
  * pas venu, c'est l'inviter à en laisser un mauvais.
  */
 export async function GET(request: Request) {
@@ -46,7 +46,10 @@ export async function GET(request: Request) {
     .from("reservations")
     .select("id, customer_name, customer_mail")
     .eq("business_id", supabase.businessId)
-    .eq("status", "scheduled")
+    // « attended » : le dashboard a noté le client comme venu. C'est le
+    // meilleur candidat à un avis - l'oublier, c'est écrire à tout le monde
+    // sauf à ceux dont on est sûr qu'ils ont mangé ici.
+    .in("status", ["scheduled", "attended"])
     .or("attended.is.null,attended.eq.true")
     .gte("date", earliest.toISOString())
     .lte("date", latest.toISOString());

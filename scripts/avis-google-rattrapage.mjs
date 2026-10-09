@@ -4,6 +4,7 @@
  *   npm run avis:rattrapage            # simulation - compte, n'envoie rien
  *   npm run avis:rattrapage -- --envoyer
  *   npm run avis:rattrapage -- --envoyer --lien-provisoire
+ *   npm run avis:rattrapage -- --sauf-deja-relances   # voir plus bas
  *
  * À lancer une seule fois, depuis un poste, avec les variables de .env.local.
  *
@@ -32,11 +33,15 @@ if (!supabase.configured) {
   process.exit(1);
 }
 
+// Le .env.local pointe sur la base de dev : afficher la cible avant tout.
+const projet = new URL(process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL).hostname.split(".")[0];
+console.log(`Base visée : ${projet} · business_id ${supabase.businessId}`);
+
 const { data, error } = await supabase.client
   .from("reservations")
-  .select("id, customer_name, customer_mail, date")
+  .select("id, customer_name, customer_mail, date, status, attended")
   .eq("business_id", supabase.businessId)
-  .eq("status", "scheduled")
+  .in("status", ["scheduled", "attended"])
   .or("attended.is.null,attended.eq.true")
   .lte("date", new Date(Date.now() - 3 * 60 * 60_000).toISOString())
   .order("date", { ascending: false });
@@ -46,15 +51,30 @@ if (error) {
   process.exit(1);
 }
 
+/*
+ * Le premier passage (09/10/2026) ne retenait que le statut « scheduled » et
+ * a oublié les clients notés « attended ». `--sauf-deja-relances` écarte les
+ * adresses déjà servies par ce passage : leur clé d'idempotence portait sur
+ * une autre réservation, Resend ne bloquerait donc pas le doublon.
+ */
+const dejaRelances = new Set(
+  process.argv.includes("--sauf-deja-relances")
+    ? data
+        .filter((r) => r.status === "scheduled" && r.attended !== false)
+        .map((r) => r.customer_mail?.trim().toLowerCase())
+        .filter(Boolean)
+    : [],
+);
+
 const parClient = new Map();
 let sansMail = 0;
 for (const row of data) {
   const email = row.customer_mail?.trim().toLowerCase();
   if (!email) sansMail++;
-  else if (!parClient.has(email)) parClient.set(email, row); // tri décroissant : la première est la dernière
+  else if (!dejaRelances.has(email) && !parClient.has(email)) parClient.set(email, row); // tri décroissant : la première est la dernière
 }
 
-console.log(`${data.length} réservations passées, ${parClient.size} clients distincts, ${sansMail} sans e-mail.`);
+console.log(`${data.length} réservations passées, ${parClient.size} clients à relancer, ${dejaRelances.size} déjà relancés écartés, ${sansMail} sans e-mail.`);
 if (!envoyer) {
   console.log("Simulation : rien n'est parti. Relancer avec --envoyer.");
   process.exit(0);
