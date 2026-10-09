@@ -34,11 +34,11 @@ function Hero() {
             {site.district} · {site.city}
           </p>
           <h1 className="mt-5 max-w-3xl font-display text-4xl/[1.08] tracking-tight text-balance sm:text-5xl/[1.06] lg:text-[3.6rem]/[1.05]">
-            La cuisine française de toujours, généreuse et à prix juste.
+            La cuisine française de toujours, faite maison et à prix juste.
           </h1>
           <p className="mx-auto mt-6 max-w-lg text-base/relaxed text-pretty text-muted">
-            Un bouillon comme on les aime : des classiques mijotés, une salle
-            chaleureuse et le service continu, du déjeuner au dernier verre.
+            Un bouillon comme on les aime : des classiques mijotés et une salle
+            chaleureuse, du déjeuner au dernier verre.
           </p>
         </Reveal>
 
@@ -94,6 +94,11 @@ function Maison() {
               servie sans façon, à un prix que tout le monde peut s’offrir.
             </p>
             <p>
+              FiFi, c’était le chat de la maison : il a veillé sur la salle
+              pendant près de quinze ans. Le lieu porte son nom pour lui rendre
+              hommage - c’est lui, sur notre enseigne.
+            </p>
+            <p>
               Chez FiFi, on la prolonge à notre manière. Les œufs mayonnaise et
               le bœuf bourguignon côtoient la burrata et les coquillettes à la
               truffe ; le service ne s’arrête pas entre deux heures ; et le
@@ -145,7 +150,7 @@ function Maison() {
                   },
                   {
                     term: "Le service continu",
-                    detail: "On vous sert à 15h comme à 22h, sans coupure ni mine renfrognée.",
+                    detail: "On vous sert de 11h30 à 23h30, sans coupure ni mine renfrognée.",
                   },
                 ].map((row) => (
                   <div key={row.term} className="py-5 first:pt-0 last:pb-0">

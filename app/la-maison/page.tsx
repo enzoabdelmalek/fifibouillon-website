@@ -14,7 +14,23 @@ export const metadata: Metadata = {
   alternates: { canonical: "/la-maison" },
 };
 
-const chapters = [
+type Chapter = {
+  eyebrow: string;
+  title: string;
+  body: string[];
+  photo?: "facade" | "salle" | "salle2";
+};
+
+const chapters: Chapter[] = [
+  {
+    eyebrow: "Le nom",
+    title: "FiFi, le chat de la maison",
+    body: [
+      "Avant d’être un bouillon, FiFi était un chat. Pendant près de quinze ans, il a veillé sur la salle, entre les banquettes et le comptoir, et salué les habitués bien avant nous.",
+      "Donner son nom au lieu, c’était notre façon de lui rendre hommage. C’est lui qu’on retrouve sur l’enseigne, et un peu partout dans la maison.",
+    ],
+    photo: "salle",
+  },
   {
     eyebrow: "L’origine",
     title: "Nourrir Paris, vite et bien",
@@ -22,7 +38,7 @@ const chapters = [
       "Le bouillon naît à Paris au milieu du XIXᵉ siècle. Un boucher a l’idée de servir aux ouvriers des halles un bouillon de viande réconfortant, pour quelques sous, dans une grande salle où tout le monde s’assoit côte à côte.",
       "Le principe fait fureur : une cuisine française sans chichis, servie vite, à un prix que chacun peut s’offrir. C’est cette promesse-là, intacte, que nous reprenons à notre compte.",
     ],
-    photo: "facade" as const,
+    photo: "facade",
   },
   {
     eyebrow: "La cuisine",
@@ -31,16 +47,15 @@ const chapters = [
       "Le bœuf bourguignon mijote longuement, la soupe à l’oignon est gratinée à la commande, les desserts sortent de notre cuisine. Les grands classiques sont là - œufs mayonnaise, poireaux vinaigrette, confit de canard, crème brûlée.",
       "À côté, quelques écarts assumés : une burrata bien fraîche, des coquillettes crémeuses à la truffe, un burger maison. Le bouillon d’aujourd’hui, pas celui du musée.",
     ],
-    photo: "salle2" as const,
+    photo: "salle2",
   },
   {
     eyebrow: "La salle",
     title: "Ouverte en continu",
     body: [
-      "On sert à 15h comme à 22h. Pas de coupure, pas de créneau à négocier : on pousse la porte quand on a faim, ou simplement soif - le comptoir reste ouvert bien après le dessert.",
+      "On sert de 11h30 à 23h30. Pas de coupure, pas de créneau à négocier : on pousse la porte quand on a faim, ou simplement soif - le comptoir reste ouvert bien après le dessert.",
       "Et de 16h à 22h, les pintes et les cocktails signature passent au tarif happy hour, tous les jours.",
     ],
-    photo: "salle" as const,
   },
 ];
 
@@ -66,7 +81,9 @@ export default function LaMaisonPage() {
                   <p key={paragraph.slice(0, 32)}>{paragraph}</p>
                 ))}
               </div>
-              <Photo name={chapter.photo} className="mt-10" sizes="(min-width: 768px) 48rem, 100vw" />
+              {chapter.photo ? (
+                <Photo name={chapter.photo} className="mt-10" sizes="(min-width: 768px) 48rem, 100vw" />
+              ) : null}
             </Reveal>
           ))}
         </div>

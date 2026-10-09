@@ -298,3 +298,64 @@ export async function sendPrivatisationEmails(
     return { sent: false, reason: "erreur" };
   }
 }
+
+/* ------------------------------------------------------------------ */
+/*  Demande d'avis Google                                              */
+/* ------------------------------------------------------------------ */
+
+export function reviewRequestTemplate(firstName: string): string {
+  const hello = firstName ? `Bonjour <strong style="color:${INK};">${esc(firstName)}</strong>, merci` : "Merci";
+  return shell(
+    "Merci de votre visite chez FiFi",
+    `${hello} d’avoir partagé un repas avec nous. Si vous avez aimé votre passage, quelques mots sur Google nous aideraient beaucoup : c’est ainsi que d’autres gourmands nous trouvent.`,
+    "",
+    `<p style="margin:8px 0 0;text-align:center;">
+       <a href="${site.googleReviewUrl}"
+          style="display:inline-block;background:${ROSEWOOD};color:${BUTTER};text-decoration:none;padding:14px 28px;border-radius:999px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;">
+         Laisser un avis
+       </a>
+     </p>
+     <p style="margin:24px 0 0;font-size:14px;line-height:1.65;color:${MUTED};">
+       Quelque chose ne vous a pas plu ? Répondez simplement à cet e-mail : nous lisons tout.
+     </p>
+     <p style="margin:18px 0 0;font-size:14px;line-height:1.65;color:${MUTED};">À très bientôt,<br><em>L’équipe FiFi</em></p>`,
+  );
+}
+
+/**
+ * Envoie la demande d'avis d'une réservation.
+ *
+ * La clé d'idempotence est dérivée de la réservation : Resend refuse un
+ * second envoi avec la même clé pendant 24 h. C'est elle qui garantit
+ * l'envoi unique - le cron repasse sur la même réservation plusieurs fois,
+ * et la table n'a pas de colonne pour noter que c'est fait.
+ */
+export async function sendReviewRequest(
+  reservationId: string,
+  email: string,
+  firstName: string,
+): Promise<boolean> {
+  const apiKey = env.resendApiKey();
+  const from = env.resendFrom();
+  if (!apiKey || !from) return false;
+
+  const resend = new Resend(apiKey);
+  const { error } = await resend.emails.send(
+    {
+      from,
+      to: email,
+      // Les réponses arrivent au restaurant : un client déçu qui répond,
+      // c'est un avis négatif qui n'est pas publié.
+      replyTo: env.adminMail() ?? undefined,
+      subject: "Merci pour votre visite chez FiFi",
+      html: reviewRequestTemplate(firstName),
+    },
+    { idempotencyKey: `avis-google/${reservationId}` },
+  );
+
+  if (error) {
+    console.error(`[avis] réservation ${reservationId} :`, error.message);
+    return false;
+  }
+  return true;
+}

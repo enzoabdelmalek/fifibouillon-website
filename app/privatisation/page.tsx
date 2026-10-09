@@ -28,7 +28,7 @@ export default function PrivatisationPage() {
       <PageHeader
         eyebrow="Privatisation"
         title="Toute la salle pour vous"
-        intro={`Un anniversaire, un repas d’équipe, un après-travail. À partir de ${MIN_GUESTS} personnes, ${site.name} se réserve rien que pour vous.`}
+        intro={`Un anniversaire, un repas d’équipe, un après-travail. À partir de ${MIN_GUESTS} personnes, notre salle du sous-sol se réserve rien que pour vous.`}
       />
 
       <div className="mx-auto max-w-6xl px-5 py-20 sm:px-8 lg:py-28">
@@ -38,9 +38,11 @@ export default function PrivatisationPage() {
               <h2 className="eyebrow text-gold">La salle</h2>
               <dl className="mt-6 divide-y divide-line border-y border-line">
                 {[
+                  { term: "Lieu", detail: site.privatisation.room },
                   { term: "Capacité", detail: `Jusqu’à ${site.privatisation.capacity} personnes` },
                   { term: "Formule", detail: site.privatisation.partial },
                   { term: "À partir de", detail: `${MIN_GUESTS} personnes` },
+                  { term: "Menus", detail: site.privatisation.menuLanguages },
                 ].map((row) => (
                   <div key={row.term} className="flex items-baseline justify-between gap-6 py-4">
                     <dt className="eyebrow text-muted">{row.term}</dt>

@@ -25,10 +25,22 @@ export const site = {
   city: "Paris",
 
   description:
-    "Bouillon & brasserie dans le 9ᵉ arrondissement de Paris. La cuisine française de toujours, généreuse et à prix juste, servie dans une salle chaleureuse du matin au soir.",
+    "Bouillon & brasserie dans le 9ᵉ arrondissement de Paris. La cuisine française de toujours, faite maison et à prix juste, servie dans une salle chaleureuse du matin au soir.",
 
   /** URL de production - sert aux métadonnées Open Graph et au sitemap. */
   url: "https://www.fifibouillon.com",
+
+  /**
+   * Lien « laisser un avis », envoyé par e-mail après chaque repas.
+   *
+   * ⚠️ Provisoire : c'est un lien de recherche Google. À remplacer par le
+   * lien court de la fiche (Google Business Profile → « Demander des avis »,
+   * de la forme https://g.page/r/…/review), qui ouvre directement le
+   * formulaire. Et seulement après la fusion des anciennes fiches, sinon
+   * les avis partent sur la mauvaise.
+   */
+  googleReviewUrl:
+    "https://www.google.com/search?q=fifibouillon#sv=CAESzAEKuAEStQEKd0FKaVQ0dEkyT0ZmeFFFczlqc0pkN1hxZF96dTQ4ODNfRWV4blg1NVNiYjFuZzdLa1cyYm91WXQ4RkxIYUdDb0xYRVRhMFEzUFhxOFJUWmZsREpVY3lGZHZVczBocGExNXdreTdXTmVYSThla3RvVW1hS3hsN3VvEhZMQVhKYXFXeUVKS2IzYm9QdS1IMGFBGiJBRHNyOWZSbG04WkcxRVNwcEltZjBZZlV2clNSUHFiaWJ3EgQ4MDUxGgEzKgAwADgBQAAYACCKramcDEoCEAE",
 
   contact: {
     phone: "+33 9 51 28 34 18",
@@ -180,6 +192,10 @@ export const site = {
      * tient soixante-dix.
      */
     capacity: 60,
+    /** La salle privatisable est celle du sous-sol, pas la salle principale. */
+    room: "Salle au sous-sol",
+    /** Pour les groupes étrangers : la carte existe en quatre langues. */
+    menuLanguages: "Français, anglais, espagnol, italien",
     /** ⚠️ À CONFIRMER : peut-on ne privatiser qu'une partie de la salle ? */
     partial: "Salle entière ou partie, selon la formule",
   },

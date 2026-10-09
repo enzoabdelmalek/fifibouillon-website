@@ -1,0 +1,25 @@
+# Déclenche la demande d'avis Google toutes les 15 minutes.
+#
+# Pourquoi pas un cron Vercel : sur le plan Hobby, Vercel n'autorise qu'une
+# exécution par jour, à l'heure près - impossible de tenir « 3 h après le
+# repas ». GitHub Actions n'a pas cette limite.
+#
+# Secrets du dépôt à créer (Settings → Secrets and variables → Actions) :
+#   CRON_SECRET - la même valeur que la variable CRON_SECRET sur Vercel.
+name: Demande d'avis Google
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+jobs:
+  avis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Appel de la route
+        run: |
+          curl --fail-with-body --silent --show-error \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            https://www.fifibouillon.com/api/cron/avis-google

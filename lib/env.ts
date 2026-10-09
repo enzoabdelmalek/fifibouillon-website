@@ -23,4 +23,6 @@ export const env = {
   resendApiKey: () => first(process.env.RESEND_API_KEY),
   resendFrom: () => first(process.env.RESEND_FROM),
   adminMail: () => first(process.env.ADMIN_MAIL),
+  /** Protège la route du cron d'avis : sans lui, n'importe qui la déclencherait. */
+  cronSecret: () => first(process.env.CRON_SECRET),
 };
